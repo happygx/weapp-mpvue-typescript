@@ -1,18 +1,18 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
-import { BaseUrl } from "@/config/index";
-import requestConfig from "@/config/requestConfig";
-import { UserModule } from "@/store/module/user";
-import qs from "qs";
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
+import { BaseUrl } from '@/config/index';
+import requestConfig from '@/config/requestConfig';
+import { UserModule } from '@/store/module/user';
+import { getSession } from './session';
 
 declare type Methods =
-  | "GET"
-  | "OPTIONS"
-  | "HEAD"
-  | "POST"
-  | "PUT"
-  | "DELETE"
-  | "TRACE"
-  | "CONNECT";
+  | 'GET'
+  | 'OPTIONS'
+  | 'HEAD'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'TRACE'
+  | 'CONNECT';
 
 class HttpRequest {
   public pending: object; // 请求的url集合
@@ -32,11 +32,10 @@ class HttpRequest {
     instance.interceptors.request.use(
       (config: AxiosRequestConfig) => {
         // console.log(config);
-
         // 在请求前统一添加headers信息
         if (UserModule.session) {
           config.headers = {
-            Authorization: "session " + UserModule.session,
+            Authorization: 'session ' + UserModule.session,
           };
         }
 
@@ -75,14 +74,13 @@ class HttpRequest {
     // 直接使用axios报错，因为微信小程序必须走wx.request发送交易，因此需要使用adapter
     instance.defaults.adapter = (options: AxiosRequestConfig) => {
       return new Promise((resolve, reject) => {
-        let data =
-          options.method === "get"
-            ? JSON.parse(options.data)
-            : qs.stringify(options.data);
+        let data = options.data === undefined ? '{}' : options.data;
+        data = JSON.parse(data);
         // wx小程序 发起请求相应 log 就可以看到熟悉的返回啦
         wx.request({
           url: BaseUrl + options.url,
           method: options.method as Methods,
+          header: options.headers,
           data: data,
           success: (res) => {
             return resolve(res as any);
@@ -101,12 +99,14 @@ class HttpRequest {
 // 请求失败
 const requestFail = (res: AxiosResponse) => {
   // console.log(res);
-  const { data, status } = res;
-  // token失效重新登录
-  if (status === 401) {
-    console.log(res);
+  const { data, statusCode } = res as any;
+
+  if (statusCode === 401) {
     // 账户失效
-    return false;
+    return UserModule.ResetToken();
+  } else if (statusCode === 412) {
+    // session失效重新获取
+    return getSession();
   } else {
     return Promise.reject({
       code: status,

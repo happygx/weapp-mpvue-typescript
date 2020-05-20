@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     // 与 Vue 的浏览器支持保持一致
     "target": "es2015",
     // 这可以对 `this` 上的数据属性进行更严格的推断
@@ -7,18 +8,14 @@
     // 如果使用 webpack 2+ 或 rollup，可以利用 tree-shake:
     "module": "es2015",
     "moduleResolution": "node",
-    "baseUrl": "./",
     "outDir": "./dist/",
     "paths": {
-      "vue": [
-        "node_modules/mpvue"
-      ],
-      "@/*": [
-        "src/*"
-      ]
+      "vue": ["node_modules/mpvue"],
+      "@/*": ["src/*"],
+      "@vant/weapp/*": ["path/to/node_modules/@vant/weapp/dist/*"]
     },
     "types": [
-       //"@types/weixin-app",
+      //"@types/weixin-app",
       "@types/node"
     ],
     "allowJs": true,
@@ -28,12 +25,8 @@
     "strictPropertyInitialization": false,
     "experimentalDecorators": true
   },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"],
   "typeAcquisition": {
     "enable": true
   }

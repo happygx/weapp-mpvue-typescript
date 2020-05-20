@@ -1,22 +1,56 @@
-export const setStorage = (name: string, value: any) => {
+/**
+ * @param  {string} key
+ * @param  {any} value
+ */
+export const setStorage = (key: string, value: any) => {
   wx.setStorage({
-    key: name,
+    key: key,
     data: value,
   });
 };
-export const removeStorage = (name: string) => {
+
+/**
+ * @param  {string} key
+ */
+export const removeStorage = (key: string) => {
   wx.removeStorage({
-    key: name,
+    key: key,
   });
 };
-export const getStorage = (name: string): any => {
-  wx.getStorage({
-    key: name,
-    success: (res) => {
-      return res;
-    },
-    fail: (err) => {
-      return false;
-    },
-  });
+
+/**
+ * @param  {string} key
+ * @param  {boolean} sync
+ * @param  {any} success?
+ */
+export const getStorage = (key: string, sync: boolean, success?: any): any => {
+  if (sync) {
+    return wx.getStorageSync(key);
+  } else {
+    wx.getStorage({
+      key: key,
+      success: (res) => {
+        return typeof success == 'function' && success(res.data);
+      },
+      fail: (err) => {
+        return typeof success == 'function' && success(false);
+      },
+    });
+  }
+};
+
+/**
+ * @param  {string} path
+ */
+export const routeInterception = (name: string) => {
+  var info = wx.getStorageSync('info');
+  if (info) {
+    wx.navigateTo({
+      url: `/pages/${name}/main`,
+    });
+  } else {
+    wx.navigateTo({
+      url: '/pages/login/main',
+    });
+  }
 };

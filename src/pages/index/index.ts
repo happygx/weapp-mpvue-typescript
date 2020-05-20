@@ -1,5 +1,5 @@
 // index.ts
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component } from 'vue-property-decorator';
 
 // 必须使用装饰器的方式来指定component
 @Component({
@@ -7,11 +7,12 @@ import { Vue, Component } from "vue-property-decorator";
     //
   },
 })
-class Index extends Vue {
-  private name: string = "index";
+export default class Index extends Vue {
+  private name: string = 'index';
+  // private canIUse: any = wx.canIUse("button.open-type.getUserInfo");
 
   onLoad() {
-    //
+    // console.log(this.globalData)
   }
 
   onShow() {
@@ -22,5 +23,3 @@ class Index extends Vue {
     // vue hook
   }
 }
-
-export default Index;

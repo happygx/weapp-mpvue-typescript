@@ -1,7 +1,15 @@
-import Api from "@/utils/request";
+import Api from '@/utils/request';
 
 export const getOpenIdSessionKey = (params = {}) => {
   return Api.getOpenIdSessionKey(params);
+};
+
+export const userInformationData = (params = {}) => {
+  return Api.userInformationData(params);
+};
+
+export const userSensitiveData = (params = {}) => {
+  return Api.userSensitiveData(params);
 };
 
 export const wxLogin = (params = {}) => {

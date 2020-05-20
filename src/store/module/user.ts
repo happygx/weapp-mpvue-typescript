@@ -4,45 +4,69 @@ import {
   Action,
   Mutation,
   getModule,
-} from "vuex-module-decorators";
-import store from "@/store";
-import { setStorage, getStorage } from "@/utils/common";
+} from 'vuex-module-decorators';
+import store from '@/store';
+import { setStorage, getStorage, removeStorage } from '@/utils/common';
+import { wxLogin, wxLogout } from '@/api/common';
 
 export interface IUserState {
-  session: string;
-  // info: any;
-  // browse_permissions: string[] | boolean;
-  // handle_permissions: object | boolean;
+  session: string | boolean;
+  info: object | boolean;
 }
 
-@Module({ dynamic: true, store, name: "user" })
+@Module({ dynamic: true, store, name: 'user' })
 class User extends VuexModule implements IUserState {
-  public session: string = getStorage("session");
+  public session: string | boolean = getStorage('session', true);
+  public info: object | boolean = getStorage('info', true);
 
   @Action
-  public async Login(userInfo: object) {
-    // const data = await login({
-    //   method: 'POST',
-    //   data: userInfo,
-    // });
-    // if (!data) {
-    //   throw Error('Verification failed, please Login again.');
-    // }
+  public async Login(form: object) {
+    console.log(form);
+    const res = await wxLogin({
+      method: 'POST',
+      data: form,
+    });
+    console.log(res);
+
+    if (!res) {
+      throw Error('Verification failed, please Login again.');
+    }
+    this.SET_INFO(res.info);
   }
 
   @Action
-  public async LogOut() {
-    // this.ResetToken();
+  public async LogOut(callback: () => void) {
+    const res = await wxLogout();
+    this.ResetToken();
+    callback();
+  }
+
+  @Action
+  public ResetToken() {
+    this.SET_INFO(false);
+    removeStorage('info');
+  }
+
+  @Action
+  public async SET_SESSION_ASYNC(session: string) {
+    this.SET_SESSION(session);
+  }
+
+  @Action
+  public async SET_INFO_ASYNC(info: object) {
+    this.SET_INFO(info);
   }
 
   @Mutation
-  private SET_TOKEN(token: string) {
-    // this.token = token;
+  private SET_SESSION(session: string | boolean) {
+    this.session = session;
+    setStorage('session', session);
   }
 
   @Mutation
-  private SET_INFO(info: object) {
-    // this.info = info;
+  private SET_INFO(info: object | boolean) {
+    this.info = info;
+    setStorage('info', info);
   }
 }
 

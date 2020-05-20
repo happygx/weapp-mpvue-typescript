@@ -1,30 +1,30 @@
-var path = require("path");
-var fs = require("fs");
-var utils = require("./utils");
-var config = require("../config");
-var webpack = require("webpack");
-var merge = require("webpack-merge");
-var vueLoaderConfig = require("./vue-loader.conf");
-var MpvuePlugin = require("webpack-mpvue-asset-plugin");
-var glob = require("glob");
-var CopyWebpackPlugin = require("copy-webpack-plugin");
-var relative = require("relative");
+var path = require('path');
+var fs = require('fs');
+var utils = require('./utils');
+var config = require('../config');
+var webpack = require('webpack');
+var merge = require('webpack-merge');
+var vueLoaderConfig = require('./vue-loader.conf');
+var MpvuePlugin = require('webpack-mpvue-asset-plugin');
+var glob = require('glob');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+var relative = require('relative');
 
 function resolve(dir) {
-  return path.join(__dirname, "..", dir);
+  return path.join(__dirname, '..', dir);
 }
 
 function getEntry(rootSrc) {
   var map = {};
-  glob.sync(rootSrc + "/pages/**/main.ts").forEach((file) => {
-    var key = relative(rootSrc, file).replace(".ts", "");
+  glob.sync(rootSrc + '/pages/**/main.ts').forEach((file) => {
+    var key = relative(rootSrc, file).replace('.ts', '');
     map[key] = file;
   });
   return map;
 }
 
-const appEntry = { app: resolve("./src/main.ts") };
-const pagesEntry = getEntry(resolve("./src"), "pages/**/main.ts");
+const appEntry = { app: resolve('./src/main.ts') };
+const pagesEntry = getEntry(resolve('./src'), 'pages/**/main.ts');
 //分包A
 //const subpackagePagesEntry = getEntry(resolve('./src'), '/packageA/pages/**/main.ts')
 const entry = Object.assign({}, appEntry, pagesEntry);
@@ -34,26 +34,26 @@ let baseWebpackConfig = {
   // 可以将 entry 写成 {'toPath': 'fromPath'} 的形式，
   // toPath 为相对于 dist 的路径, 例：index/demo，则生成的文件地址为 dist/index/demo.js
   entry,
-  target: require("mpvue-webpack-target"),
+  target: require('mpvue-webpack-target'),
   output: {
     path: config.build.assetsRoot,
-    jsonpFunction: "webpackJsonpMpvue",
-    filename: "[name].js",
+    jsonpFunction: 'webpackJsonpMpvue',
+    filename: '[name].js',
     publicPath:
-      process.env.NODE_ENV === "production"
+      process.env.NODE_ENV === 'production'
         ? config.build.assetsPublicPath
         : config.dev.assetsPublicPath,
   },
   resolve: {
-    extensions: [".js", ".vue", ".json", ".ts"],
+    extensions: ['.js', '.vue', '.json', '.ts'],
     alias: {
-      vue: "mpvue",
-      "@": resolve("src"),
-      debug: resolve("src/utils/debug"),
+      vue: 'mpvue',
+      '@': resolve('src'),
+      debug: resolve('src/utils/debug'),
     },
     symlinks: false,
-    aliasFields: ["mpvue", "weapp", "browser"],
-    mainFields: ["browser", "module", "main"],
+    aliasFields: ['mpvue', 'weapp', 'browser'],
+    mainFields: ['browser', 'module', 'main'],
   },
   module: {
     rules: [
@@ -68,7 +68,7 @@ let baseWebpackConfig = {
       // },
       {
         test: /\.vue$/,
-        loader: "mpvue-loader",
+        loader: 'mpvue-loader',
         options: vueLoaderConfig,
       },
       // ts文件的loader
@@ -76,13 +76,13 @@ let baseWebpackConfig = {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         use: [
-          "babel-loader",
+          'babel-loader',
           {
-            loader: "mpvue-loader",
+            loader: 'mpvue-loader',
             options: Object.assign({ checkMPEntry: true }, vueLoaderConfig),
           },
           {
-            loader: "awesome-typescript-loader",
+            loader: 'awesome-typescript-loader',
             options: {
               // errorsAsWarnings: true,
               // useCache: true,
@@ -92,37 +92,37 @@ let baseWebpackConfig = {
       },
       {
         test: /\.js$/,
-        include: [resolve("src"), resolve("test")],
+        include: [resolve('src'), resolve('test')],
         use: [
-          "babel-loader",
+          'babel-loader',
           {
-            loader: "mpvue-loader",
+            loader: 'mpvue-loader',
             options: Object.assign({ checkMPEntry: true }, vueLoaderConfig),
           },
         ],
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: "url-loader",
+        loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath("img/[name].[ext]"),
+          name: utils.assetsPath('img/[name].[ext]'),
         },
       },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-        loader: "url-loader",
+        loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath("media/[name].[ext]"),
+          name: utils.assetsPath('media/[name].[ext]'),
         },
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: "url-loader",
+        loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath("fonts/[name].[ext]"),
+          name: utils.assetsPath('fonts/[name].[ext]'),
         },
       },
     ],
@@ -130,26 +130,26 @@ let baseWebpackConfig = {
   plugins: [
     // api 统一桥协议方案
     new webpack.DefinePlugin({
-      mpvue: "global.mpvue",
-      mpvuePlatform: "global.mpvuePlatform",
+      mpvue: 'global.mpvue',
+      mpvuePlatform: 'global.mpvuePlatform',
     }),
     new MpvuePlugin(),
     new CopyWebpackPlugin(
       [
         {
-          from: "**/*.json",
-          to: "",
+          from: '**/*.json',
+          to: '',
         },
       ],
       {
-        context: "src/",
+        context: 'src/',
       }
     ),
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, "../static"),
-        to: path.resolve(config.build.assetsRoot, "./static"),
-        ignore: [".*"],
+        from: path.resolve(__dirname, '../static'),
+        to: path.resolve(config.build.assetsRoot, './static'),
+        ignore: ['.*'],
       },
     ]),
   ],
@@ -159,8 +159,8 @@ let baseWebpackConfig = {
 // 所以需要将项目根路径下面的 project.swan.json 拷贝到构建目录
 // 然后百度开发者工具将 dist/swan 作为项目根目录打
 const projectConfigMap = {
-  tt: "../project.config.json",
-  swan: "../project.swan.json",
+  tt: '../project.config.json',
+  swan: '../project.swan.json',
 };
 
 const PLATFORM = process.env.PLATFORM;

@@ -20,7 +20,7 @@ declare namespace wx {
   }
   interface ErrMsgResponse {
     /** 成功：ok，错误：详细信息 */
-    errMsg: "ok" | string;
+    errMsg: 'ok' | string;
   }
   interface TempFileResponse {
     /** 文件的临时路径 */
@@ -53,15 +53,15 @@ declare namespace wx {
     header?: RequestHeader;
     /** 默认为 GET，有效值：OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT */
     method?:
-      | "GET"
-      | "OPTIONS"
-      | "GET"
-      | "HEAD"
-      | "POST"
-      | "PUT"
-      | "DELETE"
-      | "TRACE"
-      | "CONNECT";
+      | 'GET'
+      | 'OPTIONS'
+      | 'GET'
+      | 'HEAD'
+      | 'POST'
+      | 'PUT'
+      | 'DELETE'
+      | 'TRACE'
+      | 'CONNECT';
     /** 如果设为json，会尝试对返回的数据做一次 JSON.parse */
     dataType?: string;
     /**
@@ -90,16 +90,14 @@ declare namespace wx {
      * @version 1.4.0
      */
     onProgressUpdate(
-      callback?: (
-        res: {
-          /** 上传进度百分比 */
-          progress: number;
-          /** 已经上传的数据长度，单位 Bytes */
-          totalBytesSent: number;
-          /** 预期需要上传的数据总长度，单位 Bytes */
-          totalBytesExpectedToSend: number;
-        }
-      ) => void
+      callback?: (res: {
+        /** 上传进度百分比 */
+        progress: number;
+        /** 已经上传的数据长度，单位 Bytes */
+        totalBytesSent: number;
+        /** 预期需要上传的数据总长度，单位 Bytes */
+        totalBytesExpectedToSend: number;
+      }) => void
     ): void;
     /**
      * 中断下载任务
@@ -138,16 +136,14 @@ declare namespace wx {
      * @version 1.4.0
      */
     onProgressUpdate(
-      callback?: (
-        res: {
-          /** 下载进度百分比 */
-          progress: number;
-          /** 已经下载的数据长度，单位 Bytes */
-          totalBytesWritten: number;
-          /** 预期需要下载的数据总长度，单位 Bytes */
-          totalBytesExpectedToWrite: number;
-        }
-      ) => void
+      callback?: (res: {
+        /** 下载进度百分比 */
+        progress: number;
+        /** 已经下载的数据长度，单位 Bytes */
+        totalBytesWritten: number;
+        /** 预期需要下载的数据总长度，单位 Bytes */
+        totalBytesExpectedToWrite: number;
+      }) => void
     ): void;
     /**
      * 中断下载任务
@@ -227,10 +223,10 @@ declare namespace wx {
   // #endregion
   // #region 媒体API列表
   // 媒体-----图片
-  type ImageSizeType = "original" | "compressed";
-  type ImageSourceType = "album" | "camera";
-  type VideoSourceType = "album" | "camera";
-  type CameraDevice = "front" | "back";
+  type ImageSizeType = 'original' | 'compressed';
+  type ImageSourceType = 'album' | 'camera';
+  type VideoSourceType = 'album' | 'camera';
+  type CameraDevice = 'front' | 'back';
   interface TempFile {
     /** 本地文件路径 */
     path: string;
@@ -909,7 +905,7 @@ declare namespace wx {
     /**
      * 文件类型，指定文件类型打开文件，有效值 doc, xls, ppt, pdf, docx, xlsx, pptx
      */
-    fileType?: "doc" | "xls" | "ppt" | "pdf" | "docx" | "xlsx" | "pptx";
+    fileType?: 'doc' | 'xls' | 'ppt' | 'pdf' | 'docx' | 'xlsx' | 'pptx';
   }
   /**
    * 新开页面打开文档，支持格式：doc, xls, ppt, pdf, docx, xlsx, pptx
@@ -1001,7 +997,7 @@ declare namespace wx {
   }
   interface GetLocationOptions extends BaseOptions {
     /** 默认为 wgs84 返回 gps 坐标，gcj02 返回可用于wx.openLocation的坐标 */
-    type?: "wgs84" | "gcj02";
+    type?: 'wgs84' | 'gcj02';
     altitude?: boolean; // 传入 true 会返回高度信息，由于获取高度需要较高精确度，会减慢接口返回速度
     /** 接口调用成功的回调函数，返回内容详见返回参数说明。 */
     success(res: LocationData): void;
@@ -1131,7 +1127,7 @@ declare namespace wx {
    */
   function canIUse(api: string): boolean;
   // 设备-----网络状态
-  type networkType = "2g" | "3g" | "4g" | "wifi" | "unknown" | "none";
+  type networkType = '2g' | '3g' | '4g' | 'wifi' | 'unknown' | 'none';
   interface NetworkTypeData {
     /** 返回网络类型2g，3g，4g，wifi */
     networkType: networkType;
@@ -1150,12 +1146,7 @@ declare namespace wx {
    * @version 1.1.0
    */
   function onNetworkStatusChange(
-    callback: (
-      res: {
-        isConnected: boolean;
-        networkType: networkType;
-      }
-    ) => void
+    callback: (res: { isConnected: boolean; networkType: networkType }) => void
   ): void;
   // 设备-----加速度计
   interface AccelerometerData {
@@ -1214,7 +1205,7 @@ declare namespace wx {
    */
   function makePhoneCall(options: MakePhoneCallOptions): void;
   // 设备-----扫码
-  type scanType = "qrCode" | "barCode";
+  type scanType = 'qrCode' | 'barCode';
   interface ScanCodeData {
     /**
      * 所扫码的内容
@@ -1394,11 +1385,7 @@ declare namespace wx {
    * @version 1.1.0
    */
   function onBluetoothDeviceFound(
-    callback: (
-      res: {
-        devices: BluetoothDevice[];
-      }
-    ) => void
+    callback: (res: { devices: BluetoothDevice[] }) => void
   ): void;
   interface GetConnectedBluetoothDevicesOptions extends BaseOptions {
     services: string[];
@@ -1607,43 +1594,39 @@ declare namespace wx {
    * 监听低功耗蓝牙连接的错误事件，包括设备丢失，连接异常断开等等。
    */
   function onBLEConnectionStateChanged(
-    callback: (
-      res: {
-        /**
-         * 蓝牙设备 id，参考 device 对象
-         */
-        deviceId: string;
-        /**
-         * 连接目前的状态
-         */
-        connected: boolean;
-      }
-    ) => void
+    callback: (res: {
+      /**
+       * 蓝牙设备 id，参考 device 对象
+       */
+      deviceId: string;
+      /**
+       * 连接目前的状态
+       */
+      connected: boolean;
+    }) => void
   ): void;
   /**
    * 监听低功耗蓝牙设备的特征值变化。必须先启用notify接口才能接收到设备推送的notification。
    */
   function onBLECharacteristicValueChange(
-    callback: (
-      res: {
-        /**
-         * 蓝牙设备 id，参考 device 对象
-         */
-        deviceId: string;
-        /**
-         * 特征值所属服务 uuid
-         */
-        serviceId: string;
-        /**
-         * 特征值 uuid
-         */
-        characteristicId: string;
-        /**
-         * 特征值最新的值
-         */
-        value: ArrayBuffer;
-      }
-    ) => void
+    callback: (res: {
+      /**
+       * 蓝牙设备 id，参考 device 对象
+       */
+      deviceId: string;
+      /**
+       * 特征值所属服务 uuid
+       */
+      serviceId: string;
+      /**
+       * 特征值 uuid
+       */
+      characteristicId: string;
+      /**
+       * 特征值最新的值
+       */
+      value: ArrayBuffer;
+    }) => void
   ): void;
   // #region iBeacon
   interface StartBeaconDiscoveryOptions extends BaseOptions {
@@ -1925,7 +1908,7 @@ declare namespace wx {
     /**
      * 图标，只支持 "success", "loading", "none"
      */
-    icon?: "success" | "loading" | "none";
+    icon?: 'success' | 'loading' | 'none';
     /**
      * 自定义图标的本地路径，image 的优先级高于 icon
      */
@@ -2060,7 +2043,7 @@ declare namespace wx {
     /**
      * 前景颜色值，包括按钮、标题、状态栏的颜色，仅支持 #ffffff 和 #000000
      */
-    frontColor: "#ffffff" | "#000000";
+    frontColor: '#ffffff' | '#000000';
     /**
      * 背景颜色值，有效值为十六进制颜色
      */
@@ -2080,7 +2063,7 @@ declare namespace wx {
        * easeOut	动画以低速结束。
        * easeInOut	动画以低速开始和结束。
        */
-      timingFunc?: "linear" | "easeIn" | "easeOut" | "easeInOut";
+      timingFunc?: 'linear' | 'easeIn' | 'easeOut' | 'easeInOut';
     };
   }
 
@@ -2242,13 +2225,13 @@ declare namespace wx {
   function reLaunch(options?: ReLaunchOptions): void;
   // 界面-----动画
   type TimingFunction =
-    | "linear"
-    | "ease"
-    | "ease-in"
-    | "ease-in-out"
-    | "ease-out"
-    | "step-start"
-    | "step-end";
+    | 'linear'
+    | 'ease'
+    | 'ease-in'
+    | 'ease-in-out'
+    | 'ease-out'
+    | 'step-start'
+    | 'step-end';
   interface CreateAnimationOptions {
     /** 动画持续时间，单位ms，默认值 400 */
     duration?: number;
@@ -2604,8 +2587,8 @@ declare namespace wx {
     method: string;
     data: CanvasAction[] | Array<number | string>;
   }
-  type LineCapType = "butt" | "round" | "square";
-  type LineJoinType = "bevel" | "round" | "miter";
+  type LineCapType = 'butt' | 'round' | 'square';
+  type LineJoinType = 'bevel' | 'round' | 'miter';
   interface CanvasGradient {
     addColorStop(index: number, color: string): void;
   }
@@ -2671,7 +2654,7 @@ declare namespace wx {
     /**
      * 用于设置文字的对齐
      */
-    setTextAlign(align: "left" | "center" | "right"): void;
+    setTextAlign(align: 'left' | 'center' | 'right'): void;
     /**
      * 绘制图像，图像保持原始尺寸。
      * @param imageResource 所要绘制的图片资源, 通过chooseImage得到一个文件路径或者一个项目目录内的图片
@@ -3064,15 +3047,15 @@ declare namespace wx {
 
   // scope 列表
   type Scope =
-    | "scope.userInfo"
-    | "scope.userLocation"
-    | "scope.address"
-    | "scope.invoiceTitle"
-    | "scope.invoice"
-    | "scope.werun"
-    | "scope.record"
-    | "scope.writePhotosAlbum"
-    | "scope.camera";
+    | 'scope.userInfo'
+    | 'scope.userLocation'
+    | 'scope.address'
+    | 'scope.invoiceTitle'
+    | 'scope.invoice'
+    | 'scope.werun'
+    | 'scope.record'
+    | 'scope.writePhotosAlbum'
+    | 'scope.camera';
 
   // 开放接口-----设置
   interface AuthorizeOption {
@@ -3118,7 +3101,7 @@ declare namespace wx {
    */
   function getUserInfo(options: GetUserInfoOptions): void;
   // 开放接口-----微信支付
-  type PaymentSignType = "MD5" | "HMAC-SHA256";
+  type PaymentSignType = 'MD5' | 'HMAC-SHA256';
   interface RequestPaymentOptions extends BaseOptions {
     /** 时间戳从1970年1月1日00:00:00至今的秒数,即当前的时间 */
     timeStamp: string | number;
@@ -3349,7 +3332,7 @@ declare namespace wx {
    */
   function getWeRunData(options?: WeRunDataOptions): void;
 
-  type AuthModes = "fingerPrint" | "facial" | "speech";
+  type AuthModes = 'fingerPrint' | 'facial' | 'speech';
   interface CheckIsSupportSoterAuthenticationOptions extends BaseOptions {
     success?(res: {
       supportMode: AuthModes[]; // 该设备支持的可被SOTER识别的生物识别方式
@@ -3490,28 +3473,28 @@ declare namespace wx {
   }
 
   type TouchEventType =
-    | "tap"
-    | "touchstart"
-    | "touchmove"
-    | "touchcancel"
-    | "touchend"
-    | "touchforcechange";
+    | 'tap'
+    | 'touchstart'
+    | 'touchmove'
+    | 'touchcancel'
+    | 'touchend'
+    | 'touchforcechange';
 
   type TransitionEventType =
-    | "transitionend"
-    | "animationstart"
-    | "animationiteration"
-    | "animationend";
+    | 'transitionend'
+    | 'animationstart'
+    | 'animationiteration'
+    | 'animationend';
 
   type EventType =
-    | "input"
-    | "form"
-    | "submit"
-    | "scroll"
+    | 'input'
+    | 'form'
+    | 'submit'
+    | 'scroll'
     | TouchEventType
     | TransitionEventType
-    | "tap"
-    | "longpress";
+    | 'tap'
+    | 'longpress';
 
   interface BaseEvent<T extends string, Detail> {
     type: T;
@@ -3533,22 +3516,22 @@ declare namespace wx {
    */
   interface InputEvent
     extends BuiltInEvent<
-        "input",
-        {
-          value: string;
-          cursor: number;
-        }
-      > {}
+      'input',
+      {
+        value: string;
+        cursor: number;
+      }
+    > {}
 
   interface FormEvent
     extends BuiltInEvent<
-        "form",
-        {
-          value: { [name: string]: string | boolean | number };
-        }
-      > {}
+      'form',
+      {
+        value: { [name: string]: string | boolean | number };
+      }
+    > {}
 
-  interface ScrollEvent extends BuiltInEvent<"scroll", {}> {}
+  interface ScrollEvent extends BuiltInEvent<'scroll', {}> {}
 
   interface Touch {
     identifier: number;
@@ -3560,37 +3543,37 @@ declare namespace wx {
 
   interface TouchEvent<T extends TouchEventType>
     extends BuiltInEvent<
-        T,
-        {
-          x: number;
-          y: number;
-        }
-      > {
+      T,
+      {
+        x: number;
+        y: number;
+      }
+    > {
     touches: Touch[];
     changedTouches: Touch[];
   }
 
-  interface TapEvent extends TouchEvent<"tap"> {
+  interface TapEvent extends TouchEvent<'tap'> {
     // 手指触摸后马上离开
   }
 
-  interface TouchStartEvent extends TouchEvent<"touchstart"> {
+  interface TouchStartEvent extends TouchEvent<'touchstart'> {
     // 手指触摸动作开始
   }
 
-  interface TouchEndEvent extends TouchEvent<"touchend"> {
+  interface TouchEndEvent extends TouchEvent<'touchend'> {
     // 手指触摸动作结束
   }
 
-  interface TouchMoveEvent extends TouchEvent<"touchmove"> {
+  interface TouchMoveEvent extends TouchEvent<'touchmove'> {
     // 手指触摸后移动
   }
 
-  interface TouchCancelEvent extends TouchEvent<"touchcancel"> {
+  interface TouchCancelEvent extends TouchEvent<'touchcancel'> {
     // 手指触摸动作被打断，如来电提醒，弹窗
   }
 
-  interface TouchForceChangeEvent extends TouchEvent<"touchforcechange"> {
+  interface TouchForceChangeEvent extends TouchEvent<'touchforcechange'> {
     // 在支持 3D Touch 的 iPhone 设备，重按时会触发
   }
   // #endregion
@@ -3733,9 +3716,9 @@ declare namespace wx {
 
   type DefaultProps = object | Record<string, any>;
 
-  type UnionToIntersection<U> = (U extends any
-    ? (k: U) => void
-    : never) extends ((k: infer I) => void)
+  type UnionToIntersection<U> = (
+    U extends any ? (k: U) => void : never
+  ) extends (k: infer I) => void
     ? I
     : never;
 
@@ -3748,13 +3731,13 @@ declare namespace wx {
   }
 
   type UnboxBehaviorData<T> = T extends Behavior<{}, {}, {}>
-    ? T["__DO_NOT_USE_INTERNAL_FIELD_DATA"]
+    ? T['__DO_NOT_USE_INTERNAL_FIELD_DATA']
     : {};
   type UnboxBehaviorProps<T> = T extends Behavior<{}, {}, {}>
-    ? T["__DO_NOT_USE_INTERNAL_FIELD_PROPS"]
+    ? T['__DO_NOT_USE_INTERNAL_FIELD_PROPS']
     : {};
   type UnboxBehaviorMethods<T> = T extends Behavior<{}, {}, {}>
-    ? T["__DO_NOT_USE_INTERNAL_FIELD_METHODS"]
+    ? T['__DO_NOT_USE_INTERNAL_FIELD_METHODS']
     : {};
 
   type UnboxBehaviorsMethods<
@@ -3803,7 +3786,7 @@ declare namespace wx {
 
   interface ComponentRelation<D = any, P = any> {
     /** 目标组件的相对关系，可选的值为 parent 、 child 、 ancestor 、 descendant */
-    type: "parent" | "child" | "ancestor" | "descendant";
+    type: 'parent' | 'child' | 'ancestor' | 'descendant';
     /** 如果这一项被设置，则它表示关联的目标节点所应具有的behavior，所有拥有这一behavior的组件节点都会被关联 */
     target?: string;
     /** 关系生命周期函数，当关系被建立在页面节点树中时触发，触发时机在组件attached生命周期之后 */
@@ -3825,7 +3808,7 @@ declare namespace wx {
 
   interface ComponentRelation<D = any, P = any> {
     /** 目标组件的相对关系，可选的值为 parent 、 child 、 ancestor 、 descendant */
-    type: "parent" | "child" | "ancestor" | "descendant";
+    type: 'parent' | 'child' | 'ancestor' | 'descendant';
     /** 如果这一项被设置，则它表示关联的目标节点所应具有的behavior，所有拥有这一behavior的组件节点都会被关联 */
     target?: string;
     /** 关系生命周期函数，当关系被建立在页面节点树中时触发，触发时机在组件attached生命周期之后 */
@@ -3968,7 +3951,9 @@ declare namespace wx {
     value?: infer T;
   }
     ? T
-    : Def extends (...args: any[]) => infer T ? T : never;
+    : Def extends (...args: any[]) => infer T
+    ? T
+    : never;
 
   /**
    * Component实例方法
@@ -3998,7 +3983,7 @@ declare namespace wx {
       {
         [key in keyof (P & UnboxBehaviorsProps<B>)]: PropValueType<
           (P & UnboxBehaviorsProps<B>)[key]
-        >
+        >;
       };
 
     /**
@@ -4009,7 +3994,7 @@ declare namespace wx {
       {
         [key in keyof (P & UnboxBehaviorsProps<B>)]: PropValueType<
           (P & UnboxBehaviorsProps<B>)[key]
-        >
+        >;
       };
     /**
      * 将数据从逻辑层发送到视图层，同时改变对应的 this.data 的值
@@ -4028,7 +4013,7 @@ declare namespace wx {
           | symbol
           | object
           | null
-          | any[]
+          | any[];
       },
       callback?: () => void
     ): void;
@@ -4079,7 +4064,7 @@ declare namespace wx {
   // #region Page
   interface PageShareAppMessageOptions {
     /** 转发事件来源。button：页面内转发按钮；menu：右上角转发菜单 */
-    from: "button" | "menu";
+    from: 'button' | 'menu';
     /** 如果 from 值是 button，则 target 是触发这次转发事件的 button，否则为 undefined */
     target: object | undefined;
   }
@@ -4148,6 +4133,7 @@ declare namespace wx {
   }
 
   interface Page<D = object, P = object> extends Component<D, P> {
+    onShow();
     /**
      * data
      */
