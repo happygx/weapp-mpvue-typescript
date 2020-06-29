@@ -4,30 +4,32 @@
 		"urlCheck": true,
 		"es6": true,
 		"enhance": true,
-		"postcss": false,
+		"postcss": true,
 		"preloadBackgroundData": false,
-		"minified": false,
+		"minified": true,
 		"newFeature": true,
 		"coverView": true,
 		"nodeModules": true,
 		"autoAudits": false,
 		"showShadowRootInWxmlPanel": false,
 		"scopeDataCheck": false,
-		"uglifyFileName": false,
+		"uglifyFileName": true,
 		"checkInvalidKey": true,
 		"checkSiteMap": false,
 		"uploadWithSourceMap": true,
+		"compileHotReLoad": false,
 		"babelSetting": {
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
 		},
+		"useIsolateContext": true,
 		"useCompilerModule": false,
 		"userConfirmedUseCompilerModuleSwitch": true
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
-	"appid": "wx0143242e3ce9fcef",
+	"appid": "wxe714ed701ccde53b",
 	"projectname": "workflow",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
@@ -151,6 +153,21 @@
 					"id": -1,
 					"name": "pages/work/create/main",
 					"pathName": "pages/work/create/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/work/deal/main",
+					"pathName": "pages/work/deal/main",
+					"query": "id=78",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/work/deal/question/main",
+					"pathName": "pages/work/deal/question/main",
+					"query": "id=407",
 					"scene": null
 				}
 			]

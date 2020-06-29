@@ -14,6 +14,8 @@
     "pages/work/list/main",
     "pages/work/create/main",
     "pages/work/deal/main",
+    "pages/work/deal/question/main",
+    "pages/work/deal/device/main",
     "pages/mine/index/main",
     "pages/mine/information/main",
     "pages/mine/notice/main",
@@ -80,6 +82,7 @@
     "van-uploader": "./static/vant/uploader/index",
     "van-dialog": "./static/vant/dialog/index",
     "van-checkbox": "./static/vant/checkbox/index",
-    "van-swipe-cell": "./static/vant/swipe-cell/index"
+    "van-swipe-cell": "./static/vant/swipe-cell/index",
+    "van-stepper": "./static/vant/stepper/index"
   }
 }

@@ -16,6 +16,6 @@
 
 <script lang="ts" src="./list.ts"></script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './list.scss';
 </style>

@@ -209,13 +209,6 @@ VantComponent({
         });
       }
     },
-    imageError(err) {
-      var errorImgIndex = err.target.dataset.index; //获取循环的下标
-      var imgObject = 'lists[' + errorImgIndex + '].path'; //carlistData为数据源，对象数组
-      var errorImg = {};
-      errorImg[imgObject] = '/static/images/play.jpg'; //我们构建一个对象
-      this.setData(errorImg); //修改数据源对应的数据
-    },
     onVideoClose() {
       this.setData({
         videoShow: false,

@@ -2,4 +2,30 @@
 
 .deal-wrap {
   width: 100%;
+  padding: 10px 15px;
+  .van-cell__title {
+    color: #555;
+    font-weight: bold;
+  }
+  .edit {
+    top: 5rpx;
+  }
+  .title {
+    color: #555;
+  }
+  .yellow {
+    color: #e6a23c;
+  }
+  .red {
+    color: #f56c6c;
+  }
+  .green {
+    color: #39b54a;
+  }
+  .question:last-child {
+    margin-bottom: 0;
+  }
+  .btn-group {
+    padding: 20px 16px;
+  }
 }

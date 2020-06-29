@@ -2,7 +2,14 @@
 
 .create-wrap {
   width: 100%;
-  padding: 10px;
+  padding: 10px 15px;
+
+  .cell-group {
+    .van-cell__title {
+      color: #555;
+      font-weight: bold;
+    }
+  }
 
   .required::before {
     position: absolute;
@@ -23,6 +30,9 @@
   .title {
     display: flex;
     align-items: center;
+    h3 {
+      color: #555;
+    }
     .van-checkbox__icon {
       width: 16px;
       height: 16px;

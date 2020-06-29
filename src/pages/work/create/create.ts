@@ -18,7 +18,7 @@ import Dialog from '../../../../static/vant/dialog/dialog';
 export default class Create extends Vue {
   // data
   private buildingName: string = '';
-  private buildingId: number = NaN;
+  private buildingId: number = 0;
   private buildingsData: object[] = [];
   private companyShow: boolean = false;
   private operation: number = 14;
@@ -26,7 +26,7 @@ export default class Create extends Vue {
   private selectRows: any[] = [];
   private questions: object[] = [];
   private suggestShow: boolean = false;
-  private suggestIndex: any = NaN;
+  private suggestIndex: number | string = '';
   private suggestContent: string = '';
   private tableHeader: object[] = [
     { prop: 'exhibitor_name', icon: 'icon-user' },
@@ -34,7 +34,7 @@ export default class Create extends Vue {
     { prop: 'visibleName', icon: 'icon-status' },
   ];
   private tagType: string[] = ['default', 'warning', 'danger'];
-  private workId: number = NaN;
+  private workId: number = 0;
   private disabled: boolean = false;
 
   // 监听页面加载

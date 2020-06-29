@@ -160,3 +160,8 @@ export const objectAssign = (target: object, source: object) => {
     }
   }
 };
+
+export const isVideo = (url: string) => {
+  const VIDEO_REGEXP = /\.(mp4|mov|m4v|3gp|avi|m3u8|webm)/i;
+  return VIDEO_REGEXP.test(url);
+};

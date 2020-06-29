@@ -16,9 +16,9 @@ export default class Information extends Vue {
   private isShow: boolean = false;
   private type: string = '';
   private name: string = '';
-  private gender: number = NaN;
-  private phone: number = NaN;
-  private captcha: number = NaN;
+  private gender: number | string = '';
+  private phone: number | string = '';
+  private captcha: number | string = '';
   private isSend: boolean = true;
   private sendText: string = '发送验证码';
 
@@ -86,7 +86,7 @@ export default class Information extends Vue {
   }
 
   async save() {
-    if (this[this.type] !== '' && this[this.type] !== NaN) {
+    if (!this[this.type]) {
       if (this.type === 'phone') {
         let res = await compareVerificationCode({
           data: {

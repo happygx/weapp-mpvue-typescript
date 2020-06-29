@@ -12,6 +12,7 @@ import Company from '@/components/Company/company.vue';
 import { UserModule } from '@/store/module/user';
 import { uploadFile } from '@/utils/uploadOSS/uploadFile';
 import Dialog from '../../../../../static/vant/dialog/dialog';
+import { addQuestion } from '@/api/work';
 
 @Component({
   name: 'add',
@@ -73,6 +74,8 @@ export default class Add extends Vue {
   private fileList: any[] = [];
   private disabled: boolean = false;
   private faultDevice: object[] = [];
+  private isAdd: boolean = false;
+  private isRemote: boolean = true;
 
   // 监听页面加载
   onLoad() {
@@ -91,7 +94,7 @@ export default class Add extends Vue {
 
   // 初始化函数
   init() {
-    this.questionId = (this.$options.parent as any).$mp.query.id;
+    this.questionId = this.$options.parent.$mp.query.id;
     if (this.questionId) {
       this.disabled = true;
       this.getQuestionsData();
@@ -105,7 +108,17 @@ export default class Add extends Vue {
       this.classificationName = this.classification.name;
       this.form.classificationId = this.classification.id;
     }
-    this.getBuildings();
+    this.isAdd = this.$options.parent.$mp.query.add;
+    if (this.isAdd) {
+      this.disabled = true;
+      this.isRemote = false;
+      this.buildingName = this.$options.parent.$mp.query.buildingName;
+      this.form.buildingId = this.$options.parent.$mp.query.buildingId;
+      this.getUsers(this.form.buildingId);
+      this.getDevice(this.form.buildingId);
+    } else {
+      this.getBuildings();
+    }
     this.getOssSignData();
   }
 
@@ -128,7 +141,7 @@ export default class Add extends Vue {
       this.form.status = res.status;
       this.form.content = res.content;
       this.form.attachments = [...res.attachments];
-      this.fileList = res.attachments;
+      this.fileList = [...res.attachments];
     });
   }
 
@@ -214,18 +227,10 @@ export default class Add extends Vue {
 
   deviceConfirm(e: any) {
     let device = e.target.value[1];
-
     let isRepeat = this.form.devices.some((item: any) => {
       return item.code === device.code;
     });
     if (!isRepeat) {
-      let type = 10;
-      if (e.target.value[0] === '水泵') {
-        type = 20;
-      } else if (e.target.value[0] === '冷却塔') {
-        type = 30;
-      }
-      device.type = type;
       this.form.devices.push(device);
     } else {
       this.$tip('此问题设备已存在！');
@@ -313,12 +318,9 @@ export default class Add extends Vue {
   }
 
   getAttachments() {
-    let attachments = this.filterDifferent(
-      this.fileList,
-      this.form.attachments
-    );
+    this.fileList = this.filterDifferent(this.fileList, this.form.attachments);
     this.form.attachments = [];
-    for (let item of attachments) {
+    for (let item of this.fileList) {
       //获取最后一个.的位置
       let index = item.tempFilePath.lastIndexOf('.');
       //获取后缀
@@ -337,6 +339,25 @@ export default class Add extends Vue {
 
   createQuestion() {
     this.getAttachments();
+    if (this.isAdd) {
+      this.add();
+    } else {
+      this.create();
+    }
+  }
+
+  add() {
+    this.form.workflowId = this.$options.parent.$mp.query.workflowId;
+    console.log(this.form);
+    addQuestion({
+      method: 'POST',
+      data: this.form,
+    }).then((res: any) => {
+      this.createSuccess();
+    });
+  }
+
+  create() {
     if (this.questionId) {
       this.form.questionId = this.questionId;
       wxQuestionUpdate({
@@ -365,6 +386,14 @@ export default class Add extends Vue {
         },
       });
     }
-    wx.navigateBack();
+    if (this.isAdd) {
+      wx.navigateTo({
+        url: `/pages/work/deal/main?id=${this.$options.parent.$mp.query.workflowId}`,
+      });
+    } else {
+      wx.navigateTo({
+        url: '/pages/question/mine/main',
+      });
+    }
   }
 }

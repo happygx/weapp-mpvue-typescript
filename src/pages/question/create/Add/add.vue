@@ -5,6 +5,7 @@
         label="仓库名称"
         required
         disabled
+        title-width="80px"
         :border="false"
         :value="buildingName"
         @click="!disabled && (companyShow = true)"
@@ -21,6 +22,7 @@
         placeholder="请选择问题提出人"
         required
         disabled
+        title-width="80px"
         :border="false"
         :value="exhibitorName"
         @click="exhibitorShow = true"
@@ -44,6 +46,7 @@
         placeholder="请选择问题分类"
         required
         disabled
+        title-width="80px"
         :border="false"
         :value="classificationName"
         @click="classificationShow = true"
@@ -66,7 +69,7 @@
         v-if="roles !== '养护员'"
         :border="false"
         title="问题级别"
-        title-width="90px"
+        title-width="80px"
         title-class="required"
       >
         <van-radio-group
@@ -80,10 +83,10 @@
         </van-radio-group>
       </van-cell>
       <van-cell
-        v-if="roles !== '养护员'"
+        v-if="roles !== '养护员' && isRemote"
         :border="false"
         title="远程处理"
-        title-width="90px"
+        title-width="80px"
         title-class="required"
       >
         <van-radio-group
@@ -102,6 +105,7 @@
         required
         autosize
         type="textarea"
+        title-width="80px"
         :show-confirm-bar="false"
         :border="false"
         :value="form.content"
@@ -110,7 +114,7 @@
       <van-cell
         :border="false"
         title="告警设备"
-        title-width="90px"
+        title-width="80px"
         v-if="faultDevice.length > 0"
       >
         <van-tag
@@ -124,7 +128,7 @@
           {{ item.location }}（{{ item.name }}）
         </van-tag>
       </van-cell>
-      <van-cell :border="false" title="问题设备" title-width="90px">
+      <van-cell :border="false" title="问题设备" title-width="80px">
         <van-button
           type="info"
           size="small"
@@ -138,7 +142,7 @@
         v-if="form.devices.length > 0"
         :border="false"
         title=" "
-        title-width="90px"
+        title-width="80px"
       >
         <van-tag
           v-for="(item, index) in form.devices"
@@ -165,7 +169,7 @@
           @confirm="deviceConfirm"
         />
       </van-popup>
-      <van-cell :border="false" title="上传附件" title-width="90px">
+      <van-cell :border="false" title="上传附件" title-width="80px">
         <van-uploader
           class="fl"
           accept="media"

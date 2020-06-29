@@ -4,22 +4,25 @@
       <van-field
         label="仓库名称"
         disabled
+        title-width="80px"
         :border="false"
         :value="questionsData.building_name"
       />
       <van-cell
         v-if="roles !== '养护员'"
         title="仓库记录"
-        title-width="90px"
+        title-width="80px"
         :border="false"
       >
-        <span class="fl mr10 tl">{{ questionsData.building_record }}</span>
-        <van-icon
-          name="edit"
-          class="fl f16"
-          custom-class="edit"
-          @click="popupShow('recordShow')"
-        />
+        <p class="tl">
+          {{ questionsData.building_record }}
+          <van-icon
+            name="edit"
+            class="f16 ml5"
+            custom-class="edit pr"
+            @click="popupShow('recordShow')"
+          />
+        </p>
       </van-cell>
       <Popup
         title="仓库记录"
@@ -32,10 +35,11 @@
         v-if="roles !== '养护员'"
         label="问题提出人"
         disabled
+        title-width="80px"
         :border="false"
         :value="questionsData.exhibitor_name"
       />
-      <van-cell title="问题分类" title-width="90px" :border="false">
+      <van-cell title="问题分类" title-width="80px" :border="false">
         <span class="fl mr10">{{ questionsData.classification_name }}</span>
         <van-icon
           v-if="!isView"
@@ -62,7 +66,7 @@
       <van-cell
         v-if="roles !== '养护员'"
         title="问题级别"
-        title-width="90px"
+        title-width="80px"
         :border="false"
       >
         <span class="fl mr10" v-if="questionsData.rank !== undefined">
@@ -90,7 +94,7 @@
           @confirm="rankConfirm"
         />
       </van-popup>
-      <van-cell title="问题详情" title-width="90px" :border="false">
+      <van-cell title="问题详情" title-width="80px" :border="false">
         <span class="fl tl">
           {{ questionsData.content }}
         </span>
@@ -98,7 +102,7 @@
       <van-cell
         :border="false"
         title="告警设备"
-        title-width="90px"
+        title-width="80px"
         v-if="faultDevices.length > 0"
       >
         <van-tag
@@ -116,7 +120,7 @@
         v-if="!isView || devices.length > 0"
         :border="false"
         title="问题设备"
-        title-width="90px"
+        title-width="80px"
       >
         <van-button
           v-if="!isView"
@@ -146,7 +150,7 @@
         v-if="!isView && devices.length > 0"
         :border="false"
         title=" "
-        title-width="90px"
+        title-width="80px"
       >
         <van-tag
           v-for="(item, index) in devices"
@@ -177,7 +181,7 @@
         v-if="attachments.length > 0"
         :border="false"
         title="问题附件"
-        title-width="90px"
+        title-width="80px"
       >
         <van-uploader
           class="fl"
@@ -193,6 +197,7 @@
         placeholder="请输入处理意见"
         autosize
         type="textarea"
+        title-width="80px"
         :show-confirm-bar="false"
         :border="false"
         :value="suggest"
@@ -202,7 +207,7 @@
       <van-cell
         v-if="!isView && !textareaShow"
         title="处理意见"
-        title-width="90px"
+        title-width="80px"
         :border="false"
       >
         <span class="fl tl" :class="{ placeholder: suggest === '' }">
@@ -212,7 +217,7 @@
       <van-cell
         v-if="isView && record.length > 0"
         title="处理记录"
-        title-width="90px"
+        title-width="80px"
         :border="false"
       >
         <p class="clearfix tl mb10" v-for="(item, i) in record" :key="i">
@@ -246,7 +251,7 @@
       <van-button
         type="info"
         size="large"
-        custom-class="mt20"
+        :custom-class="roles === '售后经理' ? 'w100' : ''"
         @click="handleSuccess"
       >
         处理成功
@@ -256,7 +261,6 @@
         style="margin-left: 10%;"
         type="info"
         size="large"
-        custom-class="mt20"
         @click="handleFailure"
       >
         处理失败

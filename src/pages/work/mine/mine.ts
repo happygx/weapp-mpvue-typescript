@@ -284,8 +284,6 @@ export default class Mine extends Vue {
   }
 
   distributeConfirm(e: any) {
-    console.log(e);
-    console.log(this.distribute);
     let questionsId: number[] = [];
     this.distribute.questions.forEach((item: any) => {
       questionsId.push(item.id);

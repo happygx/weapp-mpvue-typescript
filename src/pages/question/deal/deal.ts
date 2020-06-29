@@ -10,10 +10,11 @@ import {
   finishQuestion,
   approveQuestion,
 } from '@/api/question';
+import { buildings } from '@/api/common';
 import Popup from '@/components/Popup/popup.vue'; // mpvue目前只支持的单文件组件
 import { UserModule } from '@/store/module/user';
 import Dialog from '../../../../static/vant/dialog/dialog';
-import { buildings } from '@/api/common';
+import { isVideo } from '@/utils/common';
 
 @Component({
   name: 'deal',
@@ -50,7 +51,7 @@ export default class Deal extends Vue {
   private deviceColumns: object[] = [];
   private devices: any[] = [];
   private faultDevices: object[] = [];
-  private attachments: object[] = [];
+  private attachments: any[] = [];
   private record: any[] = [];
   private suggest: string = '';
   private videoShow: boolean = false;
@@ -93,6 +94,11 @@ export default class Deal extends Vue {
       this.devices = res.device_relation;
       this.faultDevices = res.fault_device;
       this.attachments = res.attachments;
+      for (let item of this.attachments) {
+        if (isVideo(item.url)) {
+          item.errUrl = '/static/images/play.jpg';
+        }
+      }
       this.record = res.record;
       this.getDevice(res.buildingId);
     });
@@ -185,14 +191,6 @@ export default class Deal extends Vue {
       return item.code === device.code;
     });
     if (!isRepeat) {
-      let type = 10;
-      if (e.target.value[0] === '水泵') {
-        type = 20;
-      } else if (e.target.value[0] === '冷却塔') {
-        type = 30;
-      }
-      device.type = type;
-      console.log(device);
       deviceRelations({
         method: 'POST',
         data: {
@@ -237,7 +235,9 @@ export default class Deal extends Vue {
           content: this.suggest,
         },
       }).then((result: any) => {
-        wx.navigateBack();
+        wx.navigateTo({
+          url: '/pages/question/upcoming/main',
+        });
       });
     } else {
       this.$tip('处理意见不能为空！');
@@ -252,7 +252,9 @@ export default class Deal extends Vue {
         content: this.suggest,
       },
     }).then((result: any) => {
-      wx.navigateBack();
+      wx.navigateTo({
+        url: '/pages/question/upcoming/main',
+      });
     });
   }
 

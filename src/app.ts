@@ -22,9 +22,7 @@ export default class App extends Vue {
   }
   // app hook
   onLaunch() {
-    if (!UserModule.session) {
-      getSession();
-    } else {
+    if (UserModule.session) {
       checkSession();
     }
     this.getUserInfo();
