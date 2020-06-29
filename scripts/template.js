@@ -21,8 +21,8 @@ const VueTep = `<template>
 
 <script lang="ts" src="./${dirName}.ts"></script>
 
-<style lang="scss" scoped>
-  @import './${dirName}.scss'
+<style lang="scss">
+@import './${dirName}.scss'
 </style>
 
 `;
@@ -30,7 +30,6 @@ const VueTep = `<template>
 // ts 模版
 const tsTep = `import { Vue, Component } from "vue-property-decorator"
 import {  } from "@/api/common"
-import {  } from "@/components" // 组件
 
 @Component({
   name: '${dirName}',
@@ -44,7 +43,7 @@ export default class ${capPirName} extends Vue {
 
   // 监听页面加载
   onLoad() {
-    //
+    this.init();
   }
 
   // 小程序 hook

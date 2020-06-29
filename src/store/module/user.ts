@@ -6,45 +6,28 @@ import {
   getModule,
 } from 'vuex-module-decorators';
 import store from '@/store';
-import { setStorage, getStorage, removeStorage } from '@/utils/common';
-import { wxLogin, wxLogout } from '@/api/common';
+import { setStorage, getStorage } from '@/utils/common';
+import { getSession } from '@/utils/session';
 
 export interface IUserState {
   session: string | boolean;
-  info: object | boolean;
+  info: any;
+  browse: string[];
 }
 
 @Module({ dynamic: true, store, name: 'user' })
 class User extends VuexModule implements IUserState {
   public session: string | boolean = getStorage('session', true);
-  public info: object | boolean = getStorage('info', true);
-
-  @Action
-  public async Login(form: object) {
-    console.log(form);
-    const res = await wxLogin({
-      method: 'POST',
-      data: form,
-    });
-    console.log(res);
-
-    if (!res) {
-      throw Error('Verification failed, please Login again.');
-    }
-    this.SET_INFO(res.info);
-  }
-
-  @Action
-  public async LogOut(callback: () => void) {
-    const res = await wxLogout();
-    this.ResetToken();
-    callback();
-  }
+  public info: any = getStorage('info', true);
+  public browse: string[] = getStorage('browse', true);
 
   @Action
   public ResetToken() {
+    this.SET_SESSION(false);
     this.SET_INFO(false);
-    removeStorage('info');
+    this.SET_BROWSE([]);
+    wx.clearStorage();
+    getSession();
   }
 
   @Action
@@ -57,6 +40,11 @@ class User extends VuexModule implements IUserState {
     this.SET_INFO(info);
   }
 
+  @Action
+  public async SET_BROWSE_ASYNC(browse: []) {
+    this.SET_BROWSE(browse);
+  }
+
   @Mutation
   private SET_SESSION(session: string | boolean) {
     this.session = session;
@@ -67,6 +55,12 @@ class User extends VuexModule implements IUserState {
   private SET_INFO(info: object | boolean) {
     this.info = info;
     setStorage('info', info);
+  }
+
+  @Mutation
+  private SET_BROWSE(browse: []) {
+    this.browse = browse;
+    setStorage('browse', browse);
   }
 }
 

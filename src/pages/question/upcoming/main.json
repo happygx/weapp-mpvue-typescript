@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "待办问题",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 50,
+  "backgroundTextStyle": "drak"
+}

@@ -1,0 +1,20 @@
+@import '@/assert/css/common.scss';
+
+.company-wrap {
+  width: 100%;
+  .company-popup {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    .search {
+      padding: 5px 10px;
+    }
+    .cancel {
+      color: $bg;
+    }
+    .building-list {
+      height: calc(100% - 44px);
+      overflow-y: auto;
+    }
+  }
+}

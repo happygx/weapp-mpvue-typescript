@@ -1,0 +1,76 @@
+@import '@/assert/css/common.scss';
+
+.tableCom-wrap {
+  width: 100%;
+  .van-cell:after {
+    border: none;
+  }
+  .list-item {
+    padding: 10px 15px;
+    margin-bottom: 1px;
+
+    .title {
+      display: flex;
+      align-items: center;
+      .van-checkbox__icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .detail {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      p {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #888;
+        .green {
+          color: #39b54a;
+        }
+      }
+    }
+    .content {
+      color: #888;
+      .expansion {
+        word-break: keep-all;
+        color: $bg;
+      }
+    }
+  }
+  .swipe-right {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 15px;
+      color: #fff;
+      background-color: #e54d42;
+      &:nth-child(2) {
+        background-color: #07c160;
+      }
+    }
+  }
+
+  .load-more {
+    padding: 10px;
+    color: #aaa;
+    text-align: center;
+    background-color: #fff;
+  }
+  .loading-wrap {
+    display: flex;
+    justify-content: center;
+    .loading {
+      margin: 20px auto;
+      .van-loading__text {
+        color: #1989fa;
+      }
+    }
+  }
+}

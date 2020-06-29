@@ -1,17 +1,18 @@
-var utils = require("./utils");
-var webpack = require("webpack");
-var config = require("../config");
-var merge = require("webpack-merge");
-var baseWebpackConfig = require("./webpack.base.conf");
+var utils = require('./utils');
+var webpack = require('webpack');
+var config = require('../config');
+var merge = require('webpack-merge');
+var baseWebpackConfig = require('./webpack.base.conf');
 // var HtmlWebpackPlugin = require('html-webpack-plugin')
-var FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
-var MpvueVendorPlugin = require("webpack-mpvue-vendor-plugin");
+var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+var MpvueVendorPlugin = require('webpack-mpvue-vendor-plugin');
 
 // copy from ./webpack.prod.conf.js
-var path = require("path");
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var CopyWebpackPlugin = require("copy-webpack-plugin");
-var OptimizeCSSPlugin = require("optimize-css-assets-webpack-plugin");
+var path = require('path');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin'); // 头部引入
 
 // add hot-reload related code to entry chunks
 // Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -27,17 +28,17 @@ module.exports = merge(baseWebpackConfig, {
   },
   // cheap-module-eval-source-map is faster for development
   // devtool: '#cheap-module-eval-source-map',
-  devtool: "#source-map",
+  devtool: '#source-map',
   output: {
     path: config.build.assetsRoot,
     // filename: utils.assetsPath('[name].[chunkhash].js'),
     // chunkFilename: utils.assetsPath('[id].[chunkhash].js')
-    filename: utils.assetsPath("[name].js"),
-    chunkFilename: utils.assetsPath("[id].js"),
+    filename: utils.assetsPath('[name].js'),
+    chunkFilename: utils.assetsPath('[id].js'),
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": config.dev.env,
+      'process.env': config.dev.env,
     }),
 
     // copy from ./webpack.prod.conf.js
@@ -57,20 +58,20 @@ module.exports = merge(baseWebpackConfig, {
       },
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: "common/vendor",
+      name: 'common/vendor',
       minChunks: function (module, count) {
         // any required modules inside node_modules are extracted to vendor
         return (
           (module.resource &&
             /\.js$/.test(module.resource) &&
-            module.resource.indexOf("node_modules") >= 0) ||
+            module.resource.indexOf('node_modules') >= 0) ||
           count > 1
         );
       },
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: "common/manifest",
-      chunks: ["common/vendor"],
+      name: 'common/manifest',
+      chunks: ['common/vendor'],
     }),
     new MpvueVendorPlugin({
       platform: process.env.PLATFORM,
@@ -85,5 +86,6 @@ module.exports = merge(baseWebpackConfig, {
     //   inject: true
     // }),
     new FriendlyErrorsPlugin(),
+    new UglifyJsPlugin({ sourceMap: true }), // 压缩vendor.js
   ],
 });

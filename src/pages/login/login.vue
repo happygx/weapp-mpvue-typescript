@@ -4,12 +4,14 @@
       <van-field
         label="用户名"
         placeholder="请输入用户名"
+        clearable
         :value="form.username"
         @input="form.username = $event.mp.detail"
       />
       <van-field
         label="密码"
         placeholder="请输入密码"
+        clearable
         :value="form.password"
         :password="passwordShow"
         :right-icon="passwordShow ? 'closed-eye' : 'eye-o'"
@@ -26,8 +28,6 @@
         >登录</van-button
       >
     </div>
-    <!--这种特殊占位符是必须有的！-->
-    <van-toast id="van-toast" />
   </div>
 </template>
 

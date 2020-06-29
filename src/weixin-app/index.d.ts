@@ -3663,6 +3663,8 @@ declare namespace wx {
   function getAccountInfoSync(): AccountInfo;
   // #endregion
 
+  function getLaunchOptionsSync(): () => void;
+
   /**
    * App 实现的接口对象
    * 开发者可以添加任意的函数或数据到 Object 参数中，用 this 可以访问

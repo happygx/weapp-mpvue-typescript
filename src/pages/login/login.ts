@@ -1,7 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator';
-import { userSensitiveData } from '@/api/common';
-import Toast from '../../../static/vant/toast/toast';
+import { wxLogin } from '@/api/common';
 import { UserModule } from '@/store/module/user';
+import { getSession } from '@/utils/session';
+import { getStorage } from '@/utils/common';
 
 @Component({
   name: 'login',
@@ -43,7 +44,7 @@ export default class Login extends Vue {
 
   bindGetUserInfo(e: any) {
     if (this.form.username === '' || this.form.username === '') {
-      Toast('不能为空！');
+      this.$tip('不能为空！');
       return false;
     }
     let userInfo = e.target.userInfo;
@@ -51,10 +52,26 @@ export default class Login extends Vue {
     if (userInfo) {
       this.form.encryptedData = e.target.encryptedData;
       this.form.iv = e.target.iv;
-      UserModule.Login(this.form);
+      getStorage('session', false, (res: any) => {
+        if (res) {
+          this.login();
+        } else {
+          getSession(this.login);
+        }
+      });
+    }
+  }
+
+  login() {
+    wxLogin({
+      method: 'POST',
+      data: this.form,
+    }).then((res: any) => {
+      UserModule.SET_INFO_ASYNC(res.info);
+      UserModule.SET_BROWSE_ASYNC(res.browse_permissions);
       wx.switchTab({
         url: '/pages/index/main',
       });
-    }
+    });
   }
 }

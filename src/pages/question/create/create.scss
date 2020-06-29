@@ -1,0 +1,27 @@
+@import '@/assert/css/common.scss';
+
+.create-wrap {
+  width: 100%;
+
+  .tab {
+    padding: 15px;
+    .orange {
+      color: #f60;
+    }
+  }
+
+  .solutions {
+    padding-bottom: 10px;
+    border-bottom: 1px dashed $bc;
+    p {
+      padding: 5px 0;
+      color: #666;
+    }
+  }
+
+  .create {
+    h4 {
+      color: #1fc2dc;
+    }
+  }
+}

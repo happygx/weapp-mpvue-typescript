@@ -1,5 +1,12 @@
 import { VantComponent } from '../common/component';
-import { isImageFile, isVideo, chooseFile, isPromise } from './utils';
+import {
+  isImageFile,
+  isVideoFile,
+  isMediaFile,
+  isVideo,
+  chooseFile,
+  isPromise,
+} from './utils';
 import { chooseImageProps, chooseVideoProps } from './shared';
 VantComponent({
   props: Object.assign(
@@ -68,16 +75,26 @@ VantComponent({
   data: {
     lists: [],
     isInCount: true,
+    videoShow: false,
+    video: {},
   },
   methods: {
     formatFileList() {
       const { fileList = [], maxCount } = this.data;
       const lists = fileList.map((item) =>
         Object.assign(Object.assign({}, item), {
+          isMedia:
+            typeof item.isMedia === 'undefined'
+              ? isMediaFile(item)
+              : item.isMedia,
           isImage:
             typeof item.isImage === 'undefined'
               ? isImageFile(item)
               : item.isImage,
+          isVideo:
+            typeof item.isVideo === 'undefined'
+              ? isVideoFile(item)
+              : item.isVideo,
         })
       );
       this.setData({ lists, isInCount: lists.length < maxCount });
@@ -118,7 +135,7 @@ VantComponent({
       if (useBeforeRead) {
         res = new Promise((resolve, reject) => {
           this.$emit(
-            'before-read',
+            'beforeRead',
             Object.assign(Object.assign({ file }, this.getDetail()), {
               callback: (ok) => {
                 ok ? resolve() : reject();
@@ -148,7 +165,7 @@ VantComponent({
       if (typeof this.data.afterRead === 'function') {
         this.data.afterRead(file, this.getDetail());
       }
-      this.$emit('after-read', Object.assign({ file }, this.getDetail()));
+      this.$emit('afterRead', Object.assign({ file }, this.getDetail()));
     },
     deleteItem(event) {
       const { index } = event.currentTarget.dataset;
@@ -164,14 +181,44 @@ VantComponent({
       const { index } = event.currentTarget.dataset;
       const { lists } = this.data;
       const item = lists[index];
-      wx.previewImage({
-        urls: lists
-          .filter((item) => item.isImage)
-          .map((item) => item.url || item.path),
-        current: item.url || item.path,
-        fail() {
-          wx.showToast({ title: '预览图片失败', icon: 'none' });
-        },
+      if (item.isVideo) {
+        this.setData({
+          videoShow: true,
+          video: item,
+        });
+      } else {
+        wx.previewImage({
+          urls: lists
+            .filter((item) => item.isImage)
+            .map(
+              (item) =>
+                item.url ||
+                item.path ||
+                item.thumbTempFilePath ||
+                item.tempFilePath
+            ),
+          current:
+            item.url ||
+            item.path ||
+            item.thumbTempFilePath ||
+            item.tempFilePath,
+          fail(err) {
+            // console.log(err);
+            wx.showToast({ title: '预览图片失败', icon: 'none' });
+          },
+        });
+      }
+    },
+    imageError(err) {
+      var errorImgIndex = err.target.dataset.index; //获取循环的下标
+      var imgObject = 'lists[' + errorImgIndex + '].path'; //carlistData为数据源，对象数组
+      var errorImg = {};
+      errorImg[imgObject] = '/static/images/play.jpg'; //我们构建一个对象
+      this.setData(errorImg); //修改数据源对应的数据
+    },
+    onVideoClose() {
+      this.setData({
+        videoShow: false,
       });
     },
     onClickPreview(event) {

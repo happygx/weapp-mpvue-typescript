@@ -1,0 +1,28 @@
+@import '@/assert/css/common.scss';
+
+.search-wrap {
+  width: 100%;
+  border-top: 1px solid #f1f1f1;
+  border-bottom: 3px solid #f1f1f1;
+  .select,
+  .search,
+  .search-btn {
+    float: left;
+    height: 40px;
+    padding: 0;
+  }
+  .select {
+    width: 30%;
+    border-right: 1px solid #f1f1f1;
+  }
+  .search {
+    width: 70%;
+    .search-btn {
+      line-height: 40px;
+      color: $bg;
+    }
+  }
+  .van-search__content {
+    background-color: #fff;
+  }
+}

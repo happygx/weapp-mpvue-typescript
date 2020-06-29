@@ -1,10 +1,22 @@
-<!-- page.vue -->
 <template>
   <div class="index-warp">
-    <p class="color">{{ name }}</p>
+    <swiper
+      catchtap="onSwiperTap"
+      indicator-active-color="rgba(255,255,255,.7)"
+      indicator-dots="true"
+      autoplay="true"
+      interval="5000"
+      class="swiper"
+    >
+      <swiper-item>
+        <image :src="bg1"></image>
+      </swiper-item>
+      <swiper-item>
+        <image :src="bg2"></image>
+      </swiper-item>
+    </swiper>
   </div>
 </template>
-<!--必须指定为ts-->
 <script lang="ts" src="./index.ts"></script>
 
 <style lang="scss" scoped>

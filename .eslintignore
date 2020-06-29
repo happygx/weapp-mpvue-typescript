@@ -2,4 +2,5 @@ build/*.js
 config/*.js
 scripts/*.js
 static/*
-
+src/utils/*.wxs
+src/utils/uploadOSS/*.js

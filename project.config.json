@@ -1,10 +1,11 @@
 {
 	"description": "项目配置文件。",
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
-		"enhance": false,
-		"postcss": true,
+		"enhance": true,
+		"postcss": false,
+		"preloadBackgroundData": false,
 		"minified": false,
 		"newFeature": true,
 		"coverView": true,
@@ -20,7 +21,9 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		}
+		},
+		"useCompilerModule": false,
+		"userConfirmedUseCompilerModuleSwitch": true
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
@@ -28,6 +31,7 @@
 	"projectname": "workflow",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
+	"libVersion": "2.11.1",
 	"condition": {
 		"search": {
 			"current": -1,
@@ -53,9 +57,9 @@
 			"current": -1,
 			"list": [
 				{
-					"id": -1,
-					"name": "pages/mine/main",
-					"pathName": "pages/mine/main",
+					"id": 0,
+					"name": "pages/mine/index/main",
+					"pathName": "pages/mine/index/main",
 					"query": "",
 					"scene": null
 				},
@@ -75,8 +79,78 @@
 				},
 				{
 					"id": -1,
-					"name": "pages/information/main",
-					"pathName": "pages/information/main",
+					"name": "pages/question/index/main",
+					"pathName": "pages/question/index/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/question/mine/main",
+					"pathName": "pages/question/mine/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/question/upcoming/main",
+					"pathName": "pages/question/upcoming/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/question/attention/main",
+					"pathName": "pages/question/attention/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/question/list/main",
+					"pathName": "pages/question/list/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/question/create/main",
+					"pathName": "pages/question/create/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 9,
+					"name": "pages/question/deal/main",
+					"pathName": "pages/question/deal/main",
+					"query": "id=396&view=true",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/work/index/main",
+					"pathName": "pages/work/index/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/work/mine/main",
+					"pathName": "pages/work/mine/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/work/list/main",
+					"pathName": "pages/work/list/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/work/create/main",
+					"pathName": "pages/work/create/main",
 					"scene": null
 				}
 			]

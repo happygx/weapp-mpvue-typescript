@@ -1,6 +1,14 @@
 const IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg)/i;
+const VIDEO_REGEXP = /\.(mp4|mov|m4v|3gp|avi|m3u8|webm)/i;
+const MEDIA_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg|mp4|mov|m4v|3gp|avi|m3u8|webm)/i;
 function isImageUrl(url) {
   return IMAGE_REGEXP.test(url);
+}
+function isVideoUrl(url) {
+  return VIDEO_REGEXP.test(url);
+}
+function isMediaUrl(url) {
+  return MEDIA_REGEXP.test(url);
 }
 export function isImageFile(item) {
   if (item.type) {
@@ -9,8 +17,35 @@ export function isImageFile(item) {
   if (item.path) {
     return isImageUrl(item.path);
   }
+  if (item.thumbTempFilePath) {
+    return isImageUrl(item.thumbTempFilePath);
+  }
+  if (item.tempFilePath) {
+    return isImageUrl(item.tempFilePath);
+  }
+  if (item.name) {
+    return isImageUrl(item.name);
+  }
   if (item.url) {
     return isImageUrl(item.url);
+  }
+  return false;
+}
+export function isVideoFile(item) {
+  if (item.tempFilePath) {
+    return isVideoUrl(item.tempFilePath);
+  }
+  if (item.object_name) {
+    return isVideoUrl(item.object_name);
+  }
+  return false;
+}
+export function isMediaFile(item) {
+  if (item.tempFilePath) {
+    return isMediaUrl(item.tempFilePath);
+  }
+  if (item.object_name) {
+    return isMediaUrl(item.object_name);
   }
   return false;
 }

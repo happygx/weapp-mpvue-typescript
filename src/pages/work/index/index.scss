@@ -1,0 +1,22 @@
+@import '@/assert/css/common.scss';
+
+.work-wrap {
+  width: 100%;
+  padding: 10px;
+  .grid-item {
+    color: #888;
+    font-size: 14px;
+    .iconfont {
+      font-size: 23px;
+    }
+    .red {
+      color: #e54d42;
+    }
+    .orange {
+      color: #f37b1d;
+    }
+    .yellow {
+      color: #fbbd08;
+    }
+  }
+}

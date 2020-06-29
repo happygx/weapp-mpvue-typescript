@@ -42,44 +42,6 @@ section {
   box-sizing: border-box;
 }
 
-body {
-  font-size: 14px;
-  line-height: 24px;
-  font-family: "Microsoft YaHei";
-  background: #fff;
-  color: #333;
-  -webkit-text-size-adjust: 100%;
-}
-
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-fieldset,
-img {
-  border: 0;
-}
-
-address,
-caption,
-cite,
-code,
-dfn,
-em,
-strong,
-th,
-var,
-optgroup {
-  font-style: normal;
-  font-weight: normal;
-}
-
-del,
-ins {
-  text-decoration: none;
-}
-
 ol,
 ul,
 li {
@@ -103,25 +65,7 @@ h6 {
 
 q:before,
 q:after {
-  content: "";
-}
-
-abbr,
-acronym {
-  border: 0;
-  font-variant: normal;
-}
-
-sup {
-  vertical-align: baseline;
-}
-
-sub {
-  vertical-align: baseline;
-}
-
-legend {
-  color: #000;
+  content: '';
 }
 
 input,
@@ -257,7 +201,7 @@ label {
 }
 
 .clearfix:after {
-  content: ".";
+  content: '.';
   display: block;
   height: 0;
   clear: both;

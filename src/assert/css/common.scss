@@ -1,3 +1,22 @@
-.color {
-  color: #0f0;
+$bg: #1989fa;
+$bc: #dfe4eb;
+
+.common-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  box-shadow: 0 1rpx 6rpx rgba(0, 0, 0, 0.1);
+
+  .van-dropdown-menu {
+    height: 40px;
+  }
+  .van-ellipsis {
+    color: #666;
+  }
+}
+
+.common-content {
+  margin-top: 95px;
 }

@@ -1,0 +1,20 @@
+@import '@/assert/css/common.scss';
+
+.popup-wrap {
+  width: 100%;
+  .popup {
+    top: 40%;
+    width: 320px;
+    border-radius: 5px;
+    .title {
+      color: #fff;
+      line-height: 40px;
+      background-color: $bg;
+    }
+    footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px;
+    }
+  }
+}

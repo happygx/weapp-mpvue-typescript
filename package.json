@@ -2,8 +2,8 @@
   "name": "workflow",
   "version": "1.0.0",
   "mpvueTemplateProjectVersion": "0.1.0",
-  "description": "A Mpvue project",
-  "author": "panttgit <844050525@qq.com>",
+  "description": "workflow",
+  "author": "happygx <463275576@qq.com>",
   "private": true,
   "scripts": {
     "dev:wx": "node build/dev-server.js wx",
@@ -32,7 +32,6 @@
     "awesome-typescript-loader": "4.0.1",
     "axios": "^0.18.0",
     "mpvue": "^2.0.0",
-    "qs": "^6.9.4",
     "ts-loader": "3.1.1",
     "typescript": "^3.3.3333",
     "vue": "^2.6.7",

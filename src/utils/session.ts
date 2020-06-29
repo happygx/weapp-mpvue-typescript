@@ -1,18 +1,21 @@
 import { getOpenIdSessionKey } from '@/api/common';
 import { UserModule } from '@/store/module/user';
 
-export const getSession = () => {
+export const getSession = (callback?: () => void) => {
   wx.login({
     success: (res) => {
-      console.log(res);
       getOpenIdSessionKey({
         data: {
           code: res.code,
         },
-      }).then((result: any) => {
-        console.log(result);
-        UserModule.SET_SESSION_ASYNC(result.third_session);
-      });
+      })
+        .then((result: any) => {
+          UserModule.SET_SESSION_ASYNC(result.third_session);
+          typeof callback === 'function' && callback();
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
     },
   });
 };

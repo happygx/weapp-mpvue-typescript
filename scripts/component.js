@@ -15,55 +15,62 @@ if (!dirName) {
  */
 const VueTep = `<template>
   <div class="${dirName}-wrap">
-    {{data.componentName}}
+    {{ componentName }}
   </div>
 </template>
 
-<script lang="ts">
-  import { Component, Vue, Prop, Emit } from "vue-property-decorator"
+<script lang="ts" src="./${dirName}.ts"></script>
 
-  @Component({
-    name: '${dirName}'
-  })
-  export default class Table extends Vue {
-    // prop
-    @Prop({
-      required: false,
-      default: ''
-    }) name!: string
-
-    // data
-    private componentName: string = '${dirName}'
-
-    // 全局vue.js不强制刷新或者重启时只创建一次,也就是说,created()只会触发一次
-    created() {
-      //
-    }
-
-    // 进入当前存在activated()函数的页面时,一进入页面就触发,可以用于列表数据等的刷新
-    activated() {
-      //
-    }
-
-    // 通常是初始化页面完成后，再对html的dom节点进行一些需要的操作
-    mounted() {
-      //
-    }
-
-    init() {
-      //
-    }
-
-  }
-</script>
-
-<style lang="scss" scoped>
-
-  .${dirName}-wrap {
-    width: 100%
-  }
+<style lang="scss">
+@import './${dirName}.scss'
 </style>
+`;
 
+// ts 模版
+const tsTep = `import { Component, Vue, Prop, Emit } from "vue-property-decorator"
+
+@Component({
+  name: '${dirName}'
+})
+export default class ${capPirName} extends Vue {
+  // prop
+  @Prop({
+    required: false,
+    default: ''
+  }) name!: string
+
+  // data
+  private componentName: string = '${dirName}'
+
+  // 监听页面加载
+  onLoad() {
+    this.init();
+  }
+
+  // 小程序 hook
+  onShow() {
+    //
+  }
+
+  // vue hook
+  mounted() {
+    //
+  }
+
+  // 初始化函数
+  init() {
+    //
+  }
+
+  }
+`;
+
+// scss 模版
+const scssTep = `@import '@/assert/css/common.scss';
+
+.${dirName}-wrap {
+  width: 100%;
+}
 `;
 
 // interface 模版
@@ -77,7 +84,9 @@ export interface ${capPirName}Data {
 fs.mkdirSync(`${basePath}/components/${capPirName}`); // mkdir
 
 process.chdir(`${basePath}/components/${capPirName}`); // cd views
-fs.writeFileSync(`${capPirName}.vue`, VueTep); // vue
+fs.writeFileSync(`${dirName}.vue`, VueTep); // vue
+fs.writeFileSync(`${dirName}.ts`, tsTep); // ts
+fs.writeFileSync(`${dirName}.scss`, scssTep); // scss
 
 // process.chdir(`${basePath}/types/components`) // cd components
 // fs.writeFileSync(`${dirName}.interface.ts`, interfaceTep) // interface

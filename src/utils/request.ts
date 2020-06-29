@@ -3,6 +3,7 @@ import { BaseUrl } from '@/config/index';
 import requestConfig from '@/config/requestConfig';
 import { UserModule } from '@/store/module/user';
 import { getSession } from './session';
+import { tip } from './common';
 
 declare type Methods =
   | 'GET'
@@ -72,16 +73,15 @@ class HttpRequest {
   async request(options: AxiosRequestConfig) {
     const instance = axios.create();
     // 直接使用axios报错，因为微信小程序必须走wx.request发送交易，因此需要使用adapter
-    instance.defaults.adapter = (options: AxiosRequestConfig) => {
+    instance.defaults.adapter = (config: AxiosRequestConfig) => {
       return new Promise((resolve, reject) => {
-        let data = options.data === undefined ? '{}' : options.data;
-        data = JSON.parse(data);
+        let data = config.data === undefined ? '{}' : config.data;
         // wx小程序 发起请求相应 log 就可以看到熟悉的返回啦
         wx.request({
-          url: BaseUrl + options.url,
-          method: options.method as Methods,
-          header: options.headers,
-          data: data,
+          url: BaseUrl + config.url,
+          method: config.method as Methods,
+          header: config.headers,
+          data: JSON.parse(data),
           success: (res) => {
             return resolve(res as any);
           },
@@ -100,6 +100,7 @@ class HttpRequest {
 const requestFail = (res: AxiosResponse) => {
   // console.log(res);
   const { data, statusCode } = res as any;
+  tip(data.msg || '请求失败');
 
   if (statusCode === 401) {
     // 账户失效

@@ -1,0 +1,18 @@
+@import '@/assert/css/common.scss';
+
+.information-wrap {
+  width: 100%;
+
+  .popup {
+    padding: 30px 20px;
+    .popup-content {
+      .radio-group {
+        display: flex;
+        padding: 0 5%;
+        .radio {
+          width: 40%;
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { UserModule } from './store/module/user';
 import { getSession, checkSession } from './utils/session';
-import { userInformationData } from './api/common';
+import { userInformationData } from './api/mine';
 
 // const debug = require("debug")("log:App");
 declare module 'vue/types/vue' {

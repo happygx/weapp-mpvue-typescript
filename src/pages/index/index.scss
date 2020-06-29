@@ -2,5 +2,11 @@
 
 .index-warp {
   width: 100%;
-  // color: red;
+  .swiper {
+    height: 200px;
+    image {
+      width: 100%;
+      height: 200px;
+    }
+  }
 }
