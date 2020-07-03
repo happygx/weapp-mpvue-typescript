@@ -54,7 +54,6 @@ export default class Deal extends Vue {
     workflows({
       url: `workflows/${this.$mp.query.id}`,
     }).then((res: any) => {
-      // console.log(res);
       this.workData = res;
       if (UserModule.info.name === res.last_receive_user && res.status === 30) {
         this.isConfirm = true;
