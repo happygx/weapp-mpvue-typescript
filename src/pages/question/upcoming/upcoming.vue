@@ -1,8 +1,13 @@
 <template>
   <div class="upcoming-wrap">
     <header class="common-header">
-      <Search :searchOptions="searchOptions" @search="getQuestions" />
+      <Search
+        v-if="componentShow"
+        :searchOptions="searchOptions"
+        @search="getQuestions"
+      />
       <Filter
+        v-if="componentShow"
         :dropdownConfig="dropdownConfig"
         :timeConfig="timeConfig"
         @confirm="filterConfirm"
@@ -12,6 +17,7 @@
       <TableCom :tableConfig="tableConfig" />
     </div>
     <Popup
+      v-if="componentShow"
       :show="closeShow"
       title="关闭说明"
       @cancel="closeShow = false"

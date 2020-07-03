@@ -1,4 +1,4 @@
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
+import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
 import { formatDate } from '@/utils/common';
 
 @Component({

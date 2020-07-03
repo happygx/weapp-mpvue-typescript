@@ -78,6 +78,7 @@ export default class List extends Vue {
   private curPage: number = 0;
   private dataParams: object = {};
   private isRefresh: boolean = false;
+  private componentShow: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -97,6 +98,7 @@ export default class List extends Vue {
   // 下拉刷新
   onPullDownRefresh() {
     Object.assign(this.$data, this.$options.data());
+    this.componentShow = true;
     this.isRefresh = true;
     this.init();
   }

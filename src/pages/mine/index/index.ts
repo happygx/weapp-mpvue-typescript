@@ -5,9 +5,7 @@ import { routeInterception } from '@/utils/common';
 
 // 必须使用装饰器的方式来指定component
 @Component({
-  components: {
-    //
-  },
+  components: {},
 })
 export default class Mine extends Vue {
   // data

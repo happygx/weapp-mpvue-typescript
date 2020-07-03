@@ -23,10 +23,10 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
+		"bundle": true,
 		"useIsolateContext": true,
 		"useCompilerModule": true,
-		"userConfirmedUseCompilerModuleSwitch": true,
-		"bundle": true
+		"userConfirmedUseCompilerModuleSwitch": true
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
@@ -34,7 +34,7 @@
 	"projectname": "workflow",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
-	"libVersion": "2.11.1",
+	"libVersion": "2.11.3",
 	"condition": {
 		"search": {
 			"current": -1,
@@ -158,10 +158,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 14,
 					"name": "pages/work/deal/main",
 					"pathName": "pages/work/deal/main",
-					"query": "id=78",
+					"query": "id=27",
 					"scene": null
 				},
 				{
@@ -169,6 +169,27 @@
 					"name": "pages/work/deal/question/main",
 					"pathName": "pages/work/deal/question/main",
 					"query": "id=407",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/question/deal/main",
+					"pathName": "pages/question/deal/main",
+					"query": "id=293&view=true",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/work/deal/main",
+					"pathName": "pages/work/deal/main",
+					"query": "id=74&view=true",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/work/deal/maintenance/main",
+					"pathName": "pages/work/deal/maintenance/main",
+					"query": "id=27",
 					"scene": null
 				}
 			]

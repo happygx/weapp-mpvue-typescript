@@ -36,6 +36,7 @@ export default class Create extends Vue {
   private tagType: string[] = ['default', 'warning', 'danger'];
   private workId: number = 0;
   private disabled: boolean = false;
+  private componentShow: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -184,6 +185,7 @@ export default class Create extends Vue {
           suggest: content,
           revisable: true,
         });
+        this.suggestCancel();
       }
     }
   }
@@ -202,7 +204,7 @@ export default class Create extends Vue {
         method: 'PUT',
         data: dataParam,
       }).then((res: any) => {
-        this.suggestShow = false;
+        this.suggestCancel();
       });
     } else {
       questionRecords({
@@ -213,7 +215,7 @@ export default class Create extends Vue {
           item.visibleName = item.visible ? '可见' : '不可见';
         }
         this.selectRows = res;
-        this.suggestShow = false;
+        this.suggestCancel();
       });
     }
   }
@@ -254,7 +256,7 @@ export default class Create extends Vue {
         questions: this.questions,
       },
     }).then((result: any) => {
-      wx.navigateTo({
+      wx.redirectTo({
         url: '/pages/work/mine/main',
       });
     });

@@ -30,7 +30,7 @@
         <van-tag
           v-for="(item, index) in faultDevices"
           :key="index"
-          class="fl"
+          class="fl mr10 mb5"
           plain
           size="medium"
           type="primary"
@@ -57,7 +57,7 @@
           <van-tag
             v-for="(item, index) in devices"
             :key="index"
-            class="fl mr15"
+            class="fl mr10 mb5"
             plain
             :closeable="false"
             size="medium"
@@ -77,7 +77,7 @@
         <van-tag
           v-for="(item, index) in devices"
           :key="index"
-          class="mr15 fl"
+          class="fl mr10 mb5"
           plain
           :closeable="isView ? false : true"
           size="medium"
@@ -124,16 +124,17 @@
             <span class="ml10 fb">{{ item.handler_user_name }}：</span>
             <span style="word-break: break-all;">{{ item.suggest }}</span>
           </p>
-          <span class="df" v-for="(attachment, j) in item.attachments" :key="j">
+          <p class="df">
             <img
+              v-for="(attachment, j) in item.attachments"
+              :key="j"
               mode="scaleToFill"
               :src="attachment.url || attachment.errUrl"
               class="img"
               style="width: 55px; height: 55px;"
-              @error="imageError(i, j)"
-              @click="onPreview(item.attachments, attachment)"
+              @click="onPreview(attachment)"
             />
-          </span>
+          </p>
         </div>
       </van-cell>
       <van-cell

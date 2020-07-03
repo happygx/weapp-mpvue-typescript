@@ -21,6 +21,7 @@ export default class Create extends Vue {
   private tabActive: number = 0;
   private collapseActive: number = 0;
   private classification: object = {};
+  private componentShow: boolean = false;
 
   // 监听页面加载
   onLoad() {

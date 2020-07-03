@@ -1,15 +1,20 @@
 <template>
   <div class="mine-wrap">
     <header class="common-header">
-      <Search :searchOptions="searchOptions" @search="getQuestions" />
+      <Search
+        v-if="componentShow"
+        :searchOptions="searchOptions"
+        @search="getWorkflows"
+      />
       <Filter
+        v-if="componentShow"
         :dropdownConfig="dropdownConfig"
         :timeConfig="timeConfig"
         @confirm="filterConfirm"
       />
     </header>
     <div class="common-content">
-      <TableCom :tableConfig="tableConfig" />
+      <TableCom v-if="componentShow" :tableConfig="tableConfig" />
     </div>
     <van-dialog id="van-dialog" />
     <van-popup

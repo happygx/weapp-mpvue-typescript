@@ -82,6 +82,7 @@ export default class Mine extends Vue {
   private distributeShow: boolean = false;
   private distributeData: object[] = [];
   private distribute: any = {};
+  private componentShow: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -101,6 +102,7 @@ export default class Mine extends Vue {
   // 下拉刷新
   onPullDownRefresh() {
     Object.assign(this.$data, this.$options.data());
+    this.componentShow = true;
     this.isRefresh = true;
     this.init();
   }
@@ -144,12 +146,18 @@ export default class Mine extends Vue {
       startTime:
         this.timeConfig.startDay === ''
           ? ''
-          : this.timeConfig.startDay + ` 00:00:00`,
-      endTime: this.timeConfig.endDay + ` 23:59:59`,
+          : `${this.timeConfig.startDay} 00:00:00`,
+      endTime: `${this.timeConfig.endDay} 23:59:59`,
       offset: 0 + this.curPage * 10,
       limit: 10,
     };
-
+    // if (this.isRefresh) {
+    //   let time = {
+    //     startTime: '',
+    //     endTime: `${now} 23:59:59`,
+    //   };
+    //   data = Object.assign(data, time);
+    // }
     data = Object.assign(data, params);
     if (!noMerge) {
       this.dataParams = Object.assign(this.dataParams, data);
@@ -257,10 +265,10 @@ export default class Mine extends Vue {
           },
         })
           .then((res: any) => {
-            this.$tip('工单删除成功！');
             Object.assign(this.$data, this.$options.data());
-            this.isRefresh = true;
+            this.componentShow = true;
             this.init();
+            this.$tip('工单删除成功！');
           })
           .catch(() => {
             // on cancel
@@ -297,10 +305,10 @@ export default class Mine extends Vue {
         workflowId: this.distribute.id,
       },
     }).then((res: any) => {
-      this.$tip('工单分配成功！');
       Object.assign(this.$data, this.$options.data());
-      this.isRefresh = true;
+      this.componentShow = true;
       this.init();
+      this.$tip('工单分配成功！');
     });
   }
 

@@ -86,7 +86,7 @@ export default class Information extends Vue {
   }
 
   async save() {
-    if (!this[this.type]) {
+    if (this[this.type]) {
       if (this.type === 'phone') {
         let res = await compareVerificationCode({
           data: {

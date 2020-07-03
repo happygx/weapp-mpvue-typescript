@@ -174,13 +174,13 @@ export default class Question extends Vue {
     this.record[i].attachments[j].isVideo = true;
   }
 
-  onPreview(record: any[], attachment: any) {
+  onPreview(attachment: any) {
     if (attachment.isVideo) {
       this.video = attachment;
       this.videoShow = true;
     } else {
       wx.previewImage({
-        urls: record.map((item) => item.url),
+        urls: [attachment.url],
         current: attachment.url,
         fail(err) {
           // console.log(err);
@@ -304,8 +304,6 @@ export default class Question extends Vue {
         },
       });
     }
-    wx.navigateTo({
-      url: `/pages/work/deal/main?id=${this.questionsData.workflow_id}`,
-    });
+    wx.navigateBack();
   }
 }

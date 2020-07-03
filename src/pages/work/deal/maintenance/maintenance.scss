@@ -1,0 +1,13 @@
+@import '@/assert/css/common.scss';
+
+.maintenance-wrap {
+  width: 100%;
+  padding: 15px 20px;
+  .label {
+    font-size: 15px;
+    color: #555;
+  }
+  .btn-group {
+    padding: 20px 0;
+  }
+}

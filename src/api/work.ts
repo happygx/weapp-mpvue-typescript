@@ -35,3 +35,7 @@ export const wxChangePartUpdate = (params = {}) => {
 export const addQuestion = (params = {}) => {
   return Api.addQuestion(params);
 };
+
+export const workflowSystemKeepRecords = (params = {}) => {
+  return Api.workflowSystemKeepRecords(params);
+};

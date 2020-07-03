@@ -27,6 +27,7 @@ export default class Deal extends Vue {
   private roles: string = '';
   private isView: boolean = false;
   private questionsData: any = {};
+  private buildingRecord: string = '';
   private classificationShow: boolean = false;
   private classificationsData: object[] = [];
   private rankShow: boolean = false;
@@ -56,6 +57,7 @@ export default class Deal extends Vue {
   private suggest: string = '';
   private videoShow: boolean = false;
   private video: object = {};
+  private componentShow: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -91,6 +93,7 @@ export default class Deal extends Vue {
     }).then((res: any) => {
       // console.log(res);
       this.questionsData = res;
+      this.buildingRecord = res.building_record;
       this.devices = res.device_relation;
       this.faultDevices = res.fault_device;
       this.attachments = res.attachments;
@@ -235,9 +238,7 @@ export default class Deal extends Vue {
           content: this.suggest,
         },
       }).then((result: any) => {
-        wx.navigateTo({
-          url: '/pages/question/upcoming/main',
-        });
+        wx.navigateBack();
       });
     } else {
       this.$tip('处理意见不能为空！');
@@ -252,25 +253,23 @@ export default class Deal extends Vue {
         content: this.suggest,
       },
     }).then((result: any) => {
-      wx.navigateTo({
-        url: '/pages/question/upcoming/main',
-      });
+      wx.navigateBack();
     });
   }
 
-  imageError(i: number, j: number) {
-    this.record[i].attachments[j].videoUrl = this.record[i].attachments[j].url;
-    this.record[i].attachments[j].url = '/static/images/play.jpg';
-    this.record[i].attachments[j].isVideo = true;
+  imageError(attachment: any) {
+    attachment.videoUrl = attachment.url;
+    attachment.url = '/static/images/play.jpg';
+    attachment.isVideo = true;
   }
 
-  onPreview(record: any[], attachment: any) {
+  onPreview(attachment: any) {
     if (attachment.isVideo) {
       this.video = attachment;
       this.videoShow = true;
     } else {
       wx.previewImage({
-        urls: record.map((item) => item.url),
+        urls: [attachment.url],
         current: attachment.url,
         fail(err) {
           // console.log(err);
@@ -283,5 +282,11 @@ export default class Deal extends Vue {
   onVideoClose() {
     this.videoShow = false;
     this.video = {};
+  }
+
+  work() {
+    wx.navigateTo({
+      url: `/pages/work/deal/main?id=${this.questionsData.workflow_id}&view=true`,
+    });
   }
 }

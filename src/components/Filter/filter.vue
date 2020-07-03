@@ -20,9 +20,11 @@
           :value="timeData.endDay"
           @click="selectTime('endDay')"
         />
-        <van-button type="info" block @click="filterConfirm">
-          确定
-        </van-button>
+        <div class="btn-group">
+          <van-button type="info" block round @click="filterConfirm">
+            确定
+          </van-button>
+        </div>
       </van-dropdown-item>
     </van-dropdown-menu>
     <van-calendar

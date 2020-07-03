@@ -4,7 +4,6 @@ import Search from '@/components/Search/search.vue'; // mpvue目前只支持的�
 import Filter from '@/components/Filter/filter.vue'; // mpvue目前只支持的单文件组件
 import TableCom from '@/components/TableCom/tableCom.vue'; // mpvue目前只支持的单文件组件
 import { now, minDate, maxDate } from '@/utils/date';
-import { UserModule } from '@/store/module/user';
 
 @Component({
   name: 'list',
@@ -15,7 +14,6 @@ import { UserModule } from '@/store/module/user';
   },
 })
 export default class List extends Vue {
-  // data
   // data
   private searchOptions: object[] = [
     {
@@ -85,6 +83,7 @@ export default class List extends Vue {
   private curPage: number = 0;
   private dataParams: object = {};
   private isRefresh: boolean = false;
+  private componentShow: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -104,6 +103,7 @@ export default class List extends Vue {
   // 下拉刷新
   onPullDownRefresh() {
     Object.assign(this.$data, this.$options.data());
+    this.componentShow = true;
     this.isRefresh = true;
     this.init();
   }
@@ -231,6 +231,7 @@ export default class List extends Vue {
     }).then((res: any) => {
       row.operates[0].name = '取消';
       row.concern = true;
+      row.concern_status = 10;
       this.$tip('关注成功！');
     });
   }
@@ -243,6 +244,7 @@ export default class List extends Vue {
     }).then((res: any) => {
       row.operates[0].name = '关注';
       row.concern = false;
+      row.concern_status = 20;
       this.$tip('取消成功！');
     });
   }

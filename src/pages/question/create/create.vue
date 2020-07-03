@@ -39,7 +39,7 @@
       <van-tab title="创建问题" :disabled="tabActive !== 1"> </van-tab>
     </van-tabs>
     <Add
-      v-if="roles !== '养护员' || tabActive === 1"
+      v-if="(roles !== '养护员' || tabActive === 1) && componentShow"
       :classificationsData="classificationsData"
       :classification="classification"
     />

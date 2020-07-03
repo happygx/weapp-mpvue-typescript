@@ -44,7 +44,7 @@
                   :class="[
                     header.icon,
                     {
-                      green: item.status < 40 || item.visible,
+                      green: item.status < 40,
                     },
                   ]"
                 ></i>

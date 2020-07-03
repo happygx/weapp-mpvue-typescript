@@ -14,7 +14,7 @@
         title-width="80px"
         :border="false"
       >
-        <p class="tl">
+        <p class="tl" style="word-break: break-all;">
           {{ questionsData.building_record }}
           <van-icon
             name="edit"
@@ -25,9 +25,10 @@
         </p>
       </van-cell>
       <Popup
+        v-if="componentShow"
         title="仓库记录"
         :show="recordShow"
-        :content="questionsData.building_record"
+        :content="buildingRecord"
         @cancel="popupShow('recordShow')"
         @confirm="recordConfirm"
       />
@@ -108,7 +109,7 @@
         <van-tag
           v-for="(item, index) in faultDevices"
           :key="index"
-          class="fl"
+          class="fl mr10 mb5"
           plain
           size="medium"
           type="primary"
@@ -135,7 +136,7 @@
           <van-tag
             v-for="(item, index) in devices"
             :key="index"
-            class="fl mr15"
+            class="fl mr10 mb5"
             plain
             :closeable="false"
             size="medium"
@@ -155,7 +156,7 @@
         <van-tag
           v-for="(item, index) in devices"
           :key="index"
-          class="fl mr15"
+          class="fl mr10 mb5"
           plain
           :closeable="isView ? false : true"
           size="medium"
@@ -215,35 +216,63 @@
         </span>
       </van-cell>
       <van-cell
-        v-if="isView && record.length > 0"
+        v-if="roles !== '养护员' && record.length > 0"
         title="处理记录"
         title-width="80px"
         :border="false"
       >
         <p class="clearfix tl mb10" v-for="(item, i) in record" :key="i">
-          <span class="fl">
-            {{ item.handler_time }}
-            <span class="ml10 fb">{{ item.handler_user_name }}：</span>
-            {{ item.suggest }}
-          </span>
-          <span
-            class="fl mt5"
+          {{ item.handler_time }}
+          <span class="ml10 fb">{{ item.handler_user_name }}：</span>
+          {{ item.suggest }}
+        </p>
+        <p class="df mt10">
+          <img
             v-for="(attachment, j) in item.attachments"
             :key="j"
-          >
-            <img
-              mode="scaleToFill"
-              :src="attachment.url || attachment.errUrl"
-              class="fl img"
-              style="width: 55px; height: 55px;"
-              @error="imageError(i, j)"
-              @click="onPreview(item.attachments, attachment)"
-            />
-          </span>
+            mode="scaleToFill"
+            :src="attachment.url || attachment.errUrl"
+            class="fl img"
+            style="width: 55px; height: 55px;"
+            @error="imageError(attachment)"
+            @click="onPreview(attachment)"
+          />
         </p>
       </van-cell>
-      <van-popup :show="videoShow" @close="onVideoClose">
-        <video :src="video.videoUrl" object-fit="cover" controls></video>
+      <van-cell
+        v-if="questionsData.result"
+        title="处理结果"
+        title-width="80px"
+        :border="false"
+      >
+        <div class="df">
+          <span>
+            {{ questionsData.result }}
+          </span>
+          <span v-if="record[0].workflow_id" class="ml20 link" @click="work">
+            工单
+          </span>
+        </div>
+        <div class="df mt10">
+          <img
+            v-for="(attachment, j) in record[0].attachments"
+            :key="j"
+            mode="scaleToFill"
+            :src="attachment.url || attachment.errUrl"
+            class="img"
+            style="width: 55px; height: 55px;"
+            @error="imageError(attachment)"
+            @click="onPreview(attachment)"
+          />
+        </div>
+      </van-cell>
+      <van-popup :show="videoShow" @close="onVideoClose" custom-class="popup">
+        <video
+          class="preview"
+          :src="video.videoUrl"
+          object-fit="cover"
+          controls
+        ></video>
       </van-popup>
     </van-cell-group>
     <van-dialog id="van-dialog" />

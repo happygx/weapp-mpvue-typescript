@@ -1,5 +1,4 @@
-import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator';
-import {} from '@/api/common';
+import { Vue, Component } from 'vue-property-decorator';
 import { wxDevicesSearch } from '@/api/question';
 import { changePart, changeParts, wxChangePartUpdate } from '@/api/work';
 
@@ -109,7 +108,7 @@ export default class Device extends Vue {
 
   deviceCancel() {
     this.deviceShow = false;
-    const picker = this.$parent.$mp.page.selectComponent('#devicePicker');
+    const picker = this.$mp.page.selectComponent('#devicePicker');
     picker.setIndexes([0, 0]); // 初始化索引
   }
 
@@ -133,7 +132,7 @@ export default class Device extends Vue {
 
   standardCancel() {
     this.standardShow = false;
-    const picker = this.$parent.$mp.page.selectComponent('#standardPicker');
+    const picker = this.$mp.page.selectComponent('#standardPicker');
     picker.setIndexes([0, 0, 0]); // 初始化索引
   }
 
@@ -153,33 +152,33 @@ export default class Device extends Vue {
   }
 
   save() {
-    let dataParam: any = {
-      workflowId: this.$mp.query.workflowId,
-      systemKeepRecordId: this.$mp.query.systemKeepRecordId,
-      deviceType: this.deviceType,
-      deviceCode: this.deviceCode,
-      partStandardId: this.partStandardId,
-      partNumber: this.partNumber,
-    };
-    if (this.part) {
-      dataParam.changePartId = this.part.id;
-      wxChangePartUpdate({
-        method: 'PUT',
-        data: dataParam,
-      }).then((res: any) => {
-        wx.navigateTo({
-          url: `/pages/work/deal/main?id=${this.$mp.query.workflowId}`,
+    if (this.deviceCode !== 0 && this.partStandardId !== 0) {
+      let dataParam: any = {
+        workflowId: this.$mp.query.workflowId,
+        systemKeepRecordId: this.$mp.query.systemKeepRecordId,
+        deviceType: this.deviceType,
+        deviceCode: this.deviceCode,
+        partStandardId: this.partStandardId,
+        partNumber: this.partNumber,
+      };
+      if (this.part.id) {
+        dataParam.changePartId = this.part.id;
+        wxChangePartUpdate({
+          method: 'PUT',
+          data: dataParam,
+        }).then((res: any) => {
+          this.cancel();
         });
-      });
+      } else {
+        changeParts({
+          method: 'POST',
+          data: dataParam,
+        }).then((res: any) => {
+          this.cancel();
+        });
+      }
     } else {
-      changeParts({
-        method: 'POST',
-        data: dataParam,
-      }).then((res: any) => {
-        wx.navigateTo({
-          url: `/pages/work/deal/main?id=${this.$mp.query.workflowId}`,
-        });
-      });
+      this.$tip('不能为空！');
     }
   }
 }

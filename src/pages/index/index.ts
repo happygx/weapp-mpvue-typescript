@@ -4,9 +4,7 @@ import { Vue, Component } from 'vue-property-decorator';
 // 必须使用装饰器的方式来指定component
 @Component({
   name: 'index',
-  components: {
-    //
-  },
+  components: {},
 })
 export default class Index extends Vue {
   private bg1: string = require('@/assert/img/swiper1.png');

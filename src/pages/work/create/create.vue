@@ -12,7 +12,7 @@
         @click="!disabled && (companyShow = true)"
       />
       <Company
-        v-if="companyShow"
+        v-if="companyShow && componentShow"
         :buildingsData="buildingsData"
         @onCancel="companyShow = false"
         @onSelect="selectBuilding"
@@ -46,7 +46,7 @@
         </van-button>
       </van-cell>
       <Question
-        v-if="questionShow"
+        v-if="questionShow && componentShow"
         :buildingId="buildingId"
         :selectRows="selectRows"
         @cancel="questionShow = false"
@@ -108,6 +108,7 @@
       </div>
     </van-cell>
     <Popup
+      v-if="componentShow"
       title="处理建议"
       :show="suggestShow"
       :content="suggestContent"

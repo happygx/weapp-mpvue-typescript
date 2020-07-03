@@ -36,6 +36,16 @@
       margin-right: 0;
     }
   }
+  .popup {
+    height: 250px;
+  }
+  .preview {
+    width: 320px;
+    height: 250px;
+  }
+  .link {
+    color: $bg;
+  }
   .btn-group {
     padding: 20px 16px;
     .van-button--large {

@@ -82,12 +82,11 @@ export default class Upcoming extends Vue {
     tagType: ['default', 'warning', 'danger'],
   };
   private curPage: number = 0;
-  private dataParams: any = {
-    status: 10,
-  };
+  private dataParams: any = {};
   private isRefresh: boolean = false;
   private closeShow: boolean = false;
   private closeQuestion: any = {};
+  private componentShow: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -107,6 +106,7 @@ export default class Upcoming extends Vue {
   // 下拉刷新
   onPullDownRefresh() {
     Object.assign(this.$data, this.$options.data());
+    this.componentShow = true;
     this.isRefresh = true;
     this.init();
   }
@@ -123,9 +123,6 @@ export default class Upcoming extends Vue {
   init() {
     this.getQuestions({}, true);
     this.roles = UserModule.info.group;
-    if (this.roles === '售后经理') {
-      this.dataParams.status = 20;
-    }
   }
 
   getQuestions(params?: any, noMerge?: boolean) {
@@ -142,6 +139,7 @@ export default class Upcoming extends Vue {
       max_create_time: this.timeConfig.endDay + ` 23:59:59`,
       offset: 0 + this.curPage * 10,
       limit: 10,
+      status: this.roles === '运维' ? 10 : 20,
     };
 
     data = Object.assign(data, params);
@@ -231,10 +229,10 @@ export default class Upcoming extends Vue {
       },
     }).then((result: any) => {
       this.closeShow = false;
-      this.$tip('关闭问题成功！');
       Object.assign(this.$data, this.$options.data());
-      this.isRefresh = true;
+      this.componentShow = true;
       this.init();
+      this.$tip('关闭问题成功！');
     });
   }
 }

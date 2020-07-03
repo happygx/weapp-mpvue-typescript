@@ -6,7 +6,7 @@
         placeholder="请输入用户名"
         clearable
         :value="form.username"
-        @input="form.username = $event.mp.detail"
+        @change="form.username = $event.mp.detail"
       />
       <van-field
         label="密码"
@@ -15,7 +15,7 @@
         :value="form.password"
         :password="passwordShow"
         :right-icon="passwordShow ? 'closed-eye' : 'eye-o'"
-        @input="form.password = $event.mp.detail"
+        @change="form.password = $event.mp.detail"
         @clickIcon="onClickIcon"
       />
     </van-cell-group>

@@ -1,5 +1,4 @@
 import { Vue, Component } from 'vue-property-decorator';
-import {} from '@/api/common';
 
 @Component({
   name: 'notice',

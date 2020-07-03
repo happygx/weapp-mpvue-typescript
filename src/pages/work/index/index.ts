@@ -1,5 +1,4 @@
 import { Vue, Component } from 'vue-property-decorator';
-import {} from '@/api/common';
 import { UserModule } from '@/store/module/user';
 import { workflows } from '@/api/work';
 import { now } from '@/utils/date';
@@ -10,7 +9,7 @@ import { now } from '@/utils/date';
 })
 export default class Work extends Vue {
   // data
-  private browse: string[] = [];
+  private browse: any = [];
   private page: object = {
     mineWorkflow: false,
     workflowList: false,
@@ -36,24 +35,33 @@ export default class Work extends Vue {
   // 初始化函数
   init() {
     this.browse = UserModule.browse;
-    for (let item of Object.keys(this.page)) {
-      this.page[item] = this.browse.includes(item);
-    }
-    if (this.browse.length > 0) {
-      this.getUpcoming();
+    if (this.browse) {
+      for (let item of Object.keys(this.page)) {
+        this.page[item] = this.browse.includes(item);
+      }
+      if (this.browse.length > 0) {
+        this.getUpcoming();
+      }
     }
   }
 
   getUpcoming() {
+    let status = UserModule.info.group === '养护员' ? 400 : 200;
     workflows({
       data: {
         startTime: '',
         endTime: now,
         limit: 1,
-        myselfStatus: 200,
+        myselfStatus: status,
       },
     }).then((res: any) => {
       this.upcomingCount = res.count;
+    });
+  }
+
+  login() {
+    wx.navigateTo({
+      url: '/pages/login/main',
     });
   }
 }

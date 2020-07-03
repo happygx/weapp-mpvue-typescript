@@ -9,24 +9,13 @@ import '@/assert/font/iconfont.css';
 Vue.mixin({
   // 监听页面加载
   onLoad() {
-    // 判断是否为组件
-    if (this.$options.parent) {
-      if (!DataModule.Data[this._uid]) {
-        const data = {
-          [this._uid]: JSON.parse(JSON.stringify(this.$data)),
-        };
-        DataModule.PUSH_DATA_ASYNC(data);
-      }
-    }
+    this.componentShow = true;
   },
   // 监听页面卸载
   onUnload() {
-    if (this.$options.parent) {
-      objectAssign(this.$data, DataModule.Data[this._uid]);
-    } else {
-      if (this.$options.data) {
-        Object.assign(this.$data, this.$options.data());
-      }
+    if (!this.$options.parent && this.$options.data) {
+      this.componentShow = false;
+      Object.assign(this.$data, this.$options.data());
     }
   },
 });

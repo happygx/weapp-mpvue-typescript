@@ -17,18 +17,22 @@ export default class Deal extends Vue {
   private isView: boolean = false;
   private isConfirm: boolean = false;
   private workData: any = {};
+  private questions: any[] = [];
+  private parts: any[] = [];
   private recordShow: boolean = false;
-  private part: object = {};
   private rankClass: string[] = [];
+  private componentShow: boolean = false;
+  private preview: object = {};
+  private previewShow: boolean = false;
 
   // 监听页面加载
   onLoad() {
-    this.init();
+    //
   }
 
   // 小程序 hook
   onShow() {
-    //
+    this.init();
   }
 
   // vue hook
@@ -39,13 +43,10 @@ export default class Deal extends Vue {
   // 初始化函数
   init() {
     this.roles = UserModule.info.group;
-    if (this.roles === '养护员') {
+    if (this.$mp.query.view === 'true') {
       this.isView = true;
     } else {
       this.rankClass = ['', 'yellow', 'red'];
-    }
-    if (this.$mp.query.view === 'true') {
-      this.isView = true;
     }
     this.getWorkData();
   }
@@ -55,6 +56,8 @@ export default class Deal extends Vue {
       url: `workflows/${this.$mp.query.id}`,
     }).then((res: any) => {
       this.workData = res;
+      this.questions = res.questions;
+      this.parts = res.change_part;
       if (UserModule.info.name === res.last_receive_user && res.status === 30) {
         this.isConfirm = true;
       }
@@ -92,6 +95,22 @@ export default class Deal extends Vue {
     });
   }
 
+  imageError(attachment: any) {
+    attachment.errUrl = '/static/images/play.jpg';
+    attachment.isVideo = true;
+    this.$forceUpdate();
+  }
+
+  onPreview(attachment: any) {
+    this.preview = attachment;
+    this.previewShow = true;
+  }
+
+  onPreviewClose() {
+    this.previewShow = false;
+    this.preview = {};
+  }
+
   partModify(part?: object) {
     let Part = part ? JSON.stringify(part) : '';
     wx.navigateTo({
@@ -106,9 +125,9 @@ export default class Deal extends Vue {
       .then(() => {
         changeParts({
           method: 'DELETE',
-          url: `changeParts/${this.workData.change_part[i].id}`,
+          url: `changeParts/${this.parts[i].id}`,
         }).then((res: any) => {
-          this.workData.change_part.splice(i, 1);
+          this.parts.splice(i, 1);
           this.$tip('部件删除成功！');
         });
       })
@@ -117,9 +136,15 @@ export default class Deal extends Vue {
       });
   }
 
+  maintenance() {
+    wx.navigateTo({
+      url: `/pages/work/deal/maintenance/main?id=${this.workData.id}`,
+    });
+  }
+
   finish() {
     let QuestionsId: number[] = [];
-    for (let item of this.workData.questions) {
+    for (let item of this.questions) {
       if (item.record.length === 0 || !item.record[0].revisable) {
         this.$tip(`${item.classification_name}问题处理结果为空！`);
         return false;
@@ -136,7 +161,7 @@ export default class Deal extends Vue {
       Operation = 90;
     }
     let QuestionsId: number[] = [];
-    for (let item of this.workData.questions) {
+    for (let item of this.questions) {
       QuestionsId.push(item.id);
     }
     this.submit(Operation, QuestionsId);
@@ -151,9 +176,7 @@ export default class Deal extends Vue {
         workflowId: this.workData.id,
       },
     }).then((result: any) => {
-      wx.navigateTo({
-        url: '/pages/work/mine/main',
-      });
+      wx.navigateBack();
     });
   }
 }

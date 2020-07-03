@@ -387,11 +387,9 @@ export default class Add extends Vue {
       });
     }
     if (this.isAdd) {
-      wx.navigateTo({
-        url: `/pages/work/deal/main?id=${this.$options.parent.$mp.query.workflowId}`,
-      });
+      wx.navigateBack();
     } else {
-      wx.navigateTo({
+      wx.redirectTo({
         url: '/pages/question/mine/main',
       });
     }

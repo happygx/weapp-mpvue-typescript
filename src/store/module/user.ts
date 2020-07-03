@@ -12,20 +12,20 @@ import { getSession } from '@/utils/session';
 export interface IUserState {
   session: string | boolean;
   info: any;
-  browse: string[];
+  browse: string[] | boolean;
 }
 
 @Module({ dynamic: true, store, name: 'user' })
 class User extends VuexModule implements IUserState {
   public session: string | boolean = getStorage('session', true);
   public info: any = getStorage('info', true);
-  public browse: string[] = getStorage('browse', true);
+  public browse: string[] | boolean = getStorage('browse', true);
 
   @Action
   public ResetToken() {
     this.SET_SESSION(false);
     this.SET_INFO(false);
-    this.SET_BROWSE([]);
+    this.SET_BROWSE(false);
     wx.clearStorage();
     getSession();
   }
@@ -41,7 +41,7 @@ class User extends VuexModule implements IUserState {
   }
 
   @Action
-  public async SET_BROWSE_ASYNC(browse: []) {
+  public async SET_BROWSE_ASYNC(browse: string[] | boolean) {
     this.SET_BROWSE(browse);
   }
 
@@ -58,7 +58,7 @@ class User extends VuexModule implements IUserState {
   }
 
   @Mutation
-  private SET_BROWSE(browse: []) {
+  private SET_BROWSE(browse: string[] | boolean) {
     this.browse = browse;
     setStorage('browse', browse);
   }

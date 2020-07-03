@@ -16,6 +16,7 @@
     "pages/work/deal/main",
     "pages/work/deal/question/main",
     "pages/work/deal/device/main",
+    "pages/work/deal/maintenance/main",
     "pages/mine/index/main",
     "pages/mine/information/main",
     "pages/mine/notice/main",
