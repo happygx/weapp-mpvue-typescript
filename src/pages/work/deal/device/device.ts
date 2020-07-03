@@ -1,5 +1,4 @@
-import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator';
-import {} from '@/api/common';
+import { Vue, Component } from 'vue-property-decorator';
 import { wxDevicesSearch } from '@/api/question';
 import { changePart, changeParts, wxChangePartUpdate } from '@/api/work';
 

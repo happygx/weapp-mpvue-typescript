@@ -1,5 +1,4 @@
 import { Vue, Component } from 'vue-property-decorator';
-import {} from '@/api/common';
 import { UserModule } from '@/store/module/user';
 import { questions } from '@/api/question';
 import { now } from '@/utils/date';
@@ -10,7 +9,7 @@ import { now } from '@/utils/date';
 })
 export default class Question extends Vue {
   // data
-  private browse: string[] = [];
+  private browse: any = [];
   private page: object = {
     mineQuestion: false,
     upcoming: false,
@@ -39,12 +38,14 @@ export default class Question extends Vue {
   // 初始化函数
   init() {
     this.browse = UserModule.browse;
-    for (let item of Object.keys(this.page)) {
-      this.page[item] = this.browse.includes(item);
-    }
-    if (this.browse.length > 0) {
-      this.getUpcoming();
-      this.getMine();
+    if (this.browse) {
+      for (let item of Object.keys(this.page)) {
+        this.page[item] = this.browse.includes(item);
+      }
+      if (this.browse.length > 0) {
+        this.getUpcoming();
+        this.getMine();
+      }
     }
   }
 
@@ -73,6 +74,12 @@ export default class Question extends Vue {
       },
     }).then((res: any) => {
       this.mineCount = res.count;
+    });
+  }
+
+  login() {
+    wx.navigateTo({
+      url: '/pages/login/main',
     });
   }
 }
