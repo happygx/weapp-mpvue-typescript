@@ -2,5 +2,5 @@
   "navigationBarTitleText": "我的工单",
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 50,
-  "backgroundTextStyle": "drak"
+  "backgroundTextStyle": "dark"
 }

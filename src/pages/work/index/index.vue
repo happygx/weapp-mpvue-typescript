@@ -8,7 +8,10 @@
         link-type="navigateTo"
         url="/pages/work/mine/main"
       >
-        <van-icon custom-class="iconfont iconworkflow red" info="9" />
+        <van-icon
+          custom-class="iconfont iconworkflow red"
+          :info="upcomingCount"
+        />
         <span class="mt5 fb">我的工单</span>
       </van-grid-item>
       <van-grid-item

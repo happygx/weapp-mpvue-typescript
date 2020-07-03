@@ -24,8 +24,9 @@
 			"outputPath": ""
 		},
 		"useIsolateContext": true,
-		"useCompilerModule": false,
-		"userConfirmedUseCompilerModuleSwitch": true
+		"useCompilerModule": true,
+		"userConfirmedUseCompilerModuleSwitch": true,
+		"bundle": true
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",

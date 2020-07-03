@@ -19,9 +19,14 @@ export default class Index extends Vue {
 
   onShow() {
     // 小程序 hook
+    this.init();
   }
 
   mounted() {
     // vue hook
+  }
+
+  init() {
+    //
   }
 }

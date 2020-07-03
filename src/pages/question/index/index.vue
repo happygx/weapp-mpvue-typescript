@@ -8,7 +8,7 @@
         link-type="navigateTo"
         url="/pages/question/mine/main"
       >
-        <van-icon custom-class="iconfont iconquestion red" info="9" />
+        <van-icon custom-class="iconfont iconquestion red" :info="mineCount" />
         <span class="mt5 fb">我的问题</span>
       </van-grid-item>
       <van-grid-item
@@ -18,7 +18,10 @@
         link-type="navigateTo"
         url="/pages/question/upcoming/main"
       >
-        <van-icon custom-class="iconfont icondaiban yellow" info="9"></van-icon>
+        <van-icon
+          custom-class="iconfont icondaiban yellow"
+          :info="upcomingCount"
+        ></van-icon>
         <span class="mt5 fb">待办问题</span>
       </van-grid-item>
       <van-grid-item

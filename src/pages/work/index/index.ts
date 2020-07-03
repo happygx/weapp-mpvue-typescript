@@ -1,6 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator';
 import {} from '@/api/common';
 import { UserModule } from '@/store/module/user';
+import { workflows } from '@/api/work';
+import { now } from '@/utils/date';
 
 @Component({
   name: 'work',
@@ -14,15 +16,16 @@ export default class Work extends Vue {
     workflowList: false,
     workflowCreate: false,
   };
+  private upcomingCount: number = 0;
 
   // 监听页面加载
   onLoad() {
-    this.init();
+    //
   }
 
   // 小程序 hook
   onShow() {
-    //
+    this.init();
   }
 
   // vue hook
@@ -36,5 +39,21 @@ export default class Work extends Vue {
     for (let item of Object.keys(this.page)) {
       this.page[item] = this.browse.includes(item);
     }
+    if (this.browse.length > 0) {
+      this.getUpcoming();
+    }
+  }
+
+  getUpcoming() {
+    workflows({
+      data: {
+        startTime: '',
+        endTime: now,
+        limit: 1,
+        myselfStatus: 200,
+      },
+    }).then((res: any) => {
+      this.upcomingCount = res.count;
+    });
   }
 }
