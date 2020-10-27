@@ -1,21 +1,21 @@
 import { Vue, Component } from 'vue-property-decorator';
-import { workflows, wxWorkflowUpdate, getAfterSalePerson } from '@/api/work';
+import { getAfterSalePerson, workflows, wxWorkflowUpdate } from '@/api/work';
 import Search from '@/components/Search/search.vue'; // mpvue目前只支持的单文件组件
 import Filter from '@/components/Filter/filter.vue'; // mpvue目前只支持的单文件组件
 import TableCom from '@/components/TableCom/tableCom.vue'; // mpvue目前只支持的单文件组件
+import { maxDate, minDate, now } from '@/utils/date';
 import { UserModule } from '@/store/module/user';
-import { now, minDate, maxDate } from '@/utils/date';
 import Dialog from '../../../../static/vant/dialog/dialog';
 
 @Component({
-  name: 'mine',
+  name: 'upcoming',
   components: {
     Search,
     Filter,
     TableCom,
   },
 })
-export default class Mine extends Vue {
+export default class Upcoming extends Vue {
   // data
   private roles: string = '';
   private searchOptions: object[] = [
@@ -47,18 +47,6 @@ export default class Mine extends Vue {
         this.kindChange(val);
       },
     },
-    {
-      title: '状态',
-      value: '000',
-      options: [
-        { text: '全部', value: '000' },
-        { text: '待您确认', value: 400 },
-        { text: '已完结', value: 600 },
-      ],
-      operate: (val: any) => {
-        this.statusChange(val);
-      },
-    },
   ];
   private timeConfig: any = {
     startDay: '',
@@ -78,13 +66,13 @@ export default class Mine extends Vue {
     workflowType: { 10: '维修单', 20: '维保单', 30: '善后单', 40: '调试单' },
   };
   private curPage: number = 0;
-  private myselfStatus: number | string = '000';
   private dataParams: object = {};
   private isRefresh: boolean = false;
-  private distributeShow: boolean = false;
-  private distributeData: object[] = [];
-  private distribute: any = {};
   private componentShow: boolean = false;
+  private status: number = 100;
+  private distributeShow: boolean = false;
+  private distribute: any = {};
+  private distributeData: object[] = [];
 
   // 监听页面加载
   onLoad() {
@@ -119,34 +107,16 @@ export default class Mine extends Vue {
 
   // 初始化函数
   init() {
-    this.roles = UserModule.info.group;
-    if (this.roles === '养护员') {
-      this.dropdownConfig[0].options.pop();
-    }
-    if (this.roles === '售后经理') {
-      this.dropdownConfig[1].options = [
-        { text: '全部', value: '000' },
-        { text: '新建', value: 100 },
-        { text: '我的待办', value: 200 },
-        { text: '处理中', value: 300 },
-        { text: '待您确认', value: 400 },
-        { text: '已处理', value: 500 },
-        { text: '已完结', value: 600 },
-      ];
-    } else if (this.roles === '售后人员') {
-      this.dropdownConfig[1].options = [
-        { text: '全部', value: '000' },
-        { text: '我的待办', value: 200 },
-        { text: '已处理', value: 500 },
-        { text: '已完结', value: 600 },
-      ];
-    }
-    if (this.$mp.query.type === 'distribution') {
-      this.myselfStatus = this.dropdownConfig[1].value = 100;
-    } else if (this.$mp.query.type === 'confirm') {
-      this.myselfStatus = this.dropdownConfig[1].value = 400;
+    if (this.$mp.query.type === 'confirm') {
+      wx.setNavigationBarTitle({
+        title: '待您确认',
+      });
+      this.status = 400;
     } else if (this.$mp.query.type === 'upcoming') {
-      this.myselfStatus = this.dropdownConfig[1].value = 200;
+      wx.setNavigationBarTitle({
+        title: '待办工单',
+      });
+      this.status = 200;
     }
     this.getWorkflows({}, true);
   }
@@ -162,7 +132,7 @@ export default class Mine extends Vue {
       endTime: `${this.timeConfig.endDay} 23:59:59`,
       offset: 0 + this.curPage * 10,
       limit: 10,
-      myselfStatus: this.myselfStatus,
+      myselfStatus: this.status,
     };
     data = Object.assign(data, params);
     if (!noMerge) {
@@ -245,6 +215,13 @@ export default class Mine extends Vue {
     }
   }
 
+  kindChange(e: any) {
+    this.dropdownConfig[0].value = e.mp.detail;
+    this.getWorkflows({
+      kind: e.mp.detail,
+    });
+  }
+
   delete(row: any) {
     Dialog.confirm({
       message: '是否将此工单删除？',
@@ -309,19 +286,6 @@ export default class Mine extends Vue {
     wx.navigateTo({
       url: `/pages/work/deal/main?id=${id}`,
     });
-  }
-
-  kindChange(e: any) {
-    this.dropdownConfig[0].value = e.mp.detail;
-    this.getWorkflows({
-      kind: e.mp.detail,
-    });
-  }
-
-  statusChange(e: any) {
-    this.dropdownConfig[1].value = e.mp.detail;
-    this.myselfStatus = e.mp.detail;
-    this.getWorkflows({});
   }
 
   filterConfirm(time: { startDay: string; endDay: string }) {

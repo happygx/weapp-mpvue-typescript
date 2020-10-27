@@ -2,11 +2,12 @@
 
 .create-wrap {
   width: 100%;
-  padding: 10px 15px;
+  padding: 10px;
 
   .cell-group {
     .van-cell__title {
       color: #555;
+      font-size: 15px;
       font-weight: bold;
     }
   }
@@ -18,11 +19,13 @@
     left: var(--padding-xs, 8px);
     font-size: 14px;
     font-size: var(--cell-font-size, 14px);
+    font-weight: normal;
     color: #ee0a24;
     color: var(--cell-required-color, #ee0a24);
   }
   .radio-group {
     display: flex;
+    flex-wrap: wrap;
     .van-radio__label {
       margin-left: 5px;
     }
@@ -55,5 +58,8 @@
   }
   .content {
     color: #888;
+  }
+  .btn-group {
+    padding: 20px 16px;
   }
 }

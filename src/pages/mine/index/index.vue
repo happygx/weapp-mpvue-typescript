@@ -22,12 +22,12 @@
         icon="contact"
         @click="route('information')"
       />
-      <van-cell
+      <!-- <van-cell
         title="消息通知"
         is-link
         icon="comment-o"
         @click="route('notice')"
-      />
+      /> -->
       <van-cell
         title="联系我们"
         is-link

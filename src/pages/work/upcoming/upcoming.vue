@@ -1,5 +1,5 @@
 <template>
-  <div class="mine-wrap">
+  <div class="upcoming-wrap">
     <header class="common-header">
       <Search v-if="componentShow" :searchOptions="searchOptions" @search="getWorkflows" />
       <Filter v-if="componentShow" :dropdownConfig="dropdownConfig" :timeConfig="timeConfig" @confirm="filterConfirm" />
@@ -21,8 +21,8 @@
   </div>
 </template>
 
-<script lang="ts" src="./mine.ts"></script>
+<script lang="ts" src="./upcoming.ts"></script>
 
 <style lang="scss">
-@import './mine.scss';
+@import './upcoming.scss';
 </style>

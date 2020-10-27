@@ -5,15 +5,7 @@ import { UserModule } from '@/store/module/user';
 import { getSession } from './session';
 import { tip } from './common';
 
-declare type Methods =
-  | 'GET'
-  | 'OPTIONS'
-  | 'HEAD'
-  | 'POST'
-  | 'PUT'
-  | 'DELETE'
-  | 'TRACE'
-  | 'CONNECT';
+declare type Methods = 'GET' | 'OPTIONS' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT';
 
 class HttpRequest {
   public pending: object; // 请求的url集合
@@ -72,7 +64,7 @@ class HttpRequest {
   }
   async request(options: AxiosRequestConfig) {
     const instance = axios.create();
-    // 直接使用axios报错，因为微信小程序必须走wx.request发送交易，因此需要使用adapter
+    // 直接使用axios报错，因为微信小程序必须走wx.request发送交易，因此需要使用adapter(适配器)
     instance.defaults.adapter = (config: AxiosRequestConfig) => {
       return new Promise((resolve, reject) => {
         let data = config.data === undefined ? '{}' : config.data;
@@ -104,7 +96,8 @@ const requestFail = (res: AxiosResponse) => {
 
   if (statusCode === 401) {
     // 账户失效
-    return UserModule.ResetToken();
+    UserModule.ResetToken();
+    return false;
   } else if (statusCode === 412) {
     // session失效重新获取
     return getSession();

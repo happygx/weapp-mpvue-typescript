@@ -1,4 +1,4 @@
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
+import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
 
 @Component({
   name: 'company',
@@ -36,6 +36,11 @@ export default class Company extends Vue {
   // 初始化函数
   init() {
     this.buildings = this.buildingsData;
+  }
+
+  @Watch('buildingsData')
+  onBuildingsChange(newVal: any) {
+    this.buildings = newVal;
   }
 
   onChange(e: any) {

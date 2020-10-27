@@ -2,13 +2,17 @@
 
 .deal-wrap {
   width: 100%;
-  padding: 10px 15px;
+  padding: 10px;
   .van-cell__title {
     color: #555;
+    font-size: 15px;
     font-weight: bold;
   }
   .edit {
     top: 5rpx;
+  }
+  .link {
+    color: $bg;
   }
   .title {
     color: #555;
@@ -17,11 +21,12 @@
     color: #e6a23c;
   }
   .red {
-    color: #f56c6c;
+    color: #ef2323;
   }
   .green {
     color: #39b54a;
   }
+
   .question:last-child {
     margin-bottom: 0;
   }
@@ -38,9 +43,6 @@
   .preview {
     width: 320px;
     height: 250px;
-  }
-  .link {
-    color: $bg;
   }
   .btn-group {
     padding: 20px 16px;

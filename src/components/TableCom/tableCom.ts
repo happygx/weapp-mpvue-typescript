@@ -13,6 +13,8 @@ export default class TableCom extends Vue {
 
   // data
   private tableData: any[] = [];
+  private operates: object[] = [];
+  private popupShow: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -32,6 +34,18 @@ export default class TableCom extends Vue {
   // 初始化函数
   init() {
     //
+  }
+
+  onLongPress(item: any) {
+    if (item.operates && item.operates.length > 0) {
+      this.operates = item.operates;
+      this.popupShow = true;
+    }
+  }
+
+  popupOperate(operate: any) {
+    this.popupShow = false;
+    operate.clickFun();
   }
 
   handleSelection() {

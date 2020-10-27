@@ -6,7 +6,6 @@ import {
   changeRank,
   wxDevicesSearch,
   deviceRelations,
-  attachments,
   finishQuestion,
   approveQuestion,
 } from '@/api/question';
@@ -61,12 +60,12 @@ export default class Deal extends Vue {
 
   // 监听页面加载
   onLoad() {
-    this.init();
+    //
   }
 
   // 小程序 hook
   onShow() {
-    //
+    this.init();
   }
 
   // vue hook
@@ -76,7 +75,7 @@ export default class Deal extends Vue {
 
   // 初始化函数
   init() {
-    if (this.$mp.query.view) {
+    if (this.$mp.query.view === 'true') {
       this.isView = true;
       wx.setNavigationBarTitle({
         title: '问题详情',
@@ -116,10 +115,25 @@ export default class Deal extends Vue {
       this.deviceData = res;
       this.deviceColumns = [
         {
-          values: Object.keys(res),
+          values: res.map((val: any) => {
+            return {
+              label: val.label,
+              children: val.children,
+            };
+          }),
         },
         {
-          values: res['空调'],
+          values: res[0].children.map((val: any) => {
+            let reg = /[A-Z|\-|\.|0-9].+/g;
+            let floor = val.label.match(reg);
+            return {
+              label: floor,
+              children: val.children,
+            };
+          }),
+        },
+        {
+          values: res[0].children[0].children,
         },
       ];
     });
@@ -133,9 +147,13 @@ export default class Deal extends Vue {
 
   popupShow(type: string) {
     this[type] = !this[type];
-    setTimeout(() => {
-      this.textareaShow = !this.textareaShow;
-    }, 500);
+    if (this.textareaShow === false) {
+      setTimeout(() => {
+        this.textareaShow = true;
+      }, 300);
+    } else {
+      this.textareaShow = false;
+    }
   }
 
   recordConfirm(content: string) {
@@ -146,9 +164,9 @@ export default class Deal extends Vue {
         record: content,
       },
     }).then(() => {
-      this.questionsData.building_record = content;
+      this.buildingRecord = content;
       this.recordShow = false;
-      this.$tip('仓库记录修改成功！');
+      this.$tip('注意事项修改成功！');
     });
   }
 
@@ -160,7 +178,7 @@ export default class Deal extends Vue {
       },
     }).then((res: any) => {
       this.questionsData.classification_name = res.classification_name;
-      this.classificationShow = false;
+      this.popupShow('classificationShow');
     });
   }
 
@@ -172,34 +190,41 @@ export default class Deal extends Vue {
       },
     }).then((res: any) => {
       this.questionsData.rank = e.target.value.id;
-      this.rankShow = false;
+      this.popupShow('rankShow');
     });
   }
 
   deviceChange(e: any) {
-    const { picker, value } = e.target;
-    picker.setColumnValues(1, this.deviceData[value[0]]);
+    const { picker, index, value } = e.target;
+    if (index === 0) {
+      picker.setColumnValues(1, value[index].children);
+      picker.setColumnValues(2, value[index].children[0].children);
+    } else if (index === 1) {
+      picker.setColumnValues(2, value[index].children);
+    }
   }
 
   deviceCancel() {
     this.deviceShow = false;
-    this.textareaShow = true;
-    const picker = this.$mp.page.selectComponent('#devicePicker');
-    picker.setIndexes([0, 0]); // 初始化索引
+    setTimeout(() => {
+      this.textareaShow = true;
+      // const picker = this.$mp.page.selectComponent('#devicePicker');
+      // picker.setIndexes([0, 0, 0]); // 初始化索引
+    }, 300);
   }
 
   deviceConfirm(e: any) {
-    let device = e.target.value[1];
+    let { value } = e.mp.detail;
     let isRepeat = this.devices.some((item: any) => {
-      return item.code === device.code;
+      return item.code === value[2].code;
     });
     if (!isRepeat) {
       deviceRelations({
         method: 'POST',
         data: {
           questionId: this.questionsData.id,
-          deviceCode: device.code,
-          deviceType: device.type,
+          deviceCode: value[2].code,
+          deviceType: value[2].type,
         },
       }).then((res: any) => {
         this.devices = res.device_relation;
@@ -207,8 +232,8 @@ export default class Deal extends Vue {
       });
     } else {
       this.$tip('此问题设备已存在！');
-      this.deviceCancel();
     }
+    this.deviceCancel();
   }
 
   delDevice(index: number) {
@@ -238,7 +263,7 @@ export default class Deal extends Vue {
           content: this.suggest,
         },
       }).then((result: any) => {
-        wx.navigateBack();
+        this.cancel();
       });
     } else {
       this.$tip('处理意见不能为空！');
@@ -246,14 +271,33 @@ export default class Deal extends Vue {
   }
 
   handleFailure() {
-    approveQuestion({
-      method: 'POST',
-      data: {
-        questionId: this.questionsData.id,
-        content: this.suggest,
+    Dialog.confirm({
+      message: '是否确定流转？',
+    })
+      .then(() => {
+        approveQuestion({
+          method: 'POST',
+          data: {
+            questionId: this.questionsData.id,
+            content: this.suggest,
+          },
+        }).then((result: any) => {
+          this.cancel();
+        });
+      })
+      .catch(() => {
+        // on cancel
+      });
+  }
+
+  cancel() {
+    wx.navigateBack({
+      delta: 1,
+      success: () => {
+        let page: any = getCurrentPages().pop();
+        if (page == undefined || page == null) return;
+        page.onPullDownRefresh();
       },
-    }).then((result: any) => {
-      wx.navigateBack();
     });
   }
 

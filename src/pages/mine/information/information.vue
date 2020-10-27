@@ -20,7 +20,7 @@
       @click="showPopup('phone')"
     />
     <van-popup closeable position="bottom" :show="isShow" @close="closePopup">
-      <div class="mt30 popup clearfix">
+      <div class="mt30 content clearfix">
         <template v-if="type === 'name'">
           <van-field
             label="姓名"

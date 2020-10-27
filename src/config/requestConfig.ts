@@ -50,4 +50,6 @@ export default {
   changeParts: 'changeParts', // 提交更换部件
   wxChangePartUpdate: 'changeParts/wxChangePartUpdate', // 修改更换部件
   workflowSystemKeepRecords: 'workflowSystemKeepRecords', // 获取保养表
+  buildingQuestion: 'questions/buildingQuestion', // 获取问题概况
+  mineWorkflowCount: 'workflows/mineWorkflowCount', // 获取我的工单相关的数量
 };

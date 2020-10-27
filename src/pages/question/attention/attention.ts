@@ -151,9 +151,9 @@ export default class Attention extends Vue {
         item.statusName = this.generateStatusType(item);
         item.operates = [
           {
-            name: item.concern_status === 10 ? '取消' : '关注',
+            name: item.concern ? '取消' : '关注',
             clickFun: () => {
-              if (item.concern_status === 10) {
+              if (item.concern) {
                 this.cancelAttention(item);
               } else {
                 this.attention(item);
@@ -231,7 +231,6 @@ export default class Attention extends Vue {
     }).then((res: any) => {
       row.operates[0].name = '取消';
       row.concern = true;
-      row.concern_status = 10;
       this.$tip('关注成功！');
     });
   }
@@ -244,7 +243,6 @@ export default class Attention extends Vue {
     }).then((res: any) => {
       row.operates[0].name = '关注';
       row.concern = false;
-      row.concern_status = 20;
       this.$tip('取消成功！');
     });
   }

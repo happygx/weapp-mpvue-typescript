@@ -5,7 +5,6 @@
         label="设备名称"
         placeholder="请选择设备名称"
         disabled
-        title-width="80px"
         :border="false"
         :value="deviceName"
         @click="deviceShow = true"
@@ -15,7 +14,7 @@
           id="devicePicker"
           show-toolbar
           title="请选择设备名称"
-          value-key="location"
+          value-key="label"
           :columns="deviceColumns"
           @change="deviceChange"
           @cancel="deviceCancel"
@@ -26,7 +25,6 @@
         label="部件名称"
         placeholder="请选择部件名称"
         disabled
-        title-width="80px"
         :border="false"
         :value="partStandardName"
         @click="standardShow = true"
@@ -35,7 +33,7 @@
         <van-picker
           id="standardPicker"
           show-toolbar
-          title="请选择设备名称"
+          title="请选择部件名称"
           value-key="label"
           :columns="standardColumns"
           @change="standardChange"
@@ -43,20 +41,12 @@
           @confirm="standardConfirm"
         />
       </van-popup>
-      <van-cell title="部件数量" title-width="80px" :border="false">
+      <van-cell title="部件数量" :border="false" title-width="90px">
         <van-stepper class="fl" :value="partNumber" @change="stepChange" />
       </van-cell>
     </van-cell-group>
     <div class="btn-group">
-      <van-button size="large" @click="cancel">
-        取消
-      </van-button>
-      <van-button
-        style="margin-left: 10%;"
-        type="info"
-        size="large"
-        @click="save"
-      >
+      <van-button type="info" size="large" @click="save">
         保存
       </van-button>
     </div>

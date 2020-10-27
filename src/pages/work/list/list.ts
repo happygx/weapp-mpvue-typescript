@@ -39,6 +39,7 @@ export default class List extends Vue {
         { text: '维修单', value: 10 },
         { text: '维保单', value: 20 },
         { text: '善后单', value: 30 },
+        { text: '调试单', value: 40 },
       ],
       operate: (val: any) => {
         this.kindChange(val);
@@ -46,7 +47,7 @@ export default class List extends Vue {
     },
     {
       title: '状态',
-      value: '',
+      value: 30,
       options: [
         { text: '全部', value: '' },
         { text: '处理中', value: 20 },
@@ -73,12 +74,13 @@ export default class List extends Vue {
     ],
     isLoading: true,
     isMore: true,
-    workflowType: { 10: '维修单', 20: '维保单', 30: '善后单' },
+    workflowType: { 10: '维修单', 20: '维保单', 30: '善后单', 40: '调试单' },
   };
   private curPage: number = 0;
   private dataParams: object = {};
   private isRefresh: boolean = false;
   private componentShow: boolean = false;
+  private status: number = 30;
 
   // 监听页面加载
   onLoad() {
@@ -123,12 +125,9 @@ export default class List extends Vue {
     }
     this.tableConfig.isLoading = true;
     let data = {
-      startTime:
-        this.timeConfig.startDay === ''
-          ? ''
-          : this.timeConfig.startDay + ` 00:00:00`,
+      startTime: this.timeConfig.startDay === '' ? '' : this.timeConfig.startDay + ` 00:00:00`,
       endTime: this.timeConfig.endDay + ` 23:59:59`,
-      status: '20,30,110,999',
+      status: this.status,
       offset: 0 + this.curPage * 10,
       limit: 10,
     };
@@ -151,10 +150,7 @@ export default class List extends Vue {
           });
         };
       }
-      this.tableConfig.tableData = [
-        ...this.tableConfig.tableData,
-        ...res.results,
-      ];
+      this.tableConfig.tableData = [...this.tableConfig.tableData, ...res.results];
 
       this.tableConfig.isLoading = false;
       this.tableConfig.isMore = res.next ? true : false;
@@ -188,9 +184,8 @@ export default class List extends Vue {
 
   statusChange(e: any) {
     this.dropdownConfig[1].value = e.mp.detail;
-    this.getWorkflows({
-      status: e.mp.detail,
-    });
+    this.status = e.mp.detail;
+    this.getWorkflows({});
   }
 
   filterConfirm(time: { startDay: string; endDay: string }) {

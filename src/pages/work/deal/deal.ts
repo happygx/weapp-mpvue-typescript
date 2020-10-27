@@ -14,16 +14,24 @@ import Dialog from '../../../../static/vant/dialog/dialog';
 export default class Deal extends Vue {
   // data
   private roles: string = '';
-  private isView: boolean = false;
+  private isView: boolean = true;
   private isConfirm: boolean = false;
   private workData: any = {};
   private questions: any[] = [];
+  private kindList: object = {
+    10: '维修单',
+    20: '维保单',
+    30: '善后单',
+    40: '调试单',
+  };
   private parts: any[] = [];
   private recordShow: boolean = false;
-  private rankClass: string[] = [];
+  private rankClass: string[] = ['', 'yellow', 'red'];
   private componentShow: boolean = false;
   private preview: object = {};
   private previewShow: boolean = false;
+  private isPart: boolean = false;
+  private sampleFiles: object[] = [];
 
   // 监听页面加载
   onLoad() {
@@ -43,11 +51,6 @@ export default class Deal extends Vue {
   // 初始化函数
   init() {
     this.roles = UserModule.info.group;
-    if (this.$mp.query.view === 'true') {
-      this.isView = true;
-    } else {
-      this.rankClass = ['', 'yellow', 'red'];
-    }
     this.getWorkData();
   }
 
@@ -58,10 +61,26 @@ export default class Deal extends Vue {
       this.workData = res;
       this.questions = res.questions;
       this.parts = res.change_part;
+      this.sampleFiles = res.sample_files;
       if (UserModule.info.name === res.last_receive_user && res.status === 30) {
         this.isConfirm = true;
       }
+      this.getIsDeal();
     });
+  }
+
+  getIsDeal() {
+    if (
+      (this.workData.status === 20 || this.workData.status === 30) &&
+      this.workData.last_receive_user === UserModule.info.name
+    ) {
+      this.isView = false;
+    } else {
+      this.isView = true;
+    }
+    if (this.workData.kind !== 40) {
+      this.isPart = true;
+    }
   }
 
   recordConfirm(content: string) {
@@ -80,7 +99,7 @@ export default class Deal extends Vue {
 
   addQuestion() {
     wx.navigateTo({
-      url: `/pages/question/create/main?add=true&buildingId=${this.workData.building_id}&buildingName=${this.workData.building_name}&workflowId=${this.workData.id}`,
+      url: `/pages/question/create/main?buildingId=${this.workData.building_id}&buildingName=${this.workData.building_name}&workflowId=${this.workData.id}`,
     });
   }
 
@@ -89,9 +108,7 @@ export default class Deal extends Vue {
     // decodeURIComponent(options.obj),在encodeURIComponent之前要用JSON.stringify()先转换数据,decodeURIComponent之后再用JSON.parse()转换回来
     let view = isView ? isView : '';
     wx.navigateTo({
-      url: `/pages/work/deal/question/main?question=${encodeURIComponent(
-        JSON.stringify(question)
-      )}&isView=${view}`,
+      url: `/pages/work/deal/question/main?question=${encodeURIComponent(JSON.stringify(question))}&isView=${view}`,
     });
   }
 
@@ -138,7 +155,22 @@ export default class Deal extends Vue {
 
   maintenance() {
     wx.navigateTo({
-      url: `/pages/work/deal/maintenance/main?id=${this.workData.id}`,
+      url: `/pages/work/deal/maintenance/main?id=${this.workData.id}&&view=${this.isView}`,
+    });
+  }
+
+  downloadFile(url: string) {
+    wx.downloadFile({
+      url: url,
+      success: function (res) {
+        const filePath = res.tempFilePath;
+        wx.openDocument({
+          filePath: filePath,
+          success: function (res) {
+            console.log('打开文档成功');
+          },
+        });
+      },
     });
   }
 
@@ -176,7 +208,31 @@ export default class Deal extends Vue {
         workflowId: this.workData.id,
       },
     }).then((result: any) => {
-      wx.navigateBack();
+      wx.navigateBack({
+        delta: 1,
+        success: () => {
+          let page: any = getCurrentPages().pop();
+          if (page == undefined || page == null) return;
+          page.onPullDownRefresh();
+        },
+        fail: () => {
+          wx.redirectTo({
+            url: '/pages/work/mine/main',
+          });
+        },
+      });
+    });
+  }
+
+  callPhone(phone: string) {
+    wx.makePhoneCall({
+      phoneNumber: phone,
+      success: function () {
+        console.log('拨打电话成功！');
+      },
+      fail: function () {
+        console.log('拨打电话失败！');
+      },
     });
   }
 }

@@ -72,17 +72,11 @@ export const formatDate = (date: any, fmt: string) => {
     'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
   };
   if (/(y+)/.test(fmt)) {
-    time = fmt.replace(
-      RegExp.$1,
-      (date.getFullYear() + '').substr(4 - RegExp.$1.length)
-    );
+    time = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
   }
   for (const k in o) {
     if (new RegExp('(' + k + ')').test(fmt)) {
-      time = time.replace(
-        RegExp.$1,
-        RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length)
-      );
+      time = time.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
     }
   }
   return time;
@@ -147,9 +141,7 @@ export const objectAssign = (target: object, source: object) => {
     // console.log(key);
     //遍历参数的键
     if (typeof source[key] === 'object') {
-      let isEmpty = Array.isArray(source[key])
-        ? source[key].length === 0
-        : Object.keys(source[key]).length === 0;
+      let isEmpty = Array.isArray(source[key]) ? source[key].length === 0 : Object.keys(source[key]).length === 0;
       if (isEmpty) {
         target[key] = source[key]; // 值为空直接复制值
       } else {

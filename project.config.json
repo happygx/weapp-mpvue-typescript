@@ -186,10 +186,38 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 18,
 					"name": "pages/work/deal/maintenance/main",
 					"pathName": "pages/work/deal/maintenance/main",
-					"query": "id=27",
+					"query": "id=112",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/question/survey/main",
+					"pathName": "pages/question/survey/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/question/deal/main",
+					"pathName": "pages/question/deal/main",
+					"query": "id=441",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/work/mine/main",
+					"pathName": "pages/work/mine/main",
+					"query": "id=72",
+					"scene": null
+				},
+				{
+					"id": 22,
+					"name": "pages/work/deal/main",
+					"pathName": "pages/work/deal/main",
+					"query": "id=256",
 					"scene": null
 				}
 			]

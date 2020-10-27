@@ -4,7 +4,7 @@ import Company from '@/components/Company/company.vue';
 import Question from '@/components/Question/question.vue';
 import Popup from '@/components/Popup/popup.vue'; // mpvue目前只支持的单文件组件
 import { buildings } from '@/api/common';
-import { wxQuestionRecordUpdate, questionRecords } from '@/api/question';
+import { wxQuestionRecordUpdate, questionRecords, questions } from '@/api/question';
 import Dialog from '../../../../static/vant/dialog/dialog';
 
 @Component({
@@ -37,6 +37,7 @@ export default class Create extends Vue {
   private workId: number = 0;
   private disabled: boolean = false;
   private componentShow: boolean = false;
+  private hideQuestion: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -56,11 +57,30 @@ export default class Create extends Vue {
   // 初始化函数
   init() {
     this.getBuildings();
+    // 修改工单
     if (this.$mp.query.id) {
       this.workId = this.$mp.query.id;
       this.disabled = true;
       this.getWorkflowData();
     }
+    // 创建问题过来创建工单
+    if (this.$mp.query.buildingId) {
+      this.buildingId = this.$mp.query.buildingId;
+      this.buildingName = this.$mp.query.buildingName;
+      this.getQuestion();
+    }
+    // 待办问题创建工单
+    if (this.$mp.query.questions) {
+      this.selectRows = JSON.parse(decodeURIComponent(this.$mp.query.questions));
+      this.buildingId = this.selectRows[0].building_id;
+      this.buildingName = this.selectRows[0].building_name;
+    }
+  }
+
+  getBuildings() {
+    buildings().then((res: any) => {
+      this.buildingsData = res;
+    });
   }
 
   getWorkflowData() {
@@ -78,9 +98,16 @@ export default class Create extends Vue {
     });
   }
 
-  getBuildings() {
-    buildings().then((res: any) => {
-      this.buildingsData = res;
+  getQuestion() {
+    questions({
+      data: {
+        building_id: this.buildingId,
+        status: 20,
+        limit: 1,
+      },
+    }).then((res: any) => {
+      // console.log(res);
+      this.selectRows = res.results;
     });
   }
 
@@ -92,8 +119,11 @@ export default class Create extends Vue {
 
   operationChange(e: any) {
     this.operation = e.mp.detail;
-    if (this.operation === 15) {
+    if (this.operation === 15 || this.operation === 17) {
+      this.hideQuestion = true;
       this.selectRows = [];
+    } else {
+      this.hideQuestion = false;
     }
   }
 
@@ -158,10 +188,7 @@ export default class Create extends Vue {
   suggest(i: number) {
     this.suggestIndex = i;
     this.suggestShow = true;
-    if (
-      this.selectRows[i].record.length > 0 &&
-      this.selectRows[i].record[0].revisable
-    ) {
+    if (this.selectRows[i].record.length > 0 && this.selectRows[i].record[0].revisable) {
       this.suggestContent = this.selectRows[i].record[0].suggest;
     }
   }
@@ -225,7 +252,7 @@ export default class Create extends Vue {
       this.$tip('请选择仓库名称！');
       return false;
     }
-    if (this.operation !== 15) {
+    if (!this.hideQuestion) {
       if (this.selectRows.length > 0) {
         let visibleList: number[] = [];
         this.selectRows.forEach((item: any) => {

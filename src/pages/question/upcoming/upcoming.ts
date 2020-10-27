@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator';
-import { questions, closeQuestion } from '@/api/question';
+import { questions, closeQuestion, questionConcerns, concernDel } from '@/api/question';
 import Search from '@/components/Search/search.vue'; // mpvue目前只支持的单文件组件
 import Filter from '@/components/Filter/filter.vue'; // mpvue目前只支持的单文件组件
 import TableCom from '@/components/TableCom/tableCom.vue'; // mpvue目前只支持的单文件组件
@@ -79,6 +79,7 @@ export default class Upcoming extends Vue {
     ],
     isLoading: true,
     isMore: true,
+    checkbox: true,
     tagType: ['default', 'warning', 'danger'],
   };
   private curPage: number = 0;
@@ -87,6 +88,7 @@ export default class Upcoming extends Vue {
   private closeShow: boolean = false;
   private closeQuestion: any = {};
   private componentShow: boolean = false;
+  private checked: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -121,8 +123,8 @@ export default class Upcoming extends Vue {
 
   // 初始化函数
   init() {
-    this.getQuestions({}, true);
     this.roles = UserModule.info.group;
+    this.getQuestions({}, true);
   }
 
   getQuestions(params?: any, noMerge?: boolean) {
@@ -132,16 +134,12 @@ export default class Upcoming extends Vue {
     }
     this.tableConfig.isLoading = true;
     let data = {
-      min_create_time:
-        this.timeConfig.startDay === ''
-          ? ''
-          : this.timeConfig.startDay + ` 00:00:00`,
+      min_create_time: this.timeConfig.startDay === '' ? '' : this.timeConfig.startDay + ` 00:00:00`,
       max_create_time: this.timeConfig.endDay + ` 23:59:59`,
       offset: 0 + this.curPage * 10,
       limit: 10,
       status: this.roles === '运维' ? 10 : 20,
     };
-
     data = Object.assign(data, params);
     if (!noMerge) {
       this.dataParams = Object.assign(this.dataParams, data);
@@ -161,6 +159,16 @@ export default class Upcoming extends Vue {
               this.close(item);
             },
           },
+          {
+            name: item.concern ? '取消' : '关注',
+            clickFun: () => {
+              if (item.concern) {
+                this.cancelAttention(item);
+              } else {
+                this.attention(item);
+              }
+            },
+          },
         ];
         item.click = () => {
           this.deal(item.id);
@@ -169,10 +177,7 @@ export default class Upcoming extends Vue {
           item.ellipsis = item.content.slice(0, 16) + '...';
         }
       }
-      this.tableConfig.tableData = [
-        ...this.tableConfig.tableData,
-        ...res.results,
-      ];
+      this.tableConfig.tableData = [...this.tableConfig.tableData, ...res.results];
 
       this.tableConfig.isLoading = false;
       this.tableConfig.isMore = res.next ? true : false;
@@ -209,6 +214,31 @@ export default class Upcoming extends Vue {
     });
   }
 
+  attention(row: any) {
+    questionConcerns({
+      method: 'POST',
+      data: {
+        questionId: row.id,
+      },
+    }).then((res: any) => {
+      row.operates[1].name = '取消';
+      row.concern = true;
+      this.$tip('关注成功！');
+    });
+  }
+
+  cancelAttention(row: any) {
+    concernDel({
+      data: {
+        questionId: row.id,
+      },
+    }).then((res: any) => {
+      row.operates[1].name = '关注';
+      row.concern = false;
+      this.$tip('取消成功！');
+    });
+  }
+
   deal(id: number) {
     wx.navigateTo({
       url: `/pages/question/deal/main?id=${id}`,
@@ -234,5 +264,33 @@ export default class Upcoming extends Vue {
       this.init();
       this.$tip('关闭问题成功！');
     });
+  }
+
+  checkedAll() {
+    this.checked = !this.checked;
+    for (let item of this.tableConfig.tableData) {
+      item.checked = !item.checked;
+    }
+  }
+
+  createWork() {
+    let questions = this.$refs.table.handleSelection();
+    if (questions.length === 0) {
+      this.$tip('请选择问题！');
+    } else {
+      let buildingArr: string[] = [];
+      for (let item of questions) {
+        if (!buildingArr.includes(item.building_abbreviation)) {
+          buildingArr.push(item.building_abbreviation);
+        }
+      }
+      if (buildingArr.length > 1) {
+        this.$tip('请选择同一仓库的问题！');
+      } else {
+        wx.navigateTo({
+          url: `/pages/work/create/main?questions=${encodeURIComponent(JSON.stringify(questions))}`,
+        });
+      }
+    }
   }
 }

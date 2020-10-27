@@ -65,10 +65,25 @@ export default class Device extends Vue {
       this.deviceData = res;
       this.deviceColumns = [
         {
-          values: Object.keys(res),
+          values: res.map((val: any) => {
+            return {
+              label: val.label,
+              children: val.children,
+            };
+          }),
         },
         {
-          values: res['空调'],
+          values: res[0].children.map((val: any) => {
+            let reg = /[A-Z|\-|\.|0-9].+/g;
+            let floor = val.label.match(reg);
+            return {
+              label: floor,
+              children: val.children,
+            };
+          }),
+        },
+        {
+          values: res[0].children[0].children,
         },
       ];
     });
@@ -102,20 +117,25 @@ export default class Device extends Vue {
   }
 
   deviceChange(e: any) {
-    const { picker, value } = e.target;
-    picker.setColumnValues(1, this.deviceData[value[0]]);
+    const { picker, index, value } = e.target;
+    if (index === 0) {
+      picker.setColumnValues(1, value[index].children);
+      picker.setColumnValues(2, value[index].children[0].children);
+    } else if (index === 1) {
+      picker.setColumnValues(2, value[index].children);
+    }
   }
 
   deviceCancel() {
     this.deviceShow = false;
-    const picker = this.$mp.page.selectComponent('#devicePicker');
-    picker.setIndexes([0, 0]); // 初始化索引
+    // const picker = this.$mp.page.selectComponent('#devicePicker');
+    // picker.setIndexes([0, 0, 0]); // 初始化索引
   }
 
   deviceConfirm(e: any) {
-    let { location, type, code } = e.target.value[1];
+    let { type, label, code } = e.mp.detail.value[2];
     this.deviceType = type;
-    this.deviceName = location;
+    this.deviceName = label;
     this.deviceCode = code;
     this.deviceCancel();
   }

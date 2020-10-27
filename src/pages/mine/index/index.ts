@@ -26,7 +26,7 @@ export default class Mine extends Vue {
   }
 
   init() {
-    this.info = UserModule.info;
+    this.info = UserModule.info ? UserModule.info : false;
   }
 
   login() {

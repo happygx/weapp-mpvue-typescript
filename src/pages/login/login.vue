@@ -5,17 +5,17 @@
         label="用户名"
         placeholder="请输入用户名"
         clearable
-        :value="form.username"
-        @change="form.username = $event.mp.detail"
+        :value="username"
+        @blur="onChange($event, 'username')"
       />
       <van-field
         label="密码"
         placeholder="请输入密码"
         clearable
-        :value="form.password"
         :password="passwordShow"
         :right-icon="passwordShow ? 'closed-eye' : 'eye-o'"
-        @change="form.password = $event.mp.detail"
+        :value="password"
+        @blur="onChange($event, 'password')"
         @clickIcon="onClickIcon"
       />
     </van-cell-group>

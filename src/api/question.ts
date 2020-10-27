@@ -67,3 +67,7 @@ export const questionRecords = (params = {}) => {
 export const wxQuestionRecordUpdate = (params = {}) => {
   return Api.wxQuestionRecordUpdate(params);
 };
+
+export const buildingQuestion = (params = {}) => {
+  return Api.buildingQuestion(params);
+};

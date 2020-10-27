@@ -1,0 +1,50 @@
+@import '@/assert/css/common.scss';
+
+page {
+  background-color: #f1f1f1;
+  .survey-wrap {
+    width: 100%;
+    padding-top: 15px;
+    .filter {
+      margin: 0 15px;
+      line-height: 40px;
+      color: #555;
+      border-radius: 20px;
+      background-color: #fff;
+      .placeholder {
+        color: #999;
+      }
+      .building {
+        width: 85%;
+        padding: 0 20px;
+      }
+      .icon-time {
+        width: 15%;
+      }
+    }
+  }
+
+  .question {
+    .question-item {
+      padding: 15px 20px;
+      background-color: #fff;
+      &:last-child {
+        margin: 0;
+      }
+      .question-detail {
+        line-height: 24px;
+        p {
+          color: #666;
+          word-break: break-all;
+        }
+      }
+    }
+  }
+
+  .popup {
+    padding: 15px 10px;
+    .btn-group {
+      padding: 20px 10px;
+    }
+  }
+}

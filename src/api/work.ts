@@ -39,3 +39,7 @@ export const addQuestion = (params = {}) => {
 export const workflowSystemKeepRecords = (params = {}) => {
   return Api.workflowSystemKeepRecords(params);
 };
+
+export const mineWorkflowCount = (params = {}) => {
+  return Api.mineWorkflowCount(params);
+};

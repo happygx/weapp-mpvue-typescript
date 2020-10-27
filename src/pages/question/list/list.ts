@@ -36,10 +36,10 @@ export default class List extends Vue {
   private dropdownConfig: any[] = [
     {
       title: '状态',
-      value: '',
+      value: 40,
       options: [
         { text: '全部', value: '' },
-        { text: '新建', value: 10 },
+        { text: '预处理', value: 10 },
         { text: '待处理', value: 20 },
         { text: '处理中', value: 30 },
         { text: '已处理', value: 40 },
@@ -84,6 +84,7 @@ export default class List extends Vue {
   private dataParams: object = {};
   private isRefresh: boolean = false;
   private componentShow: boolean = false;
+  private status: number = 40;
 
   // 监听页面加载
   onLoad() {
@@ -128,13 +129,11 @@ export default class List extends Vue {
     }
     this.tableConfig.isLoading = true;
     let data = {
-      min_create_time:
-        this.timeConfig.startDay === ''
-          ? ''
-          : this.timeConfig.startDay + ` 00:00:00`,
+      min_create_time: this.timeConfig.startDay === '' ? '' : this.timeConfig.startDay + ` 00:00:00`,
       max_create_time: this.timeConfig.endDay + ` 23:59:59`,
       offset: 0 + this.curPage * 10,
       limit: 10,
+      status: this.status,
     };
 
     data = Object.assign(data, params);
@@ -151,9 +150,9 @@ export default class List extends Vue {
         item.statusName = this.generateStatusType(item);
         item.operates = [
           {
-            name: item.concern_status === 10 ? '取消' : '关注',
+            name: item.concern ? '取消' : '关注',
             clickFun: () => {
-              if (item.concern_status === 10) {
+              if (item.concern) {
                 this.cancelAttention(item);
               } else {
                 this.attention(item);
@@ -168,10 +167,7 @@ export default class List extends Vue {
           item.ellipsis = item.content.slice(0, 16) + '...';
         }
       }
-      this.tableConfig.tableData = [
-        ...this.tableConfig.tableData,
-        ...res.results,
-      ];
+      this.tableConfig.tableData = [...this.tableConfig.tableData, ...res.results];
       this.tableConfig.isLoading = false;
       this.tableConfig.isMore = res.next ? true : false;
       if (this.isRefresh) {
@@ -187,7 +183,7 @@ export default class List extends Vue {
   generateStatusType(row: any) {
     switch (row.status) {
       case 10:
-        return '新建';
+        return '预处理';
       case 20:
         return '待处理';
       case 30:
@@ -201,9 +197,8 @@ export default class List extends Vue {
 
   statusChange(val: any) {
     this.dropdownConfig[0].value = val.mp.detail;
-    this.getQuestions({
-      status: val.mp.detail,
-    });
+    this.status = val.mp.detail;
+    this.getQuestions({}, true);
   }
 
   rankChange(val: any) {
@@ -231,7 +226,6 @@ export default class List extends Vue {
     }).then((res: any) => {
       row.operates[0].name = '取消';
       row.concern = true;
-      row.concern_status = 10;
       this.$tip('关注成功！');
     });
   }
@@ -244,7 +238,6 @@ export default class List extends Vue {
     }).then((res: any) => {
       row.operates[0].name = '关注';
       row.concern = false;
-      row.concern_status = 20;
       this.$tip('取消成功！');
     });
   }

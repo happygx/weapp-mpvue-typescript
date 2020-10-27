@@ -16,7 +16,7 @@ export default class Filter extends Vue {
   private timeConfig: object;
 
   // data
-  private timeData: object = {};
+  private timeData: any = {};
   private timeShow: boolean = false;
   private timeType: string = '';
 
@@ -33,6 +33,19 @@ export default class Filter extends Vue {
   // 初始化函数
   init() {
     this.timeData = { ...this.timeConfig };
+    this.timeData.startTime = new Date(this.timeData.startDay).getTime();
+    this.timeData.endTime = new Date(this.timeData.endDay).getTime();
+  }
+
+  get defaultDate() {
+    let date =
+      this.timeType === 'start'
+        ? this.timeData.startTime
+        : this.timeData.endTime;
+    if (isNaN(date)) {
+      date = this.timeData.maxDate;
+    }
+    return date;
   }
 
   selectTime(type: string) {
@@ -40,13 +53,15 @@ export default class Filter extends Vue {
     this.timeShow = true;
   }
 
-  timeClose() {
-    this.timeShow = false;
-  }
-
   timeConfirm(val: any) {
-    this.timeData[this.timeType] = formatDate(val.mp.detail, 'yyyy-MM-dd');
-    this.timeClose();
+    this.timeData[`${this.timeType}Day`] = formatDate(
+      val.mp.detail,
+      'yyyy-MM-dd'
+    );
+    this.timeData[`${this.timeType}Time`] = new Date(
+      this.timeData[`${this.timeType}Day`]
+    ).getTime();
+    this.timeShow = false;
   }
 
   @Emit()

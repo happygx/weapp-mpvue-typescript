@@ -2,6 +2,24 @@
 
 .filter-wrap {
   width: 100%;
+  .time-wrap {
+    padding: 0 20px;
+    .time {
+      display: flex;
+      align-items: center;
+      height: 44px;
+      padding: 0 10px;
+      font-size: 14px;
+      color: #323233;
+      border-bottom: 1px solid #ebedf0;
+      .label {
+        width: 90px;
+      }
+      .placeholder {
+        color: #c8c9cc;
+      }
+    }
+  }
   .btn-group {
     padding: 20px 15px;
   }

@@ -2,10 +2,15 @@
 
 .deal-wrap {
   width: 100%;
-  padding: 10px 15px;
+  padding: 10px;
   .van-cell__title {
     color: #555;
+    font-size: 15px;
     font-weight: bold;
+  }
+
+  .red {
+    color: #f56c6c;
   }
 
   .edit {
@@ -28,6 +33,7 @@
   }
   .placeholder {
     color: #c8c9cc;
+    line-height: 22px;
   }
   .img {
     margin: 0 18px 0px 0;
@@ -36,7 +42,7 @@
       margin-right: 0;
     }
   }
-  .popup {
+  .preview-popup {
     height: 250px;
   }
   .preview {
@@ -45,6 +51,9 @@
   }
   .link {
     color: $bg;
+  }
+  .record {
+    margin: 0;
   }
   .btn-group {
     padding: 20px 16px;

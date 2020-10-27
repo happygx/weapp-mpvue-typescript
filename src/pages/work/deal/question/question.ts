@@ -1,12 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator';
-import {
-  questions,
-  wxDevicesSearch,
-  deviceRelations,
-  questionRecords,
-  attachments,
-  wxQuestionRecordUpdate,
-} from '@/api/question';
+import { wxDevicesSearch, deviceRelations, questionRecords, attachments, wxQuestionRecordUpdate } from '@/api/question';
 import Dialog from '../../../../../static/vant/dialog/dialog';
 import { isVideo } from '@/utils/common';
 import { uploadFile } from '@/utils/uploadOSS/uploadFile';
@@ -56,13 +49,13 @@ export default class Question extends Vue {
   init() {
     this.isView = this.$mp.query.isView ? true : false;
     this.getQuestionsData();
-    this.getOssSignData();
+    if (!this.isView) {
+      this.getOssSignData();
+    }
   }
 
   getQuestionsData() {
-    this.questionsData = JSON.parse(
-      decodeURIComponent(this.$mp.query.question)
-    );
+    this.questionsData = JSON.parse(decodeURIComponent(this.$mp.query.question));
     this.faultDevices = this.questionsData.fault_device;
     this.devices = this.questionsData.device_relation;
     this.attachments = this.questionsData.attachments;
@@ -71,14 +64,14 @@ export default class Question extends Vue {
         item.errUrl = '/static/images/play.jpg';
       }
     }
+
+    if (!this.isView) {
+      this.getDevice(this.questionsData.buildingId);
+    }
     this.record = this.questionsData.record;
-    this.getDevice(this.questionsData.buildingId);
-    if (
-      this.questionsData.record.length > 0 &&
-      this.questionsData.record[0].revisable
-    ) {
-      this.isFinish = this.questionsData.record[0].isFinish;
-      this.suggest = this.questionsData.record[0].suggest;
+    if (this.record.length > 0 && this.record[0].revisable) {
+      this.isFinish = this.record[0].isFinish;
+      this.suggest = this.record[0].suggest;
       this.recordAttachments = [...this.questionsData.record[0].attachments];
       this.fileList = [...this.questionsData.record[0].attachments];
     }
@@ -99,10 +92,25 @@ export default class Question extends Vue {
       this.deviceData = res;
       this.deviceColumns = [
         {
-          values: Object.keys(res),
+          values: res.map((val: any) => {
+            return {
+              label: val.label,
+              children: val.children,
+            };
+          }),
         },
         {
-          values: res['空调'],
+          values: res[0].children.map((val: any) => {
+            let reg = /[A-Z|\-|\.|0-9].+/g;
+            let floor = val.label.match(reg);
+            return {
+              label: floor,
+              children: val.children,
+            };
+          }),
+        },
+        {
+          values: res[0].children[0].children,
         },
       ];
     });
@@ -114,21 +122,26 @@ export default class Question extends Vue {
   }
 
   deviceChange(e: any) {
-    const { picker, value } = e.target;
-    picker.setColumnValues(1, this.deviceData[value[0]]);
+    const { picker, index, value } = e.target;
+    if (index === 0) {
+      picker.setColumnValues(1, value[index].children);
+      picker.setColumnValues(2, value[index].children[0].children);
+    } else if (index === 1) {
+      picker.setColumnValues(2, value[index].children);
+    }
   }
 
   deviceCancel() {
     this.deviceShow = false;
     setTimeout(() => {
-      this.textareaShow = !this.textareaShow;
-    }, 500);
-    const picker = this.$mp.page.selectComponent('#devicePicker');
-    picker.setIndexes([0, 0]); // 初始化索引
+      this.textareaShow = true;
+    }, 300);
+    // const picker = this.$mp.page.selectComponent('#devicePicker');
+    // picker.setIndexes([0, 0, 0]); // 初始化索引
   }
 
   deviceConfirm(e: any) {
-    let device = e.target.value[1];
+    let device = e.mp.detail.value[2];
     let isRepeat = this.devices.some((item: any) => {
       return item.code === device.code;
     });
@@ -146,8 +159,8 @@ export default class Question extends Vue {
       });
     } else {
       this.$tip('此问题设备已存在！');
-      this.deviceCancel();
     }
+    this.deviceCancel();
   }
 
   delDevice(index: number) {
@@ -256,10 +269,6 @@ export default class Question extends Vue {
     }
   }
 
-  cancel() {
-    wx.navigateBack();
-  }
-
   save() {
     this.getAttachments();
     if (this.suggest === '') {
@@ -272,10 +281,7 @@ export default class Question extends Vue {
         isFinish: this.isFinish,
         attachments: this.recordAttachments,
       };
-      if (
-        this.questionsData.record.length > 0 &&
-        this.questionsData.record[0].revisable
-      ) {
+      if (this.questionsData.record.length > 0 && this.questionsData.record[0].revisable) {
         dataParam.recordId = this.questionsData.record[0].id;
         wxQuestionRecordUpdate({
           method: 'PUT',

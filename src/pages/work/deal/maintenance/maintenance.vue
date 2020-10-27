@@ -1,11 +1,11 @@
 <template>
   <div class="maintenance-wrap">
     <van-checkbox
+      v-if="!disabled"
       custom-class="mb10"
       label-class="label fb"
       shape="square"
       icon-size="15px"
-      :disabled="disabled"
       :value="isAll"
       @change="checkAll"
       >全选</van-checkbox

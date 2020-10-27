@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator';
-import { questions } from '@/api/question';
+import { questions, questionConcerns, concernDel } from '@/api/question';
 import Search from '@/components/Search/search.vue'; // mpvue目前只支持的单文件组件
 import Filter from '@/components/Filter/filter.vue'; // mpvue目前只支持的单文件组件
 import TableCom from '@/components/TableCom/tableCom.vue'; // mpvue目前只支持的单文件组件
@@ -164,6 +164,18 @@ export default class Mine extends Vue {
           };
         }
         item.statusName = this.generateStatusType(item);
+        item.operates = [
+          {
+            name: item.concern ? '取消' : '关注',
+            clickFun: () => {
+              if (item.concern) {
+                this.cancelAttention(item);
+              } else {
+                this.attention(item);
+              }
+            },
+          },
+        ];
         if (item.content.length >= 16) {
           item.ellipsis = item.content.slice(0, 16) + '...';
         }
@@ -213,6 +225,31 @@ export default class Mine extends Vue {
           return '已关闭';
       }
     }
+  }
+
+  attention(row: any) {
+    questionConcerns({
+      method: 'POST',
+      data: {
+        questionId: row.id,
+      },
+    }).then((res: any) => {
+      row.operates[0].name = '取消';
+      row.concern = true;
+      this.$tip('关注成功！');
+    });
+  }
+
+  cancelAttention(row: any) {
+    concernDel({
+      data: {
+        questionId: row.id,
+      },
+    }).then((res: any) => {
+      row.operates[0].name = '关注';
+      row.concern = false;
+      this.$tip('取消成功！');
+    });
   }
 
   modify(id: number) {

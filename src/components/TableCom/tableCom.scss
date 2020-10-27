@@ -8,14 +8,16 @@
   .list-item {
     padding: 10px 15px;
     margin-bottom: 1px;
-
+    .van-checkbox__icon {
+      width: 17px;
+      height: 17px;
+    }
+    .checkbox {
+      margin-top: 4px;
+    }
     .title {
       display: flex;
       align-items: center;
-      .van-checkbox__icon {
-        width: 16px;
-        height: 16px;
-      }
       h3 {
         color: #555;
       }
@@ -74,6 +76,13 @@
       .van-loading__text {
         color: #1989fa;
       }
+    }
+  }
+  .popup {
+    width: 50%;
+    p {
+      padding: 12px 20px;
+      border-bottom: 1px solid $bc;
     }
   }
 }

@@ -2,9 +2,10 @@
 
 .question-wrap {
   width: 100%;
-  padding: 10px 15px;
+  padding: 10px;
   .van-cell__title {
     color: #555;
+    font-size: 15px;
     font-weight: bold;
   }
   .record:last-child {
@@ -36,14 +37,12 @@
   }
   .placeholder {
     color: #c8c9cc;
+    line-height: 22px;
   }
   .van-cell__value {
     overflow: visible;
   }
   .btn-group {
     padding: 20px 16px;
-    .van-button--large {
-      width: 45%;
-    }
   }
 }

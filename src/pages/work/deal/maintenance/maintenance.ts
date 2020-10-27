@@ -30,7 +30,7 @@ export default class Maintenance extends Vue {
   // 初始化函数
   init() {
     this.getMaintenance();
-    if (UserModule.info.group === '养护员') {
+    if (UserModule.info.group === '养护员' || this.$mp.query.view === 'true') {
       this.disabled = true;
     }
   }

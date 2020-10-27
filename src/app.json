@@ -2,15 +2,15 @@
   "pages": [
     "pages/index/main",
     "pages/login/main",
-    "pages/question/index/main",
     "pages/question/mine/main",
+    "pages/question/survey/main",
     "pages/question/upcoming/main",
     "pages/question/list/main",
     "pages/question/create/main",
     "pages/question/deal/main",
     "pages/question/attention/main",
-    "pages/work/index/main",
     "pages/work/mine/main",
+    "pages/work/upcoming/main",
     "pages/work/list/main",
     "pages/work/create/main",
     "pages/work/deal/main",
@@ -36,18 +36,6 @@
         "pagePath": "pages/index/main",
         "iconPath": "static/tabs/index.png",
         "selectedIconPath": "static/tabs/index-active.png"
-      },
-      {
-        "text": "问题",
-        "pagePath": "pages/question/index/main",
-        "iconPath": "static/tabs/question.png",
-        "selectedIconPath": "static/tabs/question-active.png"
-      },
-      {
-        "text": "工单",
-        "pagePath": "pages/work/index/main",
-        "iconPath": "static/tabs/work.png",
-        "selectedIconPath": "static/tabs/work-active.png"
       },
       {
         "text": "我的",

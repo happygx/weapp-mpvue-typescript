@@ -2,10 +2,13 @@
 
 .add-wrap {
   width: 100%;
-  padding: 10px 15px;
-  .van-cell__title {
-    color: #555;
-    font-weight: bold;
+  padding: 10px;
+  .cell-group {
+    .van-cell__title {
+      color: #555;
+      font-size: 15px;
+      font-weight: bold;
+    }
   }
 
   .required::before {
@@ -15,6 +18,7 @@
     left: var(--padding-xs, 8px);
     font-size: 14px;
     font-size: var(--cell-font-size, 14px);
+    font-weight: normal;
     color: #ee0a24;
     color: var(--cell-required-color, #ee0a24);
   }
@@ -34,6 +38,19 @@
     margin: 0 18px 15px 0;
     &:nth-child(3n) {
       margin-right: 0;
+    }
+  }
+  .placeholder {
+    color: #c8c9cc;
+    line-height: 22px;
+  }
+  .btn-group {
+    padding: 20px 16px;
+    .van-button--large {
+      width: 45%;
+    }
+    .w100 {
+      width: 100%;
     }
   }
 }

@@ -8,10 +8,6 @@ export default class Popup extends Vue {
   @Prop({
     required: true,
   })
-  show: boolean;
-  @Prop({
-    required: true,
-  })
   title: string;
   @Prop({
     required: false,
@@ -39,12 +35,11 @@ export default class Popup extends Vue {
 
   // 初始化函数
   init() {
-    //
+    this.closeContent = this.content;
   }
 
-  @Watch('content')
-  onChange(newVal: string) {
-    this.closeContent = newVal;
+  onChange(e: any) {
+    this.closeContent = e.mp.detail.value;
   }
 
   @Emit()
@@ -54,11 +49,13 @@ export default class Popup extends Vue {
   confirm(content: string) {}
 
   popupConfirm() {
-    if (this.closeContent === '') {
-      this.$tip(`${this.title}不能为空！`);
-    } else {
-      this.confirm(this.closeContent);
-      this.closeContent = '';
-    }
+    // 让onChange先获取值
+    setTimeout(() => {
+      if (this.closeContent === '') {
+        this.$tip(`${this.title}不能为空！`);
+      } else {
+        this.confirm(this.closeContent);
+      }
+    }, 100);
   }
 }

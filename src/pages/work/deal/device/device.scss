@@ -2,15 +2,13 @@
 
 .device-wrap {
   width: 100%;
-  padding: 10px 15px;
+  padding: 10px;
   .van-cell__title {
     color: #555;
+    font-size: 15px;
     font-weight: bold;
   }
   .btn-group {
     padding: 20px 16px;
-    .van-button--large {
-      width: 45%;
-    }
   }
 }

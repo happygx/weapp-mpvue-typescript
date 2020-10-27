@@ -1,6 +1,6 @@
 <template>
   <div class="popup-wrap">
-    <van-popup custom-class="popup" :show="show" @close="cancel">
+    <van-popup custom-class="popup" show="true" @close="cancel">
       <h3 class="title pl20 mb10">{{ title }}</h3>
       <van-field
         :label="title"
@@ -10,7 +10,7 @@
         title-width="70px"
         :show-confirm-bar="false"
         :value="closeContent"
-        @input="closeContent = $event.mp.detail"
+        @blur="onChange"
       />
       <footer>
         <van-button class="mr10" type="default" size="small" @click="cancel"

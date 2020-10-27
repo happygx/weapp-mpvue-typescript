@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "待您分配",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 50,
+  "backgroundTextStyle": "dark"
+}

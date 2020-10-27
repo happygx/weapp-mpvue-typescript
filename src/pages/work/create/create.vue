@@ -1,57 +1,41 @@
 <template>
   <div class="create-wrap">
+    <Company
+      v-if="companyShow && componentShow"
+      :buildingsData="buildingsData"
+      @onCancel="companyShow = false"
+      @onSelect="selectBuilding"
+    />
+    <Question
+      v-if="questionShow && componentShow"
+      :buildingId="buildingId"
+      :selectRows="selectRows"
+      @cancel="questionShow = false"
+      @confirm="questionConfirm"
+    />
     <van-cell-group :border="false" custom-class="cell-group">
       <van-field
         label="仓库名称"
         placeholder="请选择仓库名称"
         required
         disabled
-        title-width="80px"
         :border="false"
         :value="buildingName"
         @click="!disabled && (companyShow = true)"
       />
-      <Company
-        v-if="companyShow && componentShow"
-        :buildingsData="buildingsData"
-        @onCancel="companyShow = false"
-        @onSelect="selectBuilding"
-      />
-      <van-cell
-        :border="false"
-        title="工单类型"
-        title-width="80px"
-        title-class="required"
-      >
-        <van-radio-group
-          class="radio-group"
-          :disabled="disabled"
-          :value="operation"
-          @change="operationChange"
-        >
+      <van-cell :border="false" title="工单类型" title-width="90px" title-class="required">
+        <van-radio-group class="radio-group" :disabled="disabled" :value="operation" @change="operationChange">
           <van-radio :name="14" class="mr15" icon-size="16px">维修单</van-radio>
           <van-radio :name="15" class="mr15" icon-size="16px">维保单</van-radio>
           <van-radio :name="16" icon-size="16px">善后单</van-radio>
+          <van-radio :name="17" icon-size="16px" class="mt15">调试单</van-radio>
         </van-radio-group>
       </van-cell>
-      <van-cell
-        v-if="operation !== 15"
-        :border="false"
-        title="工单问题"
-        title-width="80px"
-        title-class="required"
-      >
+      <van-cell v-if="!hideQuestion" :border="false" title="工单问题" title-width="90px" title-class="required">
         <van-button type="info" size="small" class="fl" @click="selectQuestion">
           选择问题
         </van-button>
       </van-cell>
-      <Question
-        v-if="questionShow && componentShow"
-        :buildingId="buildingId"
-        :selectRows="selectRows"
-        @cancel="questionShow = false"
-        @confirm="questionConfirm"
-      />
     </van-cell-group>
     <van-cell v-for="(item, index) in selectRows" :key="index" :border="false">
       <div slot="title">
@@ -68,12 +52,7 @@
             name="edit"
             @click="suggest(index)"
           />
-          <van-icon
-            v-else
-            class="mr10 f16"
-            name="add-o"
-            @click="suggest(index)"
-          />
+          <van-icon v-else class="mr10 f16" name="add-o" @click="suggest(index)" />
           <van-icon class="f16" name="close" @click="deleteQuestion(index)" />
         </div>
         <div class="detail mt10">
@@ -94,37 +73,27 @@
         </div>
         <div class="content mt5" v-if="item.content">
           <span>详情：</span>
-          <span style="word-break: break-all;">{{ item.content }}</span>
+          <span class="break">{{ item.content }}</span>
         </div>
-        <div
-          class="content mt5"
-          v-if="item.record.length > 0 && item.record[0].revisable"
-        >
+        <div class="content mt5" v-if="item.record.length > 0 && item.record[0].revisable">
           <span>建议：</span>
-          <span style="word-break: break-all;">{{
-            item.record[0].suggest
-          }}</span>
+          <span class="break">{{ item.record[0].suggest }}</span>
         </div>
       </div>
     </van-cell>
     <Popup
-      v-if="componentShow"
+      v-if="suggestShow && componentShow"
       title="处理建议"
-      :show="suggestShow"
       :content="suggestContent"
       @cancel="suggestCancel"
       @confirm="suggestConfirm"
     />
     <van-dialog id="van-dialog" />
-    <van-button
-      v-if="!disabled"
-      type="info"
-      size="large"
-      custom-class="mt20"
-      @click="submit"
-    >
-      立即创建
-    </van-button>
+    <div class="btn-group" v-if="!disabled">
+      <van-button type="info" size="large" @click="submit">
+        立即创建
+      </van-button>
+    </div>
   </div>
 </template>
 

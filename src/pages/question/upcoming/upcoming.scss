@@ -4,5 +4,23 @@ page {
   background-color: #f1f1f1;
   .upcoming-wrap {
     width: 100%;
+    footer {
+      position: fixed;
+      bottom: 0;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 10px 15px;
+      background-color: #fff;
+      border-top: 1px solid #ebedf0;
+      .van-checkbox__icon {
+        width: 17px;
+        height: 17px;
+      }
+      .footer-btn {
+        width: 120px;
+        height: 40px;
+      }
+    }
   }
 }

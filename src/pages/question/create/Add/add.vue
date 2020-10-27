@@ -1,20 +1,19 @@
 <template>
   <div class="add-wrap">
-    <van-cell-group :border="false">
+    <Company
+      v-if="companyShow"
+      :buildingsData="buildingsData"
+      @onCancel="popupShow('companyShow')"
+      @onSelect="selectBuilding"
+    />
+    <van-cell-group :border="false" custom-class="cell-group">
       <van-field
         label="仓库名称"
         required
         disabled
-        title-width="80px"
         :border="false"
         :value="buildingName"
-        @click="!disabled && (companyShow = true)"
-      />
-      <Company
-        v-if="companyShow"
-        :buildingsData="buildingsData"
-        @onCancel="companyShow = false"
-        @onSelect="selectBuilding"
+        @click="!disabled && popupShow('companyShow')"
       />
       <van-field
         v-if="roles !== '养护员'"
@@ -22,22 +21,21 @@
         placeholder="请选择问题提出人"
         required
         disabled
-        title-width="80px"
         :border="false"
         :value="exhibitorName"
-        @click="exhibitorShow = true"
+        @click="popupShow('exhibitorShow')"
       />
       <van-popup
         position="bottom"
         :show="exhibitorShow"
-        @close="exhibitorShow = false"
+        @close="popupShow('exhibitorShow')"
       >
         <van-picker
           show-toolbar
           title="请选择问题提出人"
           value-key="username"
           :columns="exhibitorData"
-          @cancel="exhibitorShow = false"
+          @cancel="popupShow('exhibitorShow')"
           @confirm="exhibitorConfirm"
         />
       </van-popup>
@@ -46,22 +44,21 @@
         placeholder="请选择问题分类"
         required
         disabled
-        title-width="80px"
         :border="false"
         :value="classificationName"
-        @click="classificationShow = true"
+        @click="popupShow('classificationShow')"
       />
       <van-popup
         position="bottom"
         :show="classificationShow"
-        @close="classificationShow = false"
+        @close="popupShow('classificationShow')"
       >
         <van-picker
           show-toolbar
           title="请选择问题分类"
           value-key="name"
           :columns="classificationsData"
-          @cancel="classificationShow = false"
+          @cancel="popupShow('classificationShow')"
           @confirm="classificationConfirm"
         />
       </van-popup>
@@ -69,7 +66,7 @@
         v-if="roles !== '养护员'"
         :border="false"
         title="问题级别"
-        title-width="80px"
+        title-width="90px"
         title-class="required"
       >
         <van-radio-group
@@ -83,10 +80,10 @@
         </van-radio-group>
       </van-cell>
       <van-cell
-        v-if="roles !== '养护员' && isRemote"
+        v-if="roles !== '养护员' && !workflowId"
         :border="false"
         title="远程处理"
-        title-width="80px"
+        title-width="90px"
         title-class="required"
       >
         <van-radio-group
@@ -94,46 +91,57 @@
           :value="form.status"
           @change="form.status = $event.mp.detail"
         >
-          <van-radio :name="10" class="mr20" icon-size="16px">是</van-radio>
+          <van-radio :name="10" icon-size="16px" class="mr20">是</van-radio>
           <van-radio :name="20" icon-size="16px">否</van-radio>
         </van-radio-group>
       </van-cell>
       <van-field
-        v-if="!companyShow"
+        v-if="textareaShow"
         label="问题详情"
         placeholder="请输入问题详情"
         required
         autosize
         type="textarea"
-        title-width="80px"
         :show-confirm-bar="false"
         :border="false"
         :value="form.content"
         @input="form.content = $event.mp.detail"
       />
+      <!-- textarea的替代样式，为了解决textarea层级过高导致文字穿透浮层的问题 -->
+      <van-cell
+        v-if="!textareaShow"
+        title="问题详情"
+        title-width="90px"
+        title-class="required"
+        :border="false"
+      >
+        <p class="tl" :class="{ placeholder: form.content === '' }">
+          {{ form.content === '' ? '请输入问题详情' : form.content }}
+        </p>
+      </van-cell>
       <van-cell
         :border="false"
         title="告警设备"
-        title-width="80px"
+        title-width="90px"
         v-if="faultDevice.length > 0"
       >
         <van-tag
           v-for="(item, index) in faultDevice"
           :key="index"
-          class="fl"
+          class="fl mr10 mb5"
           plain
           size="medium"
           type="primary"
         >
-          {{ item.location }}（{{ item.name }}）
+          {{ item.label }}（{{ item.name }}）
         </van-tag>
       </van-cell>
-      <van-cell :border="false" title="问题设备" title-width="80px">
+      <van-cell :border="false" title="问题设备" title-width="90px">
         <van-button
           type="info"
           size="small"
           class="fl"
-          @click="deviceShow = true"
+          @click="popupShow('deviceShow')"
         >
           添加设备
         </van-button>
@@ -142,7 +150,7 @@
         v-if="form.devices.length > 0"
         :border="false"
         title=" "
-        title-width="80px"
+        title-width="90px"
       >
         <van-tag
           v-for="(item, index) in form.devices"
@@ -162,14 +170,14 @@
           id="devicePicker"
           show-toolbar
           title="请选择设备名称"
-          value-key="location"
+          value-key="label"
           :columns="deviceColumns"
           @change="deviceChange"
           @cancel="deviceCancel"
           @confirm="deviceConfirm"
         />
       </van-popup>
-      <van-cell :border="false" title="上传附件" title-width="80px">
+      <van-cell :border="false" title="上传附件" title-width="90px">
         <van-uploader
           class="fl"
           accept="media"
@@ -182,9 +190,25 @@
       </van-cell>
     </van-cell-group>
     <van-dialog id="van-dialog" />
-    <van-button type="info" size="large" custom-class="mt20" @click="submit">
-      立即创建
-    </van-button>
+    <div class="btn-group">
+      <van-button
+        type="info"
+        size="large"
+        @click="submit"
+        :custom-class="getWidth"
+      >
+        创建问题
+      </van-button>
+      <van-button
+        v-if="roles === '售后经理' && !workflowId && form.status === 20"
+        style="margin-left: 10%;"
+        type="info"
+        size="large"
+        @click="submit('work')"
+      >
+        创建工单
+      </van-button>
+    </div>
   </div>
 </template>
 
