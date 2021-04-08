@@ -4,20 +4,23 @@ import { changePart, changeParts, wxChangePartUpdate } from '@/api/work';
 
 @Component({
   name: 'device',
-  components: {},
+  components: {}
 })
 export default class Device extends Vue {
   // data
   private part: any = {};
+  private maintainType: number = 0;
   private deviceType: number = 0;
   private deviceData: object[] = [];
   private deviceColumns: object[] = [];
   private deviceCode: number = 0;
   private deviceName: string = '';
+  private content: string = '';
   private deviceShow: boolean = false;
   private standardData: object[] = [];
   private standardColumns: object[] = [];
   private standardShow: boolean = false;
+  private remarksShow: boolean = false;
   private partStandardId: number = 0;
   private partStandardName: string = '';
   private partNumber: number = 1;
@@ -59,8 +62,8 @@ export default class Device extends Vue {
   getDevice() {
     wxDevicesSearch({
       data: {
-        buildingId: this.$mp.query.buildingId,
-      },
+        buildingId: this.$mp.query.buildingId
+      }
     }).then((res: any) => {
       this.deviceData = res;
       this.deviceColumns = [
@@ -68,9 +71,9 @@ export default class Device extends Vue {
           values: res.map((val: any) => {
             return {
               label: val.label,
-              children: val.children,
+              children: val.children
             };
-          }),
+          })
         },
         {
           values: res[0].children.map((val: any) => {
@@ -78,13 +81,13 @@ export default class Device extends Vue {
             let floor = val.label.match(reg);
             return {
               label: floor,
-              children: val.children,
+              children: val.children
             };
-          }),
+          })
         },
         {
-          values: res[0].children[0].children,
-        },
+          values: res[0].children[0].children
+        }
       ];
     });
   }
@@ -97,21 +100,21 @@ export default class Device extends Vue {
           values: res.map((val: any) => {
             return {
               label: val.label,
-              children: val.children,
+              children: val.children
             };
-          }),
+          })
         },
         {
           values: res[0].children.map((val: any) => {
             return {
               label: val.label,
-              children: val.children,
+              children: val.children
             };
-          }),
+          })
         },
         {
-          values: res[0].children[0].children,
-        },
+          values: res[0].children[0].children
+        }
       ];
     });
   }
@@ -160,6 +163,9 @@ export default class Device extends Vue {
     let { value, label } = e.target.value[2];
     this.partStandardName = label;
     this.partStandardId = value;
+    if (label === '其他部件') {
+      this.remarksShow = true;
+    }
     this.standardCancel();
   }
 
@@ -176,23 +182,25 @@ export default class Device extends Vue {
       let dataParam: any = {
         workflowId: this.$mp.query.workflowId,
         systemKeepRecordId: this.$mp.query.systemKeepRecordId,
+        isRenewal: this.maintainType,
         deviceType: this.deviceType,
         deviceCode: this.deviceCode,
         partStandardId: this.partStandardId,
-        partNumber: this.partNumber,
+        content: this.content,
+        partNumber: this.partNumber
       };
       if (this.part.id) {
         dataParam.changePartId = this.part.id;
         wxChangePartUpdate({
           method: 'PUT',
-          data: dataParam,
+          data: dataParam
         }).then((res: any) => {
           this.cancel();
         });
       } else {
         changeParts({
           method: 'POST',
-          data: dataParam,
+          data: dataParam
         }).then((res: any) => {
           this.cancel();
         });

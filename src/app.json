@@ -10,18 +10,34 @@
     "pages/question/deal/main",
     "pages/question/attention/main",
     "pages/work/mine/main",
-    "pages/work/upcoming/main",
     "pages/work/list/main",
     "pages/work/create/main",
     "pages/work/deal/main",
     "pages/work/deal/question/main",
     "pages/work/deal/device/main",
     "pages/work/deal/maintenance/main",
+    "pages/construction/survey/main",
+    "pages/construction/list/main",
+    "pages/construction/create/main",
     "pages/mine/index/main",
+    "pages/mine/phone/main",
+    "pages/mine/phone/detail/main",
+    "pages/mine/phone/add/main",
     "pages/mine/information/main",
     "pages/mine/notice/main",
     "pages/mine/contact/main"
   ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序定位"
+    }
+  },
+  "plugins": {
+    "chooseLocation": {
+    "version": "1.0.5",
+    "provider": "wx76a9a06e5b4e693e"
+    }
+  },
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#1989fa",
@@ -72,6 +88,8 @@
     "van-dialog": "./static/vant/dialog/index",
     "van-checkbox": "./static/vant/checkbox/index",
     "van-swipe-cell": "./static/vant/swipe-cell/index",
-    "van-stepper": "./static/vant/stepper/index"
+    "van-stepper": "./static/vant/stepper/index",
+    "van-index-bar": "./static/vant/index-bar/index",
+    "van-index-anchor": "./static/vant/index-anchor/index"
   }
 }

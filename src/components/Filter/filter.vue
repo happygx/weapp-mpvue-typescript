@@ -2,12 +2,12 @@
   <div class="filter-wrap">
     <van-dropdown-menu>
       <van-dropdown-item
-        v-for="(item, index) in dropdownConfig"
+        v-for="(item, index) in dropdownData"
         :key="index"
         :title="item.title"
         :value="item.value"
         :options="item.options"
-        @change="item.operate"
+        @change="dropdownFilter($event, index)"
       />
       <van-dropdown-item id="filter" title="筛选" v-if="timeData">
         <div class="time-wrap">
@@ -18,9 +18,7 @@
               :class="{ placeholder: timeData.startDay === '' }"
               @click="selectTime('start')"
             >
-              {{
-                timeData.startDay === '' ? '请选择开始时间' : timeData.startDay
-              }}
+              {{ timeData.startDay === '' ? '请选择开始时间' : timeData.startDay }}
             </p>
           </div>
           <div class="time">

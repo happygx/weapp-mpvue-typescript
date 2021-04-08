@@ -1123,7 +1123,9 @@ declare namespace wx {
    * 微信客户端 6.5.6 版本开始支持
    * @version 1.1.0
    */
-  function onNetworkStatusChange(callback: (res: { isConnected: boolean; networkType: networkType }) => void): void;
+  function onNetworkStatusChange(
+    callback: (res: { isConnected: boolean; networkType: networkType }) => void
+  ): void;
   // 设备-----加速度计
   interface AccelerometerData {
     /** X 轴 */
@@ -1642,7 +1644,9 @@ declare namespace wx {
    * 监听 iBeacon 服务的状态变化
    * @version 1.2.0
    */
-  function onBeaconServiceChange(callback?: (available: boolean, discovering: boolean) => void): void;
+  function onBeaconServiceChange(
+    callback?: (available: boolean, discovering: boolean) => void
+  ): void;
   // #endregion
   // 设备-----屏幕亮度
   interface SetScreenBrightnessOptions extends BaseOptions {
@@ -2178,7 +2182,14 @@ declare namespace wx {
    */
   function reLaunch(options?: ReLaunchOptions): void;
   // 界面-----动画
-  type TimingFunction = 'linear' | 'ease' | 'ease-in' | 'ease-in-out' | 'ease-out' | 'step-start' | 'step-end';
+  type TimingFunction =
+    | 'linear'
+    | 'ease'
+    | 'ease-in'
+    | 'ease-in-out'
+    | 'ease-out'
+    | 'step-start'
+    | 'step-end';
   interface CreateAnimationOptions {
     /** 动画持续时间，单位ms，默认值 400 */
     duration?: number;
@@ -2384,7 +2395,10 @@ declare namespace wx {
   interface IntersectionObserver {
     relativeTo(selector?: string, margins?: Margins): IntersectionObserver;
     relativeToViewport(margins?: Margins): IntersectionObserver;
-    observe(selector?: string, callback?: (response: ObserveResponse) => void): IntersectionObserver;
+    observe(
+      selector?: string,
+      callback?: (response: ObserveResponse) => void
+    ): IntersectionObserver;
     disconnect(): void;
   }
 
@@ -2461,7 +2475,9 @@ declare namespace wx {
      * 如果提供了callback回调函数，在执行selectQuery的exec方法后
      * 节点信息会在callback中返回。
      */
-    boundingClientRect<T extends NodesRefRect | NodesRefRect[]>(callback?: (rect: T) => void): SelectorQuery;
+    boundingClientRect<T extends NodesRefRect | NodesRefRect[]>(
+      callback?: (rect: T) => void
+    ): SelectorQuery;
     /**
      * 添加节点的滚动位置查询请求，以像素为单位。
      * 节点必须是scroll-view或者viewport。
@@ -2706,7 +2722,14 @@ declare namespace wx {
      * @param endAngle 终止弧度
      * @param counterclockwise 指定弧度的方向是逆时针还是顺时针。默认是false，即顺时针。
      */
-    arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void;
+    arc(
+      x: number,
+      y: number,
+      radius: number,
+      startAngle: number,
+      endAngle: number,
+      counterclockwise?: boolean
+    ): void;
     /**
      * 创建二次方贝塞尔曲线
      *
@@ -2726,7 +2749,14 @@ declare namespace wx {
      * @param x 结束点的x坐标
      * @param y 结束点的y坐标
      */
-    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+    bezierCurveTo(
+      cp1x: number,
+      cp1y: number,
+      cp2x: number,
+      cp2y: number,
+      x: number,
+      y: number
+    ): void;
     /**
      * 设置填充样式
      *
@@ -3244,7 +3274,9 @@ declare namespace wx {
   /**
    * 获取本机支持的 SOTER 生物认证方式
    */
-  function checkIsSupportSoterAuthentication(options: CheckIsSupportSoterAuthenticationOptions): void;
+  function checkIsSupportSoterAuthentication(
+    options: CheckIsSupportSoterAuthenticationOptions
+  ): void;
   interface StartSoterAuthenticationOptions extends BaseOptions {
     requestAuthModes: AuthModes[]; // 请求使用的可接受的生物认证方式
     challenge: string; // 挑战因子。挑战因子为调用者为此次生物鉴权准备的用于签名的字符串关键是别信息，将作为result_json的一部分，供调用者识别本次请求。例如：如果场景为请求用户对某订单进行授权确认，则可以将订单号填入此参数。
@@ -3366,11 +3398,29 @@ declare namespace wx {
     dataset: { [name: string]: string };
   }
 
-  type TouchEventType = 'tap' | 'touchstart' | 'touchmove' | 'touchcancel' | 'touchend' | 'touchforcechange';
+  type TouchEventType =
+    | 'tap'
+    | 'touchstart'
+    | 'touchmove'
+    | 'touchcancel'
+    | 'touchend'
+    | 'touchforcechange';
 
-  type TransitionEventType = 'transitionend' | 'animationstart' | 'animationiteration' | 'animationend';
+  type TransitionEventType =
+    | 'transitionend'
+    | 'animationstart'
+    | 'animationiteration'
+    | 'animationend';
 
-  type EventType = 'input' | 'form' | 'submit' | 'scroll' | TouchEventType | TransitionEventType | 'tap' | 'longpress';
+  type EventType =
+    | 'input'
+    | 'form'
+    | 'submit'
+    | 'scroll'
+    | TouchEventType
+    | TransitionEventType
+    | 'tap'
+    | 'longpress';
 
   interface BaseEvent<T extends string, Detail> {
     type: T;
@@ -3592,7 +3642,11 @@ declare namespace wx {
 
   type DefaultProps = object | Record<string, any>;
 
-  type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
+  type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+    k: infer I
+  ) => void
+    ? I
+    : never;
 
   type ArrayType<T extends any[]> = T extends Array<infer R> ? R : never;
 
@@ -3602,21 +3656,27 @@ declare namespace wx {
     __DO_NOT_USE_INTERNAL_FIELD_METHODS: Methods;
   }
 
-  type UnboxBehaviorData<T> = T extends Behavior<{}, {}, {}> ? T['__DO_NOT_USE_INTERNAL_FIELD_DATA'] : {};
-  type UnboxBehaviorProps<T> = T extends Behavior<{}, {}, {}> ? T['__DO_NOT_USE_INTERNAL_FIELD_PROPS'] : {};
-  type UnboxBehaviorMethods<T> = T extends Behavior<{}, {}, {}> ? T['__DO_NOT_USE_INTERNAL_FIELD_METHODS'] : {};
+  type UnboxBehaviorData<T> = T extends Behavior<{}, {}, {}>
+    ? T['__DO_NOT_USE_INTERNAL_FIELD_DATA']
+    : {};
+  type UnboxBehaviorProps<T> = T extends Behavior<{}, {}, {}>
+    ? T['__DO_NOT_USE_INTERNAL_FIELD_PROPS']
+    : {};
+  type UnboxBehaviorMethods<T> = T extends Behavior<{}, {}, {}>
+    ? T['__DO_NOT_USE_INTERNAL_FIELD_METHODS']
+    : {};
 
-  type UnboxBehaviorsMethods<Behaviors extends Array<Behavior<{}, {}, {}> | string>> = UnboxBehaviorMethods<
-    UnionToIntersection<ArrayType<Behaviors>>
-  >;
+  type UnboxBehaviorsMethods<
+    Behaviors extends Array<Behavior<{}, {}, {}> | string>
+  > = UnboxBehaviorMethods<UnionToIntersection<ArrayType<Behaviors>>>;
 
-  type UnboxBehaviorsData<Behaviors extends Array<Behavior<{}, {}, {}> | string>> = UnboxBehaviorData<
-    UnionToIntersection<ArrayType<Behaviors>>
-  >;
+  type UnboxBehaviorsData<
+    Behaviors extends Array<Behavior<{}, {}, {}> | string>
+  > = UnboxBehaviorData<UnionToIntersection<ArrayType<Behaviors>>>;
 
-  type UnboxBehaviorsProps<Behaviors extends Array<Behavior<{}, {}, {}> | string>> = UnboxBehaviorProps<
-    UnionToIntersection<ArrayType<Behaviors>>
-  >;
+  type UnboxBehaviorsProps<
+    Behaviors extends Array<Behavior<{}, {}, {}> | string>
+  > = UnboxBehaviorProps<UnionToIntersection<ArrayType<Behaviors>>>;
 
   // CombinedInstance models the `this`, i.e. instance type for (user defined) component
   type CombinedInstance<
@@ -3843,7 +3903,9 @@ declare namespace wx {
     data: D &
       UnboxBehaviorsData<B> &
       {
-        [key in keyof (P & UnboxBehaviorsProps<B>)]: PropValueType<(P & UnboxBehaviorsProps<B>)[key]>;
+        [key in keyof (P & UnboxBehaviorsProps<B>)]: PropValueType<
+          (P & UnboxBehaviorsProps<B>)[key]
+        >;
       };
 
     /**
@@ -3852,7 +3914,9 @@ declare namespace wx {
     properties: D &
       UnboxBehaviorsData<B> &
       {
-        [key in keyof (P & UnboxBehaviorsProps<B>)]: PropValueType<(P & UnboxBehaviorsProps<B>)[key]>;
+        [key in keyof (P & UnboxBehaviorsProps<B>)]: PropValueType<
+          (P & UnboxBehaviorsProps<B>)[key]
+        >;
       };
     /**
      * 将数据从逻辑层发送到视图层，同时改变对应的 this.data 的值
@@ -4257,7 +4321,11 @@ declare function Component<D, M, P, B extends Array<wx.Behavior<{}, {}, {}> | st
  */
 declare function Behavior<D, M, P, B extends Array<wx.Behavior<{}, {}, {}> | string> = []>(
   options?: wx.ThisTypedComponentOptionsWithRecordProps<wx.Component<D, P, B>, D, M, P, B>
-): wx.Behavior<D & wx.UnboxBehaviorsData<B>, P & wx.UnboxBehaviorsProps<B>, M & wx.UnboxBehaviorsMethods<B>>;
+): wx.Behavior<
+  D & wx.UnboxBehaviorsData<B>,
+  P & wx.UnboxBehaviorsProps<B>,
+  M & wx.UnboxBehaviorsMethods<B>
+>;
 // #endregion
 // #region Page
 /**

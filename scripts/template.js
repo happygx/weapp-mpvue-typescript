@@ -14,22 +14,21 @@ if (!dirName) {
  * @msg: vue页面模版
  */
 const VueTep = `<template>
-  <div class="${dirName}-wrap">
+  <div class='${dirName}-wrap'>
     {{ ${capPirName}Name }}
   </div>
 </template>
 
-<script lang="ts" src="./${dirName}.ts"></script>
+<script lang='ts' src='./${dirName}.ts'></script>
 
-<style lang="scss">
+<style lang='scss'>
 @import './${dirName}.scss'
 </style>
-
 `;
 
 // ts 模版
-const tsTep = `import { Vue, Component } from "vue-property-decorator"
-import {  } from "@/api/common"
+const tsTep = `import { Vue, Component } from 'vue-property-decorator';
+import {} from '@/api/common';
 
 @Component({
   name: '${dirName}',
@@ -80,12 +79,11 @@ const json = `{
 `;
 
 // main 模版
-const main = `import Vue from "vue";
-import App from "./${dirName}.vue";
+const main = `import Vue from 'vue';
+import App from './${dirName}.vue';
 
 const app = new Vue(App);
 app.$mount();
-
 `;
 
 // vuex 模版

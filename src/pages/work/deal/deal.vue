@@ -1,7 +1,13 @@
 <template>
   <div class="deal-wrap">
     <van-cell-group :border="false">
-      <van-cell v-if="roles !== '养护员'" title="注意事项" title-class="red" title-width="90px" :border="false">
+      <van-cell
+        v-if="roles !== '养护员'"
+        title="注意事项"
+        title-class="red"
+        title-width="90px"
+        :border="false"
+      >
         <p class="tl break">
           {{ workData.building_record }}
           <van-icon
@@ -21,7 +27,13 @@
         @confirm="recordConfirm"
       />
       <van-field label="仓库名称" disabled :border="false" :value="workData.building_name" />
-      <van-field label="工单编号" disabled title-class="title" :border="false" :value="workData.code" />
+      <van-field
+        label="工单编号"
+        disabled
+        title-class="title"
+        :border="false"
+        :value="workData.code"
+      />
       <van-field label="工单类型" disabled :border="false" :value="kindList[workData.kind]" />
       <van-field label="创建人" disabled :border="false" :value="workData.creator_name" />
       <van-field label="创建时间" disabled :border="false" :value="workData.create_time" />
@@ -33,7 +45,13 @@
         :value="workData.handler_user_name"
       />
       <van-cell :border="false" title="工单问题" title-width="90px" v-if="questions.length > 0">
-        <van-button v-if="!isView && workData.status === 20" type="info" size="small" class="fl" @click="addQuestion">
+        <van-button
+          v-if="!isView && workData.status === 20"
+          type="info"
+          size="small"
+          class="fl"
+          @click="addQuestion"
+        >
           添加问题
         </van-button>
         <template v-else>
@@ -41,30 +59,18 @@
             <div class="df">
               <i v-if="question.isFinish === 10" class="iconfont icon-error red"></i>
               <i v-else class="iconfont icon-deal green"></i>
-              <p class="tl link ml5" :class="rankClass[question.rank]" @click="dealQuestion(question, true)">
+              <p
+                class="tl link ml5"
+                :class="rankClass[question.rank]"
+                @click="dealQuestion(question, true)"
+              >
                 {{ question.classification_name }}
               </p>
             </div>
             <p class="tl break">详情：{{ question.content }}</p>
-            <p class="df mt10" v-if="question.record.length > 0">
-              <img
-                v-for="(attachment, j) in question.record[0].attachments"
-                :key="j"
-                mode="scaleToFill"
-                :src="attachment.errUrl || attachment.url"
-                class="img"
-                style="width: 55px; height: 55px;"
-                @error="imageError(attachment)"
-                @click="onPreview(attachment)"
-              />
-            </p>
           </div>
         </template>
       </van-cell>
-      <van-popup :show="previewShow" @close="onPreviewClose" custom-class="preview-popup">
-        <video v-if="preview.isVideo" class="preview" :src="preview.url" object-fit="cover" controls></video>
-        <img v-else class="preview" :src="preview.url" mode="scaleToFill" />
-      </van-popup>
       <van-cell
         v-if="!isView && questions.length > 0 && workData.status === 20"
         :border="false"
@@ -74,7 +80,9 @@
         <div class="mb5 question" v-for="(question, i) in questions" :key="i">
           <div class="df">
             <span class="iconfont icon-deal" :class="{ green: question.isFinish === 20 }"></span>
-            <span class="ml5 fb title" :class="rankClass[question.rank]"> {{ question.classification_name }} </span>
+            <span class="ml5 fb title" :class="rankClass[question.rank]">
+              {{ question.classification_name }}
+            </span>
             <van-icon
               v-if="question.record.length > 0 && question.record[0].revisable"
               name="edit"
@@ -86,8 +94,14 @@
           <p class="tl">{{ question.content }}</p>
         </div>
       </van-cell>
-      <van-cell v-if="isPart" :border="false" title="更换部件" title-width="90px">
-        <van-button v-if="!isView && !isConfirm" type="info" size="small" class="fl" @click="partModify()">
+      <van-cell v-if="isPart" :border="false" title="部件清单" title-width="90px">
+        <van-button
+          v-if="!isView && !isConfirm"
+          type="info"
+          size="small"
+          class="fl"
+          @click="partModify()"
+        >
           添加部件
         </van-button>
         <template v-else>
@@ -98,7 +112,11 @@
               </span>
             </div>
             <p class="tl">
-              <span> {{ part.part_kind }}/{{ part.part_name }}/{{ part.part_standard }} </span>
+              <span class="fb">{{ part.is_renewal ? '更换' : '维修' }}</span>
+              <span class="ml10">
+                {{ part.part_kind }}/{{ part.part_name }}/{{ part.part_standard }}
+              </span>
+              <span v-if="part.content">({{ part.content }})</span>
               <span class="ml10">{{ part.part_number }}</span>
             </p>
           </div>
@@ -113,17 +131,26 @@
           </div>
         </template>
       </van-cell>
-      <van-cell v-if="!isView && !isConfirm && parts.length > 0" :border="false" title=" " title-width="90px">
+      <van-cell
+        v-if="!isView && !isConfirm && parts.length > 0"
+        :border="false"
+        title=" "
+        title-width="90px"
+      >
         <div class="mb10 question" v-for="(part, i) in parts" :key="i">
           <div class="df">
             <span class="fb title">
               {{ part.device_location }}
             </span>
-            <van-icon name="edit" class="f16 ml10" @click="partModify(part)" />
-            <van-icon name="close" class="f16 ml10" @click="partDelete(i)" />
+            <van-icon name="edit" class="f18 ml10" @click="partModify(part)" />
+            <van-icon name="close" class="f18 ml15" @click="partDelete(i)" />
           </div>
           <p class="tl">
-            <span> {{ part.part_kind }}/{{ part.part_name }}/{{ part.part_standard }} </span>
+            <span class="fb">{{ part.is_renewal ? '更换' : '维修' }}</span>
+            <span class="ml10">
+              {{ part.part_kind }}/{{ part.part_name }}/{{ part.part_standard }}
+            </span>
+            <span v-if="part.content">({{ part.content }})</span>
             <span class="ml10">{{ part.part_number }}</span>
           </p>
         </div>
@@ -137,8 +164,15 @@
         <div class="record mb5 break tl f12" v-for="(item, i) in workData.operations" :key="i">
           <p>{{ item.handler_time }}</p>
           <span class="fb">{{ item.handler_user_name }}</span>
-          （<span class="link" @click="callPhone(item.handler_user_phone)">{{ item.handler_user_phone }}</span>
-          <span> ）：{{ item.kind_text }}{{ item.status === 20 ? item.receive_user_name : '' }} </span>
+          <span
+            v-if="item.handler_user_phone"
+            class="link"
+            @click="callPhone(item.handler_user_phone)"
+            >（{{ item.handler_user_phone }}）</span
+          >
+          <span>
+            ：{{ item.kind_text }}{{ item.status === 20 ? item.receive_user_name : '' }}
+          </span>
           <span class="break"></span>
         </div>
       </van-cell>

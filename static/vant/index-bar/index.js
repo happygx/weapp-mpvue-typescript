@@ -19,39 +19,39 @@ VantComponent({
     },
     unlinked() {
       this.updateData();
-    },
+    }
   },
   props: {
     sticky: {
       type: Boolean,
-      value: true,
+      value: true
     },
     zIndex: {
       type: Number,
-      value: 1,
+      value: 1
     },
     highlightColor: {
       type: String,
-      value: GREEN,
+      value: GREEN
     },
     stickyOffsetTop: {
       type: Number,
-      value: 0,
+      value: 0
     },
     indexList: {
       type: Array,
-      value: indexList(),
-    },
+      value: indexList()
+    }
   },
   mixins: [
     pageScrollMixin(function (event) {
       this.scrollTop = event.scrollTop || 0;
       this.onScroll();
-    }),
+    })
   ],
   data: {
     activeAnchorIndex: null,
-    showSidebar: false,
+    showSidebar: false
   },
   created() {
     this.scrollTop = 0;
@@ -64,7 +64,7 @@ VantComponent({
         }
         this.timer = setTimeout(() => {
           this.setData({
-            showSidebar: !!this.children.length,
+            showSidebar: !!this.children.length
           });
           this.setRect().then(() => {
             this.onScroll();
@@ -73,43 +73,39 @@ VantComponent({
       });
     },
     setRect() {
-      return Promise.all([
-        this.setAnchorsRect(),
-        this.setListRect(),
-        this.setSiderbarRect(),
-      ]);
+      return Promise.all([this.setAnchorsRect(), this.setListRect(), this.setSiderbarRect()]);
     },
     setAnchorsRect() {
       return Promise.all(
-        this.children.map((anchor) =>
-          anchor.getRect('.van-index-anchor-wrapper').then((rect) => {
+        this.children.map(anchor =>
+          anchor.getRect('.van-index-anchor-wrapper').then(rect => {
             Object.assign(anchor, {
               height: rect.height,
-              top: rect.top + this.scrollTop,
+              top: rect.top + this.scrollTop
             });
           })
         )
       );
     },
     setListRect() {
-      return this.getRect('.van-index-bar').then((rect) => {
+      return this.getRect('.van-index-bar').then(rect => {
         Object.assign(this, {
           height: rect.height,
-          top: rect.top + this.scrollTop,
+          top: rect.top + this.scrollTop
         });
       });
     },
     setSiderbarRect() {
-      return this.getRect('.van-index-bar__sidebar').then((res) => {
+      return this.getRect('.van-index-bar__sidebar').then(res => {
         this.sidebar = {
           height: res.height,
-          top: res.top,
+          top: res.top
         };
       });
     },
     setDiffData({ target, data }) {
       const diffData = {};
-      Object.keys(data).forEach((key) => {
+      Object.keys(data).forEach(key => {
         if (target.data[key] !== data[key]) {
           diffData[key] = data[key];
         }
@@ -119,9 +115,9 @@ VantComponent({
       }
     },
     getAnchorRect(anchor) {
-      return anchor.getRect('.van-index-anchor-wrapper').then((rect) => ({
+      return anchor.getRect('.van-index-anchor-wrapper').then(rect => ({
         height: rect.height,
-        top: rect.top,
+        top: rect.top
       }));
     },
     getActiveAnchorIndex() {
@@ -130,7 +126,8 @@ VantComponent({
       for (let i = this.children.length - 1; i >= 0; i--) {
         const preAnchorHeight = i > 0 ? children[i - 1].height : 0;
         const reachTop = sticky ? preAnchorHeight + stickyOffsetTop : 0;
-        if (reachTop + scrollTop >= children[i].top) {
+        let marginTop = 50;
+        if (reachTop + scrollTop + marginTop >= children[i].top) {
           return i;
         }
       }
@@ -146,14 +143,13 @@ VantComponent({
       this.setDiffData({
         target: this,
         data: {
-          activeAnchorIndex: active,
-        },
+          activeAnchorIndex: active
+        }
       });
       if (sticky) {
         let isActiveAnchorSticky = false;
         if (active !== -1) {
-          isActiveAnchorSticky =
-            children[active].top <= stickyOffsetTop + scrollTop;
+          isActiveAnchorSticky = children[active].top <= stickyOffsetTop + scrollTop;
         }
         children.forEach((item, index) => {
           if (index === active) {
@@ -177,16 +173,14 @@ VantComponent({
               data: {
                 active: true,
                 anchorStyle,
-                wrapperStyle,
-              },
+                wrapperStyle
+              }
             });
           } else if (index === active - 1) {
             const currentAnchor = children[index];
             const currentOffsetTop = currentAnchor.top;
             const targetOffsetTop =
-              index === children.length - 1
-                ? this.top
-                : children[index + 1].top;
+              index === children.length - 1 ? this.top : children[index + 1].top;
             const parentOffsetHeight = targetOffsetTop - currentOffsetTop;
             const translateY = parentOffsetHeight - currentAnchor.height;
             const anchorStyle = `
@@ -199,8 +193,8 @@ VantComponent({
               target: item,
               data: {
                 active: true,
-                anchorStyle,
-              },
+                anchorStyle
+              }
             });
           } else {
             this.setDiffData({
@@ -208,8 +202,8 @@ VantComponent({
               data: {
                 active: false,
                 anchorStyle: '',
-                wrapperStyle: '',
-              },
+                wrapperStyle: ''
+              }
             });
           }
         });
@@ -238,13 +232,11 @@ VantComponent({
         return;
       }
       this.scrollToAnchorIndex = index;
-      const anchor = this.children.find(
-        (item) => item.data.index === this.data.indexList[index]
-      );
+      const anchor = this.children.find(item => item.data.index === this.data.indexList[index]);
       if (anchor) {
         anchor.scrollIntoView(this.scrollTop);
         this.$emit('select', anchor.data.index);
       }
-    },
-  },
+    }
+  }
 });

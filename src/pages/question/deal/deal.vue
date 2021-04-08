@@ -1,7 +1,13 @@
 <template>
   <div class="deal-wrap">
     <van-cell-group :border="false">
-      <van-cell v-if="roles !== '养护员'" title="注意事项" title-class="red" title-width="90px" :border="false">
+      <van-cell
+        v-if="roles !== '养护员'"
+        title="注意事项"
+        title-class="red"
+        title-width="90px"
+        :border="false"
+      >
         <p class="tl break">
           {{ buildingRecord }}
           <van-icon
@@ -38,7 +44,11 @@
           @click="popupShow('classificationShow')"
         />
       </van-cell>
-      <van-popup position="bottom" :show="classificationShow" @close="popupShow('classificationShow')">
+      <van-popup
+        position="bottom"
+        :show="classificationShow"
+        @close="popupShow('classificationShow')"
+      >
         <van-picker
           show-toolbar
           title="请选择问题分类"
@@ -52,7 +62,13 @@
         <span class="fl mr10" v-if="questionsData.rank !== undefined">
           {{ rankList[questionsData.rank].name }}
         </span>
-        <van-icon v-if="!isView" name="edit" class="fl f16" custom-class="edit" @click="popupShow('rankShow')" />
+        <van-icon
+          v-if="!isView"
+          name="edit"
+          class="fl f16"
+          custom-class="edit"
+          @click="popupShow('rankShow')"
+        />
       </van-cell>
       <van-popup position="bottom" :show="rankShow" @close="popupShow('rankShow')">
         <van-picker
@@ -76,8 +92,19 @@
           {{ item.location }}（{{ item.name }}）
         </van-tag>
       </van-cell>
-      <van-cell v-if="!isView || devices.length > 0" :border="false" title="问题设备" title-width="90px">
-        <van-button v-if="!isView" type="info" size="small" class="fl" @click="popupShow('deviceShow')">
+      <van-cell
+        v-if="!isView || devices.length > 0"
+        :border="false"
+        title="问题设备"
+        title-width="90px"
+      >
+        <van-button
+          v-if="!isView"
+          type="info"
+          size="small"
+          class="fl"
+          @click="popupShow('deviceShow')"
+        >
           添加设备
         </van-button>
         <template v-if="isView && devices.length > 0">
@@ -127,15 +154,16 @@
         </span>
       </van-cell>
       <van-cell v-if="attachments.length > 0" :border="false" title="问题附件" title-width="90px">
-        <van-uploader
-          class="fl"
-          preview-size="55px"
-          :deletable="false"
-          :file-list="attachments"
-          @delete="handleRemove"
-        />
+        <div class="tl mr10" v-for="(item, i) in attachments" :key="i">
+          <p class="link" @click="onPreview(item)">{{ item.name }}</p>
+        </div>
       </van-cell>
-      <van-cell title="问题工单" title-width="90px" :border="false">
+      <van-cell
+        v-if="questionsData.workflow_code"
+        title="问题工单"
+        title-width="90px"
+        :border="false"
+      >
         <span class="df link" @click="work">
           {{ questionsData.workflow_code }}
         </span>
@@ -157,55 +185,66 @@
           {{ suggest === '' ? '请输入处理意见' : suggest }}
         </p>
       </van-cell>
-      <van-cell v-if="roles !== '养护员' && record.length > 0" title="处理记录" title-width="90px" :border="false">
+      <van-cell
+        v-if="roles !== '养护员' && record.length > 0"
+        title="处理记录"
+        title-width="90px"
+        :border="false"
+      >
         <div class="record mb5" v-for="(item, i) in record" :key="i">
           <p class="tl f12">
             <span>{{ item.handler_time }}</span>
             <span class="ml10 fb">{{ item.handler_user_name }}：</span>
             <span class="break">{{ item.suggest }}</span>
           </p>
-          <p class="df">
-            <img
-              v-for="(attachment, j) in item.attachments"
-              :key="j"
-              mode="scaleToFill"
-              :src="attachment.url || attachment.errUrl"
-              class="img"
-              style="width: 55px; height: 55px;"
-              @click="onPreview(attachment)"
-            />
-          </p>
+          <div class="tl" v-for="(attachment, j) in item.attachments" :key="j">
+            <p class="link mr10" @click="onPreview(attachment)">{{ attachment.name }}</p>
+          </div>
         </div>
       </van-cell>
-      <van-cell v-if="questionsData.result && roles === '养护员'" title="处理结果" title-width="90px" :border="false">
+      <van-cell
+        v-if="questionsData.result && roles === '养护员'"
+        title="处理结果"
+        title-width="90px"
+        :border="false"
+      >
         <div class="tl">
           <span>
             {{ questionsData.result }}
           </span>
         </div>
-        <div class="df mt10" v-if="record[0].attachments.length > 0">
-          <img
-            v-for="(attachment, j) in record[0].attachments"
-            :key="j"
-            mode="scaleToFill"
-            :src="attachment.url || attachment.errUrl"
-            class="img"
-            style="width: 55px; height: 55px;"
-            @error="imageError(attachment)"
+        <div class="tl mt10" v-if="record[0].attachments.length > 0">
+          <p
+            v-for="(attachment, i) in record[0].attachments"
+            :key="i"
+            class="link mr10"
             @click="onPreview(attachment)"
-          />
+          >
+            {{ attachment.name }}
+          </p>
         </div>
       </van-cell>
-      <van-popup :show="videoShow" @close="onVideoClose" custom-class="preview-popup">
-        <video class="preview" :src="video.videoUrl" object-fit="cover" controls></video>
+      <van-popup :show="videoShow" @close="videoShow = false" custom-class="preview-popup">
+        <video class="preview" :src="video.url" object-fit="cover" controls></video>
       </van-popup>
     </van-cell-group>
     <van-dialog id="van-dialog" />
     <div class="btn-group" v-if="!isView">
-      <van-button type="info" size="large" :custom-class="roles === '售后经理' ? 'w100' : ''" @click="handleSuccess">
+      <van-button
+        type="info"
+        size="large"
+        :custom-class="roles === '售后经理' ? 'w100' : ''"
+        @click="handleSuccess"
+      >
         成功
       </van-button>
-      <van-button v-if="roles !== '售后经理'" style="margin-left: 10%;" type="info" size="large" @click="handleFailure">
+      <van-button
+        v-if="roles !== '售后经理'"
+        style="margin-left: 10%;"
+        type="info"
+        size="large"
+        @click="handleFailure"
+      >
         流转
       </van-button>
     </div>

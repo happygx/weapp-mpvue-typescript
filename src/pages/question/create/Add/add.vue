@@ -25,11 +25,7 @@
         :value="exhibitorName"
         @click="popupShow('exhibitorShow')"
       />
-      <van-popup
-        position="bottom"
-        :show="exhibitorShow"
-        @close="popupShow('exhibitorShow')"
-      >
+      <van-popup position="bottom" :show="exhibitorShow" @close="popupShow('exhibitorShow')">
         <van-picker
           show-toolbar
           title="请选择问题提出人"
@@ -119,12 +115,7 @@
           {{ form.content === '' ? '请输入问题详情' : form.content }}
         </p>
       </van-cell>
-      <van-cell
-        :border="false"
-        title="告警设备"
-        title-width="90px"
-        v-if="faultDevice.length > 0"
-      >
+      <van-cell :border="false" title="告警设备" title-width="90px" v-if="faultDevice.length > 0">
         <van-tag
           v-for="(item, index) in faultDevice"
           :key="index"
@@ -137,21 +128,11 @@
         </van-tag>
       </van-cell>
       <van-cell :border="false" title="问题设备" title-width="90px">
-        <van-button
-          type="info"
-          size="small"
-          class="fl"
-          @click="popupShow('deviceShow')"
-        >
+        <van-button type="info" size="small" class="fl" @click="popupShow('deviceShow')">
           添加设备
         </van-button>
       </van-cell>
-      <van-cell
-        v-if="form.devices.length > 0"
-        :border="false"
-        title=" "
-        title-width="90px"
-      >
+      <van-cell v-if="form.devices.length > 0" :border="false" title=" " title-width="90px">
         <van-tag
           v-for="(item, index) in form.devices"
           :key="index"
@@ -191,12 +172,7 @@
     </van-cell-group>
     <van-dialog id="van-dialog" />
     <div class="btn-group">
-      <van-button
-        type="info"
-        size="large"
-        @click="submit"
-        :custom-class="getWidth"
-      >
+      <van-button type="info" size="large" @click="submit" :custom-class="getWidth">
         创建问题
       </van-button>
       <van-button

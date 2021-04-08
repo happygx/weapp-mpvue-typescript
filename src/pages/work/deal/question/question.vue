@@ -1,7 +1,12 @@
 <template>
   <div class="question-wrap">
     <van-cell-group :border="false">
-      <van-field label="问题提出人" disabled :border="false" :value="questionsData.exhibitor_name" />
+      <van-field
+        label="问题提出人"
+        disabled
+        :border="false"
+        :value="questionsData.exhibitor_name"
+      />
       <van-cell title="问题分类" title-width="90px" :border="false">
         <p class="tl">{{ questionsData.classification_name }}</p>
       </van-cell>
@@ -27,7 +32,12 @@
           {{ item.location }}（{{ item.name }}）
         </van-tag>
       </van-cell>
-      <van-cell v-if="!isView || devices.length > 0" :border="false" title="问题设备" title-width="90px">
+      <van-cell
+        v-if="!isView || devices.length > 0"
+        :border="false"
+        title="问题设备"
+        title-width="90px"
+      >
         <van-button v-if="!isView" type="info" size="small" class="fl" @click="addDevice">
           添加设备
         </van-button>
@@ -79,16 +89,12 @@
         title-width="90px"
         custom-class="uploader-hidden"
       >
-        <van-uploader
-          class="fl"
-          preview-size="55px"
-          :deletable="false"
-          :file-list="attachments"
-          @delete="handleRemove"
-        />
+        <div class="tl mr10" v-for="(item, i) in attachments" :key="i">
+          <p class="link" @click="onPreview(item)">{{ item.name }}</p>
+        </div>
       </van-cell>
-      <van-popup :show="videoShow" @close="onVideoClose">
-        <video :src="video.videoUrl" object-fit="cover" controls></video>
+      <van-popup :show="videoShow" @close="videoShow = false">
+        <video :src="video.url" object-fit="cover" controls></video>
       </van-popup>
       <van-cell v-if="record.length > 0" title="处理记录" title-width="90px" :border="false">
         <div class="record mb5" v-for="(item, i) in record" :key="i">
@@ -97,21 +103,24 @@
             <span class="ml10 fb">{{ item.handler_user_name }}：</span>
             <span class="break">{{ item.suggest }}</span>
           </p>
-          <p class="df">
-            <img
+          <p class="tl">
+            <span
               v-for="(attachment, j) in item.attachments"
               :key="j"
-              mode="scaleToFill"
-              :src="attachment.url || attachment.errUrl"
-              class="img"
-              style="width: 55px; height: 55px;"
+              class="link mr10"
               @click="onPreview(attachment)"
-            />
+            >
+              {{ attachment.name }}
+            </span>
           </p>
         </div>
       </van-cell>
       <van-cell v-if="!isView" :border="false" title="是否完成" title-width="90px">
-        <van-radio-group class="radio-group" :value="isFinish" @change="isFinish = $event.mp.detail">
+        <van-radio-group
+          class="radio-group"
+          :value="isFinish"
+          @change="isFinish = $event.mp.detail"
+        >
           <van-radio :name="20" class="mr20" icon-size="16px">是</van-radio>
           <van-radio :name="10" icon-size="16px">否</van-radio>
         </van-radio-group>

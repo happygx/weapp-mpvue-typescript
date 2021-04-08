@@ -2,7 +2,7 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component({
   name: 'contact',
-  components: {},
+  components: {}
 })
 export default class Contact extends Vue {
   // data
@@ -31,12 +31,9 @@ export default class Contact extends Vue {
   call(phone: string) {
     wx.makePhoneCall({
       phoneNumber: phone,
-      success: (res) => {
+      success: res => {
         // console.log(res);
-      },
-      fail: (err) => {
-        // console.log(err);
-      },
+      }
     });
   }
 }

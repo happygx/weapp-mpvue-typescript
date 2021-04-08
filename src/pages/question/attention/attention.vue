@@ -1,16 +1,19 @@
+<!--
+ * @Description:
+ * @Author: happygx
+ * @Date: 2020-07-03 17:18:49
+ * @LastEditTime: 2020-11-24 13:20:51
+ * @LastEditors: happygx
+-->
 <template>
   <div class="attention-wrap">
     <header class="common-header">
-      <Search
-        v-if="componentShow"
-        :searchOptions="searchOptions"
-        @search="getQuestions"
-      />
+      <Search v-if="componentShow" :searchOptions="searchOptions" @search="generateData" />
       <Filter
         v-if="componentShow"
         :dropdownConfig="dropdownConfig"
         :timeConfig="timeConfig"
-        @confirm="filterConfirm"
+        @filter="generateData"
       />
     </header>
     <div class="common-content">

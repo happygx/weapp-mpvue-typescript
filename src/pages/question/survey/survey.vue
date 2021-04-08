@@ -19,7 +19,7 @@
           <p>问题详情：{{ question.content }}</p>
           <p>
             {{ question.handler_time }}
-            <span class="ml5 mr5">{{ question.handler_user_name }}</span>
+            <span class="ml5 mr5 fb">{{ question.handler_user_name }}</span>
             {{ question.result }}
           </p>
         </div>

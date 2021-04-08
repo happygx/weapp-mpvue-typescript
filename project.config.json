@@ -1,226 +1,250 @@
 {
-	"description": "项目配置文件。",
-	"setting": {
-		"urlCheck": true,
-		"es6": true,
-		"enhance": true,
-		"postcss": true,
-		"preloadBackgroundData": false,
-		"minified": true,
-		"newFeature": true,
-		"coverView": true,
-		"nodeModules": true,
-		"autoAudits": false,
-		"showShadowRootInWxmlPanel": false,
-		"scopeDataCheck": false,
-		"uglifyFileName": true,
-		"checkInvalidKey": true,
-		"checkSiteMap": false,
-		"uploadWithSourceMap": true,
-		"compileHotReLoad": false,
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		},
-		"bundle": true,
-		"useIsolateContext": true,
-		"useCompilerModule": true,
-		"userConfirmedUseCompilerModuleSwitch": true
-	},
-	"miniprogramRoot": "dist/wx/",
-	"compileType": "miniprogram",
-	"appid": "wxe714ed701ccde53b",
-	"projectname": "workflow",
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
-	"libVersion": "2.11.3",
-	"condition": {
-		"search": {
-			"current": -1,
-			"list": []
-		},
-		"conversation": {
-			"current": -1,
-			"list": []
-		},
-		"plugin": {
-			"current": -1,
-			"list": []
-		},
-		"game": {
-			"currentL": -1,
-			"list": []
-		},
-		"gamePlugin": {
-			"current": -1,
-			"list": []
-		},
-		"miniprogram": {
-			"current": -1,
-			"list": [
-				{
-					"id": 0,
-					"name": "pages/mine/index/main",
-					"pathName": "pages/mine/index/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/index/main",
-					"pathName": "pages/index/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/login/main",
-					"pathName": "pages/login/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/question/index/main",
-					"pathName": "pages/question/index/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/question/mine/main",
-					"pathName": "pages/question/mine/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/question/upcoming/main",
-					"pathName": "pages/question/upcoming/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/question/attention/main",
-					"pathName": "pages/question/attention/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/question/list/main",
-					"pathName": "pages/question/list/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/question/create/main",
-					"pathName": "pages/question/create/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": 9,
-					"name": "pages/question/deal/main",
-					"pathName": "pages/question/deal/main",
-					"query": "id=396&view=true",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/work/index/main",
-					"pathName": "pages/work/index/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/work/mine/main",
-					"pathName": "pages/work/mine/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/work/list/main",
-					"pathName": "pages/work/list/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/work/create/main",
-					"pathName": "pages/work/create/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": 14,
-					"name": "pages/work/deal/main",
-					"pathName": "pages/work/deal/main",
-					"query": "id=27",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/work/deal/question/main",
-					"pathName": "pages/work/deal/question/main",
-					"query": "id=407",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/question/deal/main",
-					"pathName": "pages/question/deal/main",
-					"query": "id=293&view=true",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/work/deal/main",
-					"pathName": "pages/work/deal/main",
-					"query": "id=74&view=true",
-					"scene": null
-				},
-				{
-					"id": 18,
-					"name": "pages/work/deal/maintenance/main",
-					"pathName": "pages/work/deal/maintenance/main",
-					"query": "id=112",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/question/survey/main",
-					"pathName": "pages/question/survey/main",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/question/deal/main",
-					"pathName": "pages/question/deal/main",
-					"query": "id=441",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/work/mine/main",
-					"pathName": "pages/work/mine/main",
-					"query": "id=72",
-					"scene": null
-				},
-				{
-					"id": 22,
-					"name": "pages/work/deal/main",
-					"pathName": "pages/work/deal/main",
-					"query": "id=256",
-					"scene": null
-				}
-			]
-		}
-	}
+  "description": "项目配置文件。",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "preloadBackgroundData": false,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": true,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": false,
+    "scopeDataCheck": false,
+    "uglifyFileName": true,
+    "checkInvalidKey": true,
+    "checkSiteMap": false,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
+    "useMultiFrameRuntime": true,
+    "useApiHook": true,
+    "useApiHostProcess": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "bundle": false,
+    "useIsolateContext": true,
+    "useCompilerModule": true,
+    "userConfirmedUseCompilerModuleSwitch": true,
+    "userConfirmedBundleSwitch": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true
+  },
+  "miniprogramRoot": "dist/wx/",
+  "compileType": "miniprogram",
+  "appid": "wxe714ed701ccde53b",
+  "projectname": "workflow",
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "libVersion": "2.11.3",
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "id": 0,
+          "name": "pages/mine/index/main",
+          "pathName": "pages/mine/index/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/index/main",
+          "pathName": "pages/index/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/login/main",
+          "pathName": "pages/login/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/question/index/main",
+          "pathName": "pages/question/index/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/question/mine/main",
+          "pathName": "pages/question/mine/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/question/upcoming/main",
+          "pathName": "pages/question/upcoming/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/question/attention/main",
+          "pathName": "pages/question/attention/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/question/list/main",
+          "pathName": "pages/question/list/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/question/create/main",
+          "pathName": "pages/question/create/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": 9,
+          "name": "pages/question/deal/main",
+          "pathName": "pages/question/deal/main",
+          "query": "id=396&view=true",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/work/index/main",
+          "pathName": "pages/work/index/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/work/mine/main",
+          "pathName": "pages/work/mine/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/work/list/main",
+          "pathName": "pages/work/list/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/work/create/main",
+          "pathName": "pages/work/create/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/work/deal/main",
+          "pathName": "pages/work/deal/main",
+          "query": "id=455",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/work/deal/question/main",
+          "pathName": "pages/work/deal/question/main",
+          "query": "id=407",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/question/deal/main",
+          "pathName": "pages/question/deal/main",
+          "query": "id=293&view=true",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/work/deal/main",
+          "pathName": "pages/work/deal/main",
+          "query": "id=74&view=true",
+          "scene": null
+        },
+        {
+          "id": 18,
+          "name": "pages/work/deal/maintenance/main",
+          "pathName": "pages/work/deal/maintenance/main",
+          "query": "id=112",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/question/survey/main",
+          "pathName": "pages/question/survey/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/question/deal/main",
+          "pathName": "pages/question/deal/main",
+          "query": "id=441",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/work/mine/main",
+          "pathName": "pages/work/mine/main",
+          "query": "id=72",
+          "scene": null
+        },
+        {
+          "id": 22,
+          "name": "pages/work/deal/main",
+          "pathName": "pages/work/deal/main",
+          "query": "id=256",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/question/survey/main",
+          "pathName": "pages/question/survey/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/mine/phone/main",
+          "pathName": "pages/mine/phone/main",
+          "query": "id=27",
+          "scene": null
+        },
+        {
+          "name": "pages/mine/phone/add/main",
+          "pathName": "pages/mine/phone/add/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/mine/phone/detail/main",
+          "pathName": "pages/mine/phone/detail/main",
+          "query": "id=3",
+          "scene": null
+        },
+        {
+          "name": "pages/construction/create/main",
+          "pathName": "pages/construction/create/main",
+          "scene": null
+        }
+      ]
+    }
+  }
 }

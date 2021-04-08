@@ -7,7 +7,7 @@ import {
   wxDevicesSearch,
   deviceRelations,
   finishQuestion,
-  approveQuestion,
+  approveQuestion
 } from '@/api/question';
 import { buildings } from '@/api/common';
 import Popup from '@/components/Popup/popup.vue'; // mpvue目前只支持的单文件组件
@@ -18,8 +18,8 @@ import { isVideo } from '@/utils/common';
 @Component({
   name: 'deal',
   components: {
-    Popup,
-  },
+    Popup
+  }
 })
 export default class Deal extends Vue {
   // data
@@ -33,16 +33,16 @@ export default class Deal extends Vue {
   private rankList: object[] = [
     {
       id: 0,
-      name: '一般',
+      name: '一般'
     },
     {
       id: 1,
-      name: '紧急',
+      name: '紧急'
     },
     {
       id: 2,
-      name: '非常紧急',
-    },
+      name: '非常紧急'
+    }
   ];
   private recordShow: boolean = false;
   private deviceShow: boolean = false;
@@ -78,7 +78,7 @@ export default class Deal extends Vue {
     if (this.$mp.query.view === 'true') {
       this.isView = true;
       wx.setNavigationBarTitle({
-        title: '问题详情',
+        title: '问题详情'
       });
     }
     this.roles = UserModule.info.group;
@@ -88,7 +88,7 @@ export default class Deal extends Vue {
 
   getQuestionsData() {
     questions({
-      url: `questions/${this.$mp.query.id}`,
+      url: `questions/${this.$mp.query.id}`
     }).then((res: any) => {
       // console.log(res);
       this.questionsData = res;
@@ -109,8 +109,8 @@ export default class Deal extends Vue {
   getDevice(id: number) {
     wxDevicesSearch({
       data: {
-        buildingId: id,
-      },
+        buildingId: id
+      }
     }).then((res: any) => {
       this.deviceData = res;
       this.deviceColumns = [
@@ -118,9 +118,9 @@ export default class Deal extends Vue {
           values: res.map((val: any) => {
             return {
               label: val.label,
-              children: val.children,
+              children: val.children
             };
-          }),
+          })
         },
         {
           values: res[0].children.map((val: any) => {
@@ -128,13 +128,13 @@ export default class Deal extends Vue {
             let floor = val.label.match(reg);
             return {
               label: floor,
-              children: val.children,
+              children: val.children
             };
-          }),
+          })
         },
         {
-          values: res[0].children[0].children,
-        },
+          values: res[0].children[0].children
+        }
       ];
     });
   }
@@ -159,10 +159,11 @@ export default class Deal extends Vue {
   recordConfirm(content: string) {
     buildings({
       method: 'PUT',
-      url: `buildings/${this.questionsData.buildingId}`,
+      url: `buildings/wxBuildingRecordUpdate`,
       data: {
-        record: content,
-      },
+        buildingId: this.questionsData.buildingId,
+        record: content
+      }
     }).then(() => {
       this.buildingRecord = content;
       this.recordShow = false;
@@ -174,8 +175,8 @@ export default class Deal extends Vue {
     changeClassification({
       data: {
         questionId: this.questionsData.id,
-        classificationId: e.target.value.id,
-      },
+        classificationId: e.target.value.id
+      }
     }).then((res: any) => {
       this.questionsData.classification_name = res.classification_name;
       this.popupShow('classificationShow');
@@ -186,8 +187,8 @@ export default class Deal extends Vue {
     changeRank({
       data: {
         questionId: this.questionsData.id,
-        rank: e.target.value.id,
-      },
+        rank: e.target.value.id
+      }
     }).then((res: any) => {
       this.questionsData.rank = e.target.value.id;
       this.popupShow('rankShow');
@@ -224,8 +225,8 @@ export default class Deal extends Vue {
         data: {
           questionId: this.questionsData.id,
           deviceCode: value[2].code,
-          deviceType: value[2].type,
-        },
+          deviceType: value[2].type
+        }
       }).then((res: any) => {
         this.devices = res.device_relation;
         this.deviceCancel();
@@ -238,12 +239,12 @@ export default class Deal extends Vue {
 
   delDevice(index: number) {
     Dialog.confirm({
-      message: '是否确定删除此设备？',
+      message: '是否确定删除此设备？'
     })
       .then(() => {
         deviceRelations({
           method: 'DELETE',
-          url: `deviceRelations/${this.devices[index].id}`,
+          url: `deviceRelations/${this.devices[index].id}`
         }).then((res: any) => {
           this.devices.splice(index, 1);
           this.$tip('设备删除成功！');
@@ -260,8 +261,8 @@ export default class Deal extends Vue {
         method: 'POST',
         data: {
           questionId: this.questionsData.id,
-          content: this.suggest,
-        },
+          content: this.suggest
+        }
       }).then((result: any) => {
         this.cancel();
       });
@@ -272,15 +273,15 @@ export default class Deal extends Vue {
 
   handleFailure() {
     Dialog.confirm({
-      message: '是否确定流转？',
+      message: '是否确定流转？'
     })
       .then(() => {
         approveQuestion({
           method: 'POST',
           data: {
             questionId: this.questionsData.id,
-            content: this.suggest,
-          },
+            content: this.suggest
+          }
         }).then((result: any) => {
           this.cancel();
         });
@@ -297,40 +298,62 @@ export default class Deal extends Vue {
         let page: any = getCurrentPages().pop();
         if (page == undefined || page == null) return;
         page.onPullDownRefresh();
-      },
+      }
     });
   }
 
-  imageError(attachment: any) {
-    attachment.videoUrl = attachment.url;
-    attachment.url = '/static/images/play.jpg';
-    attachment.isVideo = true;
-  }
-
-  onPreview(attachment: any) {
-    if (attachment.isVideo) {
-      this.video = attachment;
-      this.videoShow = true;
-    } else {
+  onPreview(row: any) {
+    const IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg)/i;
+    const VIDEO_REGEXP = /\.(mp4|mov|m4v|3gp|avi|m3u8|webm)/i;
+    const DOC_REGEXP = /\.(txt|xls|xlsx|doc|docx|pdf|ppt|)/i;
+    if (IMAGE_REGEXP.test(row.url)) {
       wx.previewImage({
-        urls: [attachment.url],
-        current: attachment.url,
+        urls: [row.url],
+        current: row.url,
         fail(err) {
-          // console.log(err);
           wx.showToast({ title: '预览图片失败', icon: 'none' });
-        },
+        }
       });
+    } else if (VIDEO_REGEXP.test(row.url)) {
+      this.video = row;
+      this.videoShow = true;
+    } else if (DOC_REGEXP.test(row.url)) {
+      this.downloadFile(row);
+    } else {
+      wx.showToast({ title: '文件不支持预览！', icon: 'none' });
     }
   }
 
-  onVideoClose() {
-    this.videoShow = false;
-    this.video = {};
+  downloadFile(row: any) {
+    let filePath = row.url;
+    let filename = row.name;
+    let index = filename.lastIndexOf('.');
+    let fileType = filename.substr(index + 1);
+    // 下载对应文件
+    wx.downloadFile({
+      url: filePath,
+      success(res) {
+        let filePath = res.tempFilePath; // 文件路径
+        wx.openDocument({
+          filePath, // 装载对应文件的路径
+          fileType, // 指定打开的文件类型
+          success(res) {
+            console.log('打开成功');
+          },
+          fail(res) {
+            console.log(res);
+          }
+        });
+      },
+      fail(res) {
+        console.log(res);
+      }
+    });
   }
 
   work() {
     wx.navigateTo({
-      url: `/pages/work/deal/main?id=${this.questionsData.workflow_id}&view=true`,
+      url: `/pages/work/deal/main?id=${this.questionsData.workflow_id}&view=true`
     });
   }
 }

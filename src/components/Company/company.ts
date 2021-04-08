@@ -1,17 +1,24 @@
+/*
+ * @Description:
+ * @Author: happy
+ * @Date: 2020-07-03 17:18:53
+ * @LastEditTime: 2021-02-25 16:52:22
+ * @LastEditors: happy
+ */
 import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
 
 @Component({
-  name: 'company',
+  name: 'company'
 })
 export default class Company extends Vue {
   // prop
   @Prop({
     required: true,
-    default: false,
+    default: false
   })
   show: boolean;
   @Prop({
-    required: true,
+    required: true
   })
   buildingsData: object[];
 

@@ -28,7 +28,7 @@ class HttpRequest {
         // 在请求前统一添加headers信息
         if (UserModule.session) {
           config.headers = {
-            Authorization: 'session ' + UserModule.session,
+            Authorization: 'session ' + UserModule.session
           };
         }
 
@@ -50,7 +50,7 @@ class HttpRequest {
           this.destroy(url);
         }
         const { data, statusCode } = res as any;
-        if (data && statusCode === 200) {
+        if (data && /^2/.test(statusCode)) {
           // 请求成功
           return data.data;
         }
@@ -74,12 +74,12 @@ class HttpRequest {
           method: config.method as Methods,
           header: config.headers,
           data: JSON.parse(data),
-          success: (res) => {
+          success: res => {
             return resolve(res as any);
           },
-          fail: (err) => {
+          fail: err => {
             return reject(err);
-          },
+          }
         });
       });
     };
@@ -104,7 +104,7 @@ const requestFail = (res: AxiosResponse) => {
   } else {
     return Promise.reject({
       code: status,
-      msg: data.msg || res.statusText,
+      msg: data.msg || res.statusText
     });
   }
 };
@@ -125,9 +125,9 @@ const Api = (() => {
       return res;
     };
   };
-  Object.keys(requestConfig).forEach((key) => {
+  Object.keys(requestConfig).forEach(key => {
     let opts = {
-      url: requestList[key],
+      url: requestList[key]
     };
     apiObj[key] = fun(opts);
   });

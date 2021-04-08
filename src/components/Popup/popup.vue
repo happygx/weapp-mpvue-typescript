@@ -12,13 +12,9 @@
         :value="closeContent"
         @blur="onChange"
       />
-      <footer>
-        <van-button class="mr10" type="default" size="small" @click="cancel"
-          >取消</van-button
-        >
-        <van-button type="info" size="small" @click="popupConfirm()"
-          >确认</van-button
-        >
+      <footer class="popup-footer">
+        <van-button class="mr10" type="default" size="small" @click="cancel">取消</van-button>
+        <van-button type="info" size="small" @click="popupConfirm()">确认</van-button>
       </footer>
     </van-popup>
   </div>

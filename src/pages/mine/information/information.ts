@@ -1,14 +1,10 @@
 import { Vue, Component } from 'vue-property-decorator';
-import {
-  sendVerificationCode,
-  compareVerificationCode,
-  userInformationUpdate,
-} from '@/api/mine';
+import { sendVerificationCode, compareVerificationCode, userInformationUpdate } from '@/api/mine';
 import { getStorage, setStorage } from '@/utils/common';
 
 @Component({
   name: 'information',
-  components: {},
+  components: {}
 })
 export default class Information extends Vue {
   // data
@@ -17,19 +13,19 @@ export default class Information extends Vue {
   private type: string = '';
   private name: string = '';
   private gender: number | string = '';
-  private phone: number | string = '';
+  private phone: string = '';
   private captcha: number | string = '';
   private isSend: boolean = true;
   private sendText: string = '发送验证码';
 
   // 监听页面加载
   onLoad() {
-    //
+    this.init();
   }
 
   // 小程序 hook
   onShow() {
-    this.init();
+    //
   }
 
   // vue hook
@@ -60,14 +56,14 @@ export default class Information extends Vue {
 
   sendCode() {
     let reg = /^1[34578]\d{9}$/;
-    if (!reg.test(this.phone.toString())) {
+    if (!reg.test(this.phone)) {
       this.$tip('请输入正确的手机号');
       return false;
     } else {
       sendVerificationCode({
         data: {
-          phone: this.phone,
-        },
+          phone: this.phone
+        }
       }).then((res: any) => {
         this.isSend = false;
         let num = 60;
@@ -91,8 +87,8 @@ export default class Information extends Vue {
         let res = await compareVerificationCode({
           data: {
             phone: this[this.type],
-            code: this.captcha,
-          },
+            code: this.captcha
+          }
         });
       }
       this.saveInfo();
@@ -105,8 +101,8 @@ export default class Information extends Vue {
     userInformationUpdate({
       method: 'PUT',
       data: {
-        [this.type]: this[this.type],
-      },
+        [this.type]: this[this.type]
+      }
     }).then((res: any) => {
       this.info[this.type] = this[this.type];
       this.closePopup();

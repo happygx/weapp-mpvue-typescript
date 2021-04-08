@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { UserModule } from './store/module/user';
-import { getSession, checkSession } from './utils/session';
+import { checkSession } from './utils/session';
 import { userInformationData } from './api/mine';
 
 // const debug = require("debug")("log:App");
@@ -12,12 +12,13 @@ declare module 'vue/types/vue' {
 
 // 必须使用装饰器的方式来指定components
 @Component({
-  mpType: 'app', // mpvue特定
+  mpType: 'app' // mpvue特定
 } as any)
 export default class App extends Vue {
   public get globalData() {
     return {
       userInfo: null,
+      componentShow: false
     };
   }
   // app hook

@@ -1,3 +1,11 @@
+/*
+ * @Description:
+ * @Author: happygx
+ * @Date: 2020-07-03 17:18:49
+ * @LastEditTime: 2021-02-25 09:21:46
+ * @LastEditors: happy
+ */
+
 /**
  * @param  {string} key
  * @param  {any} value
@@ -5,7 +13,7 @@
 export const setStorage = (key: string, value: any) => {
   wx.setStorage({
     key: key,
-    data: value,
+    data: value
   });
 };
 
@@ -14,7 +22,7 @@ export const setStorage = (key: string, value: any) => {
  */
 export const removeStorage = (key: string) => {
   wx.removeStorage({
-    key: key,
+    key: key
   });
 };
 
@@ -29,12 +37,12 @@ export const getStorage = (key: string, sync: boolean, success?: any): any => {
   } else {
     wx.getStorage({
       key: key,
-      success: (res) => {
-        return typeof success == 'function' && success(res.data);
+      success: res => {
+        return typeof success === 'function' && success(res.data);
       },
-      fail: (err) => {
-        return typeof success == 'function' && success(false);
-      },
+      fail: () => {
+        return typeof success === 'function' && success(false);
+      }
     });
   }
 };
@@ -46,11 +54,11 @@ export const routeInterception = (name: string) => {
   var info = wx.getStorageSync('info');
   if (info) {
     wx.navigateTo({
-      url: `/pages/mine/${name}/main`,
+      url: `/pages/mine/${name}/main`
     });
   } else {
     wx.navigateTo({
-      url: '/pages/login/main',
+      url: '/pages/login/main'
     });
   }
 };
@@ -69,14 +77,17 @@ export const formatDate = (date: any, fmt: string) => {
     'H+': date.getHours(), // 小时
     'm+': date.getMinutes(), // 分
     's+': date.getSeconds(), // 秒
-    'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
+    'q+': Math.floor((date.getMonth() + 3) / 3) // 季度
   };
   if (/(y+)/.test(fmt)) {
     time = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
   }
   for (const k in o) {
     if (new RegExp('(' + k + ')').test(fmt)) {
-      time = time.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
+      time = time.replace(
+        RegExp.$1,
+        RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length)
+      );
     }
   }
   return time;
@@ -132,28 +143,111 @@ export const tip = (msg: string) => {
   wx.showToast({
     title: msg,
     icon: 'none',
-    duration: 1000,
+    duration: 1000
   });
 };
 
-export const objectAssign = (target: object, source: object) => {
-  for (let key in source) {
-    // console.log(key);
-    //遍历参数的键
-    if (typeof source[key] === 'object') {
-      let isEmpty = Array.isArray(source[key]) ? source[key].length === 0 : Object.keys(source[key]).length === 0;
-      if (isEmpty) {
-        target[key] = source[key]; // 值为空直接复制值
-      } else {
-        objectAssign(target[key], source[key]); //值是对象就再次调用函数
-      }
-    } else {
-      target[key] = source[key]; //基本类型直接复制值
+/**
+ * @description:
+ * @param {object} target
+ * @param {object} source
+ * @return {*}
+ */
+// export const objectAssign = (target: object, source: object): any => {
+//   for (let key in source) {
+//     // console.log(key);
+//     // 遍历参数的键
+//     if (typeof source[key] === 'object') {
+//       let isEmpty = Array.isArray(source[key])
+//         ? source[key].length === 0
+//         : Object.keys(source[key]).length === 0;
+//       if (isEmpty) {
+//         target[key] = source[key]; // 值为空直接复制值
+//       } else {
+//         objectAssign(target[key], source[key]); // 值是对象就再次调用函数
+//       }
+//     } else {
+//       target[key] = source[key]; // 基本类型直接复制值
+//     }
+//   }
+// };
+
+/**
+ * @description:
+ * @param {string} url
+ * @return {*}
+ */
+export const isVideo = (url: string): any => {
+  const VIDEO_REGEXP = /\.(mp4|mov|m4v|3gp|avi|m3u8|webm)/i;
+  return VIDEO_REGEXP.test(url);
+};
+
+/**
+ * @description:
+ * @param {any} fn
+ * @param {number} delay
+ * @return {*}
+ */
+export const debounce = (fn: any, delay: number = 1000): any => {
+  let timer: any = null; // 借助闭包
+  return () => {
+    if (timer) {
+      clearTimeout(timer);
     }
+    timer = setTimeout(fn, delay); // 简化写法
+  };
+};
+
+/**
+ * @description:
+ * @param {boolean} isRefresh
+ * @return {*}
+ */
+export const refreshInit = (isRefresh: boolean): boolean => {
+  if (isRefresh) {
+    wx.stopPullDownRefresh({
+      success: () => {
+        //
+      }
+    });
+  }
+  return false;
+};
+
+/**
+ * @description:
+ * @param {any} row
+ * @return {*}
+ */
+export const workStatusType = (row: any): string => {
+  switch (row.status) {
+    case 10:
+      return '新建';
+    case 20:
+      return '处理中';
+    case 30:
+      return '已处理';
+    default:
+      return '已完结';
   }
 };
 
-export const isVideo = (url: string) => {
-  const VIDEO_REGEXP = /\.(mp4|mov|m4v|3gp|avi|m3u8|webm)/i;
-  return VIDEO_REGEXP.test(url);
+/**
+ * @description:
+ * @param {any} row
+ * @return {*}
+ */
+export const questionStatusType = (row: any): string => {
+  switch (row.status) {
+    case 10:
+      return '预处理';
+    case 20:
+      return '待处理';
+    case 30:
+      return '处理中';
+    case 40:
+      return '已处理';
+    default:
+      return '已关闭';
+  }
 };

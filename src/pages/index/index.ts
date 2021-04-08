@@ -1,14 +1,20 @@
-// index.ts
+/*
+ * @Description:
+ * @Author: happy
+ * @Date: 2020-07-03 17:18:49
+ * @LastEditTime: 2021-02-25 16:36:31
+ * @LastEditors: happy
+ */
 import { Vue, Component } from 'vue-property-decorator';
 import { UserModule } from '@/store/module/user';
 import { questions } from '@/api/question';
 import { now } from '@/utils/date';
-import { mineWorkflowCount, workflows } from '@/api/work';
+import { mineWorkflowCount } from '@/api/work';
 
 // 必须使用装饰器的方式来指定component
 @Component({
   name: 'index',
-  components: {},
+  components: {}
 })
 export default class Index extends Vue {
   private bg1: string = require('@/assert/img/swiper1.png');
@@ -28,9 +34,12 @@ export default class Index extends Vue {
     UpcomingDistribution: false,
     workflowList: false,
     workflowCreate: false,
+    constructionSurvey: false,
+    constructionList: false,
+    constructionCreate: false
   };
   private questionUpcomingCount: number = 0;
-  private mineWorkflowCountData: object = {};
+  private mineWorkflowCountData: any = {};
 
   onLoad() {
     //
@@ -77,8 +86,8 @@ export default class Index extends Vue {
         min_create_time: '',
         max_create_time: `${now} 23:59:59`,
         limit: 1,
-        status: state,
-      },
+        status: state
+      }
     }).then((res: any) => {
       this.questionUpcomingCount = res.count;
     });
@@ -92,7 +101,7 @@ export default class Index extends Vue {
 
   login() {
     wx.redirectTo({
-      url: '/pages/login/main',
+      url: '/pages/login/main'
     });
   }
 }

@@ -1,0 +1,20 @@
+@import '@/assert/css/common.scss';
+
+.add-wrap {
+  width: 100%;
+  .cell-group {
+    .van-cell__title {
+      color: #555;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      .van-radio__label {
+        margin-left: 5px;
+      }
+    }
+  }
+}

@@ -1,18 +1,25 @@
+/*
+ * @Description:
+ * @Author: happygx
+ * @Date: 2020-07-03 17:18:53
+ * @LastEditTime: 2021-03-11 10:25:50
+ * @LastEditors: happy
+ */
 import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
 
 @Component({
-  name: 'tableCom',
+  name: 'tableCom'
 })
 export default class TableCom extends Vue {
   // prop
   @Prop({
     required: true,
-    default: '',
+    default: ''
   })
   private tableConfig: any;
 
   // data
-  private tableData: any[] = [];
+  private tableConfigData: any = {};
   private operates: object[] = [];
   private popupShow: boolean = false;
 
@@ -33,7 +40,13 @@ export default class TableCom extends Vue {
 
   // 初始化函数
   init() {
-    //
+    this.tableConfigData = JSON.parse(JSON.stringify(this.tableConfig));
+  }
+
+  @Watch('tableConfig', { deep: true })
+  onTableConfigChange(newVal: object) {
+    this.tableConfigData = newVal;
+    this.$forceUpdate();
   }
 
   onLongPress(item: any) {
@@ -49,12 +62,13 @@ export default class TableCom extends Vue {
   }
 
   handleSelection() {
-    return this.tableConfig.tableData.filter((row: any) => {
+    return this.tableConfigData.tableData.filter((row: any) => {
       return row.checked;
     });
   }
 
   expansion(row: any) {
+    console.log(row);
     row.isExpansion = !row.isExpansion;
     this.$forceUpdate();
   }

@@ -8,8 +8,8 @@ import Dialog from '../../../../static/vant/dialog/dialog';
 @Component({
   name: 'deal',
   components: {
-    Popup,
-  },
+    Popup
+  }
 })
 export default class Deal extends Vue {
   // data
@@ -22,7 +22,7 @@ export default class Deal extends Vue {
     10: '维修单',
     20: '维保单',
     30: '善后单',
-    40: '调试单',
+    40: '调试单'
   };
   private parts: any[] = [];
   private recordShow: boolean = false;
@@ -31,6 +31,8 @@ export default class Deal extends Vue {
   private preview: object = {};
   private previewShow: boolean = false;
   private isPart: boolean = false;
+  private videoShow: boolean = false;
+  private video: object = {};
   private sampleFiles: object[] = [];
 
   // 监听页面加载
@@ -56,7 +58,7 @@ export default class Deal extends Vue {
 
   getWorkData() {
     workflows({
-      url: `workflows/${this.$mp.query.id}`,
+      url: `workflows/${this.$mp.query.id}`
     }).then((res: any) => {
       this.workData = res;
       this.questions = res.questions;
@@ -86,10 +88,11 @@ export default class Deal extends Vue {
   recordConfirm(content: string) {
     buildings({
       method: 'PUT',
-      url: `buildings/${this.workData.building_id}`,
+      url: `buildings/wxBuildingRecordUpdate`,
       data: {
-        record: content,
-      },
+        buildingId: this.workData.building_id,
+        record: content
+      }
     }).then(() => {
       this.workData.building_record = content;
       this.recordShow = false;
@@ -99,7 +102,7 @@ export default class Deal extends Vue {
 
   addQuestion() {
     wx.navigateTo({
-      url: `/pages/question/create/main?buildingId=${this.workData.building_id}&buildingName=${this.workData.building_name}&workflowId=${this.workData.id}`,
+      url: `/pages/question/create/main?buildingId=${this.workData.building_id}&buildingName=${this.workData.building_name}&workflowId=${this.workData.id}`
     });
   }
 
@@ -108,41 +111,27 @@ export default class Deal extends Vue {
     // decodeURIComponent(options.obj),在encodeURIComponent之前要用JSON.stringify()先转换数据,decodeURIComponent之后再用JSON.parse()转换回来
     let view = isView ? isView : '';
     wx.navigateTo({
-      url: `/pages/work/deal/question/main?question=${encodeURIComponent(JSON.stringify(question))}&isView=${view}`,
+      url: `/pages/work/deal/question/main?question=${encodeURIComponent(
+        JSON.stringify(question)
+      )}&isView=${view}`
     });
-  }
-
-  imageError(attachment: any) {
-    attachment.errUrl = '/static/images/play.jpg';
-    attachment.isVideo = true;
-    this.$forceUpdate();
-  }
-
-  onPreview(attachment: any) {
-    this.preview = attachment;
-    this.previewShow = true;
-  }
-
-  onPreviewClose() {
-    this.previewShow = false;
-    this.preview = {};
   }
 
   partModify(part?: object) {
     let Part = part ? JSON.stringify(part) : '';
     wx.navigateTo({
-      url: `/pages/work/deal/device/main?buildingId=${this.workData.building_id}&workflowId=${this.workData.id}&systemKeepRecordId=${this.workData.system_keep_record_id}&part=${Part}`,
+      url: `/pages/work/deal/device/main?buildingId=${this.workData.building_id}&workflowId=${this.workData.id}&systemKeepRecordId=${this.workData.system_keep_record_id}&part=${Part}`
     });
   }
 
   partDelete(i: number) {
     Dialog.confirm({
-      message: '是否确定删除此部件？',
+      message: '是否确定删除此部件？'
     })
       .then(() => {
         changeParts({
           method: 'DELETE',
-          url: `changeParts/${this.parts[i].id}`,
+          url: `changeParts/${this.parts[i].id}`
         }).then((res: any) => {
           this.parts.splice(i, 1);
           this.$tip('部件删除成功！');
@@ -155,22 +144,7 @@ export default class Deal extends Vue {
 
   maintenance() {
     wx.navigateTo({
-      url: `/pages/work/deal/maintenance/main?id=${this.workData.id}&&view=${this.isView}`,
-    });
-  }
-
-  downloadFile(url: string) {
-    wx.downloadFile({
-      url: url,
-      success: function (res) {
-        const filePath = res.tempFilePath;
-        wx.openDocument({
-          filePath: filePath,
-          success: function (res) {
-            console.log('打开文档成功');
-          },
-        });
-      },
+      url: `/pages/work/deal/maintenance/main?id=${this.workData.id}&&view=${this.isView}`
     });
   }
 
@@ -200,39 +174,43 @@ export default class Deal extends Vue {
   }
 
   submit(operation: number, questionsId: number[]) {
-    wxWorkflowUpdate({
-      method: 'PUT',
-      data: {
-        operation: operation,
-        questionsId: questionsId,
-        workflowId: this.workData.id,
-      },
-    }).then((result: any) => {
-      wx.navigateBack({
-        delta: 1,
-        success: () => {
-          let page: any = getCurrentPages().pop();
-          if (page == undefined || page == null) return;
-          page.onPullDownRefresh();
-        },
-        fail: () => {
-          wx.redirectTo({
-            url: '/pages/work/mine/main',
-          });
-        },
+    if (this.workData.is_keep) {
+      wxWorkflowUpdate({
+        method: 'PUT',
+        data: {
+          operation,
+          questionsId,
+          workflowId: this.workData.id
+        }
+      }).then((result: any) => {
+        wx.navigateBack({
+          delta: 1,
+          success: () => {
+            let page: any = getCurrentPages().pop();
+            if (page === undefined || page == null) return;
+            page.onPullDownRefresh();
+          },
+          fail: () => {
+            wx.redirectTo({
+              url: '/pages/work/mine/main'
+            });
+          }
+        });
       });
-    });
+    } else {
+      this.$tip('保养表必须填写！');
+    }
   }
 
   callPhone(phone: string) {
     wx.makePhoneCall({
       phoneNumber: phone,
-      success: function () {
+      success() {
         console.log('拨打电话成功！');
       },
-      fail: function () {
+      fail() {
         console.log('拨打电话失败！');
-      },
+      }
     });
   }
 }

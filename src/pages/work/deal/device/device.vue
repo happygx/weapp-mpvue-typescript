@@ -1,6 +1,19 @@
+<!--
+ * @Description:
+ * @Author: happy
+ * @Date: 2020-07-03 17:18:49
+ * @LastEditTime: 2021-03-16 15:49:37
+ * @LastEditors: happy
+-->
 <template>
   <div class="device-wrap">
     <van-cell-group :border="false">
+      <van-cell :border="false" title="维修类型" title-width="90px">
+        <van-radio-group class="df" :value="maintainType" @change="maintainType = $event.mp.detail">
+          <van-radio :name="0" class="mr15" icon-size="16px">维修</van-radio>
+          <van-radio :name="1" class="mr15" icon-size="16px">更换</van-radio>
+        </van-radio-group>
+      </van-cell>
       <van-field
         label="设备名称"
         placeholder="请选择设备名称"
@@ -41,6 +54,14 @@
           @confirm="standardConfirm"
         />
       </van-popup>
+      <van-field
+        v-if="remarksShow"
+        label="部件备注"
+        placeholder="请填写部件备注"
+        :border="false"
+        :value="content"
+        @input="content = $event.mp.detail"
+      />
       <van-cell title="部件数量" :border="false" title-width="90px">
         <van-stepper class="fl" :value="partNumber" @change="stepChange" />
       </van-cell>

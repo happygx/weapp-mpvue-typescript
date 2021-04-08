@@ -12,14 +12,18 @@ import Dialog from '../../../../static/vant/dialog/dialog';
   components: {
     Company,
     Question,
-    Popup,
-  },
+    Popup
+  }
 })
 export default class Create extends Vue {
   // data
+  private province: string = '';
   private buildingName: string = '';
-  private buildingId: number = 0;
+  private buildingId: any = 0;
+  private provinces: string[] = [];
+  private provinceShow: boolean = false;
   private buildingsData: object[] = [];
+  private provinceBuildingsData: object[] = [];
   private companyShow: boolean = false;
   private operation: number = 14;
   private questionShow: boolean = false;
@@ -31,13 +35,13 @@ export default class Create extends Vue {
   private tableHeader: object[] = [
     { prop: 'exhibitor_name', icon: 'icon-user' },
     { prop: 'create_time', icon: 'icon-clock' },
-    { prop: 'visibleName', icon: 'icon-status' },
+    { prop: 'visibleName', icon: 'icon-status' }
   ];
   private tagType: string[] = ['default', 'warning', 'danger'];
   private workId: number = 0;
   private disabled: boolean = false;
   private componentShow: boolean = false;
-  private hideQuestion: boolean = false;
+  private isAll: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -80,12 +84,41 @@ export default class Create extends Vue {
   getBuildings() {
     buildings().then((res: any) => {
       this.buildingsData = res;
+      for (let item of res) {
+        this.provinces.push(item.province);
+      }
+      this.provinces = [...new Set(this.provinces)];
+    });
+  }
+
+  provinceConfirm(e: any) {
+    this.provinceShow = false;
+    this.province = e.target.value;
+    this.getProvinceBuildings();
+  }
+
+  getProvinceBuildings() {
+    buildings({
+      data: {
+        province: this.province
+      }
+    }).then((res: any) => {
+      for (let i = 0; i < res.length; i++) {
+        if (res[i].id === this.buildingId) {
+          res.splice(i, 1);
+          i--;
+        } else {
+          res[i].checked = false;
+        }
+      }
+      this.buildingsData = res;
+      this.provinceBuildingsData = res;
     });
   }
 
   getWorkflowData() {
     workflows({
-      url: `workflows/${this.$mp.query.id}`,
+      url: `workflows/${this.$mp.query.id}`
     }).then((res: any) => {
       // console.log(res);
       for (let item of res.questions) {
@@ -103,28 +136,37 @@ export default class Create extends Vue {
       data: {
         building_id: this.buildingId,
         status: 20,
-        limit: 1,
-      },
+        limit: 1
+      }
     }).then((res: any) => {
       // console.log(res);
       this.selectRows = res.results;
     });
   }
 
-  selectBuilding(b: { name: string; id: number }) {
+  selectBuilding(b: { name: string; id: number; province: string }) {
     this.buildingName = b.name;
     this.buildingId = b.id;
+    this.province = b.province;
+    this.operation === 15 && this.getProvinceBuildings();
     // 清空上个仓库的信息
   }
 
   operationChange(e: any) {
     this.operation = e.mp.detail;
-    if (this.operation === 15 || this.operation === 17) {
-      this.hideQuestion = true;
-      this.selectRows = [];
-    } else {
-      this.hideQuestion = false;
+    if (this.operation === 15 && this.province !== '') {
+      this.getProvinceBuildings();
     }
+    if (this.operation === 15 || this.operation === 17) {
+      this.selectRows = [];
+    }
+  }
+
+  checkAll(e: any) {
+    this.isAll = e.mp.detail;
+    this.provinceBuildingsData.map((val: any) => {
+      val.checked = e.mp.detail;
+    });
   }
 
   selectQuestion() {
@@ -144,8 +186,8 @@ export default class Create extends Vue {
       immigrationQuestion({
         data: {
           workflowId: this.workId,
-          questionsId: JSON.stringify(questionsId),
-        },
+          questionsId: JSON.stringify(questionsId)
+        }
       }).then((res: any) => {
         this.selectRows = [...this.selectRows, ...selectRows];
         this.questionShow = false;
@@ -163,15 +205,15 @@ export default class Create extends Vue {
 
   deleteQuestion(i: number) {
     Dialog.confirm({
-      message: '是否将此问题移出工单？',
+      message: '是否将此问题移出工单？'
     })
       .then(() => {
         if (this.workId) {
           removeQuestion({
             data: {
               questionId: this.selectRows[i].id,
-              workflowId: this.workId,
-            },
+              workflowId: this.workId
+            }
           }).then((res: any) => {
             this.selectRows.splice(i, 1);
             this.$tip('问题移出成功！');
@@ -210,7 +252,7 @@ export default class Create extends Vue {
       } else {
         question.record.unshift({
           suggest: content,
-          revisable: true,
+          revisable: true
         });
         this.suggestCancel();
       }
@@ -224,19 +266,19 @@ export default class Create extends Vue {
       suggest: this.suggestContent,
       workflowId: this.workId,
       isFinish: question.record.length === 0 ? 10 : question.record[0].isFinish,
-      attachments: [],
+      attachments: []
     };
     if (isModify) {
       wxQuestionRecordUpdate({
         method: 'PUT',
-        data: dataParam,
+        data: dataParam
       }).then((res: any) => {
         this.suggestCancel();
       });
     } else {
       questionRecords({
         method: 'POST',
-        data: dataParam,
+        data: dataParam
       }).then((res: any) => {
         for (let item of res) {
           item.visibleName = item.visible ? '可见' : '不可见';
@@ -247,45 +289,92 @@ export default class Create extends Vue {
     }
   }
 
-  submit() {
-    if (!this.buildingId) {
-      this.$tip('请选择仓库名称！');
+  async onSubmit() {
+    if (this.operation === 15) {
+      let buildingList: number[] = [];
+      this.buildingId && buildingList.push(this.buildingId);
+      this.provinceBuildingsData.forEach((val: any) => {
+        if (val.checked) {
+          buildingList.push(val.id);
+        }
+      });
+      this.buildingId = buildingList;
+    }
+
+    if (!this.buildingId || this.buildingId.length === 0) {
+      this.$tip('请先选择仓库！');
       return false;
     }
-    if (!this.hideQuestion) {
-      if (this.selectRows.length > 0) {
-        let visibleList: number[] = [];
-        this.selectRows.forEach((item: any) => {
-          visibleList.push(item.visible);
-          let obj = {
-            id: item.id,
-            suggest: '',
-          };
-          if (item.record.length > 0 && item.record[0].revisable) {
-            obj.suggest = item.record[0].suggest;
-          }
-          this.questions.push(obj);
-        });
-        if (this.operation === 14 && !visibleList.includes(1)) {
-          this.$tip('维修单必须包含可见问题！');
-          return false;
-        }
-      } else {
-        this.$tip('请选择问题！');
-        return false;
-      }
+
+    if (this.operation === 14 || this.operation === 16) {
+      this.handleSubmitQuestion();
+    } else if (this.operation === 15) {
+      this.handleMaintenance();
+    } else if (this.operation === 17) {
+      this.submit();
     }
+  }
+
+  async submit() {
     workflows({
       method: 'POST',
       data: {
         operation: this.operation,
         buildingId: this.buildingId,
-        questions: this.questions,
-      },
+        questions: this.questions
+      }
     }).then((result: any) => {
       wx.redirectTo({
-        url: '/pages/work/mine/main',
+        url: '/pages/work/mine/main'
       });
     });
+  }
+
+  handleSubmitQuestion() {
+    if (this.selectRows.length > 0) {
+      let visibleList: number[] = [];
+      this.selectRows.forEach((item: any) => {
+        visibleList.push(item.visible);
+        let obj = {
+          id: item.id,
+          suggest: ''
+        };
+        if (item.record.length > 0 && item.record[0].revisable) {
+          obj.suggest = item.record[0].suggest;
+        }
+        this.questions.push(obj);
+      });
+      if (this.operation === 14 && !visibleList.includes(1)) {
+        this.$tip('维修单必须包含可见问题！');
+        return false;
+      }
+    } else {
+      this.$tip('请选择问题！');
+      return false;
+    }
+    this.submit();
+  }
+
+  async handleMaintenance() {
+    let res = await workflows({
+      data: {
+        building_id: this.buildingId.join(','),
+        kind: 20,
+        status: '10,20'
+      }
+    });
+    if (res.count > 0) {
+      Dialog.confirm({
+        message: '此仓库下已有正在处理的维保单，是否继续创建？'
+      })
+        .then(() => {
+          this.submit();
+        })
+        .catch(() => {
+          //
+        });
+    } else {
+      this.submit();
+    }
   }
 }

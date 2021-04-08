@@ -1,24 +1,11 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { VueConstructor } from 'vue';
-import { DataModule } from '@/store/module/data';
-import { objectAssign, tip } from '@/utils/common';
+import { tip } from '@/utils/common';
+import hack from './utils/hack';
 import '@/assert/css/variables.scss';
 import '@/assert/font/iconfont.css';
 
 // 解决页面数据缓存的问题
-Vue.mixin({
-  // 监听页面加载
-  onLoad() {
-    this.componentShow = true;
-  },
-  // 监听页面卸载
-  onUnload() {
-    if (!this.$options.parent && this.$options.data) {
-      this.componentShow = false;
-      Object.assign(this.$data, this.$options.data());
-    }
-  },
-});
 
 interface IMpVue extends VueConstructor {
   mpType: string;
@@ -40,7 +27,7 @@ Component.registerHooks([
   'onReachBottom', // 页面上拉触底事件的处理函数
   'onShareAppMessage', // 用户点击右上角分享
   'onPageScroll', // 页面滚动
-  'onTabItemTap', //当前是 tab 页时， 点击 tab 时触发 （mpvue 0.0.16 支持）
+  'onTabItemTap' //当前是 tab 页时， 点击 tab 时触发 （mpvue 0.0.16 支持）
 ]);
 
 // 定义全局方法
@@ -52,8 +39,9 @@ declare module 'vue/types/vue' {
   }
 }
 
-// Vue.config._mpTrace = true;
+Vue.use(hack);
 Vue.config.productionTip = false;
+// Vue.config._mpTrace = true;
 // 在这个地方引入是为了registerHooks先执行
 const MyApp = require('./App.vue').default as IMpVue;
 const app = new Vue(MyApp);

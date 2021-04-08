@@ -1,0 +1,33 @@
+@import '@/assert/css/common.scss';
+
+page {
+  background-color: #f1f1f1;
+  .phone-wrap {
+    width: 100%;
+    .van-search__content {
+      background-color: #fff;
+    }
+    .search {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 50px;
+      padding: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(100, 101, 102, 0.12);
+      .search-btn {
+        height: 50px;
+        padding: 0;
+        line-height: 50px;
+        color: $bg;
+      }
+    }
+    .icon-add {
+      position: fixed;
+      bottom: 40px;
+      right: 20px;
+      font-size: 55px;
+      color: #1989fa;
+    }
+  }
+}

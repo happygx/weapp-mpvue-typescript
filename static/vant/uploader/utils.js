@@ -1,6 +1,7 @@
 const IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg)/i;
 const VIDEO_REGEXP = /\.(mp4|mov|m4v|3gp|avi|m3u8|webm)/i;
 const MEDIA_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg|mp4|mov|m4v|3gp|avi|m3u8|webm)/i;
+
 function isImageUrl(url) {
   return IMAGE_REGEXP.test(url);
 }
@@ -60,7 +61,7 @@ export function chooseFile({
   maxDuration,
   sizeType,
   camera,
-  maxCount,
+  maxCount
 }) {
   switch (accept) {
     case 'image':
@@ -70,7 +71,7 @@ export function chooseFile({
           sourceType: capture,
           sizeType,
           success: resolve,
-          fail: reject,
+          fail: reject
         });
       });
     case 'media':
@@ -82,7 +83,7 @@ export function chooseFile({
           sizeType,
           camera,
           success: resolve,
-          fail: reject,
+          fail: reject
         });
       });
     case 'video':
@@ -93,7 +94,7 @@ export function chooseFile({
           maxDuration,
           camera,
           success: resolve,
-          fail: reject,
+          fail: reject
         });
       });
     default:
@@ -102,7 +103,7 @@ export function chooseFile({
           count: multiple ? maxCount : 1,
           type: 'file',
           success: resolve,
-          fail: reject,
+          fail: reject
         });
       });
   }

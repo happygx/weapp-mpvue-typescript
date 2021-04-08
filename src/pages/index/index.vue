@@ -59,7 +59,10 @@
             link-type="navigateTo"
             url="/pages/question/upcoming/main"
           >
-            <van-icon custom-class="iconfont icon-upcoming olive" :info="questionUpcomingCount"></van-icon>
+            <van-icon
+              custom-class="iconfont icon-upcoming olive"
+              :info="questionUpcomingCount"
+            ></van-icon>
             <span class="mt5">待办问题</span>
           </van-grid-item>
           <van-grid-item
@@ -97,7 +100,10 @@
             link-type="navigateTo"
             url="/pages/work/mine/main?type=distribution"
           >
-            <van-icon custom-class="iconfont icon-distribution red" :info="mineWorkflowCountData.new_workflow_count" />
+            <van-icon
+              custom-class="iconfont icon-distribution red"
+              :info="mineWorkflowCountData.new_workflow_count"
+            />
             <span class="mt5">待您分配</span>
           </van-grid-item>
           <van-grid-item
@@ -159,6 +165,44 @@
           </van-grid-item>
         </van-grid>
       </div>
+      <!-- <div class="grid-wrap">
+        <h3 class="title f16">
+          <i class="point mr5"></i>
+          施工问题处理
+        </h3>
+        <van-grid column-num="3" :border="false">
+          <van-grid-item
+            v-if="page.constructionSurvey"
+            use-slot
+            content-class="grid-item"
+            link-type="navigateTo"
+            url="/pages/construction/survey/main"
+          >
+            <van-icon custom-class="iconfont icon-survey yellow"></van-icon>
+            <span class="mt5">问题概况</span>
+          </van-grid-item>
+          <van-grid-item
+            v-if="page.constructionList"
+            use-slot
+            content-class="grid-item"
+            link-type="navigateTo"
+            url="/pages/construction/list/main"
+          >
+            <van-icon custom-class="iconfont icon-list cyan"></van-icon>
+            <span class="mt5">问题列表</span>
+          </van-grid-item>
+          <van-grid-item
+            v-if="page.constructionCreate"
+            use-slot
+            content-class="grid-item"
+            link-type="navigateTo"
+            url="/pages/construction/create/main"
+          >
+            <van-icon custom-class="iconfont icon-createQuestion blue"></van-icon>
+            <span class="mt5">创建问题</span>
+          </van-grid-item>
+        </van-grid>
+      </div> -->
     </template>
     <template v-else>
       <div class="login tac">

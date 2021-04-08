@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Author: happy
+ * @Date: 2020-07-03 17:18:49
+ * @LastEditTime: 2021-03-24 10:07:41
+ * @LastEditors: happy
+ */
 import { getOpenIdSessionKey } from '@/api/common';
 import { UserModule } from '@/store/module/user';
 

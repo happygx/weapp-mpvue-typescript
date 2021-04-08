@@ -1,5 +1,11 @@
 import { Vue, Component } from 'vue-property-decorator';
-import { wxDevicesSearch, deviceRelations, questionRecords, attachments, wxQuestionRecordUpdate } from '@/api/question';
+import {
+  wxDevicesSearch,
+  deviceRelations,
+  questionRecords,
+  attachments,
+  wxQuestionRecordUpdate
+} from '@/api/question';
 import Dialog from '../../../../../static/vant/dialog/dialog';
 import { isVideo } from '@/utils/common';
 import { uploadFile } from '@/utils/uploadOSS/uploadFile';
@@ -7,7 +13,7 @@ import { getOssSign } from '@/api/common';
 
 @Component({
   name: 'question',
-  components: {},
+  components: {}
 })
 export default class Question extends Vue {
   // data
@@ -86,8 +92,8 @@ export default class Question extends Vue {
   getDevice(id: number) {
     wxDevicesSearch({
       data: {
-        buildingId: id,
-      },
+        buildingId: id
+      }
     }).then((res: any) => {
       this.deviceData = res;
       this.deviceColumns = [
@@ -95,9 +101,9 @@ export default class Question extends Vue {
           values: res.map((val: any) => {
             return {
               label: val.label,
-              children: val.children,
+              children: val.children
             };
-          }),
+          })
         },
         {
           values: res[0].children.map((val: any) => {
@@ -105,13 +111,13 @@ export default class Question extends Vue {
             let floor = val.label.match(reg);
             return {
               label: floor,
-              children: val.children,
+              children: val.children
             };
-          }),
+          })
         },
         {
-          values: res[0].children[0].children,
-        },
+          values: res[0].children[0].children
+        }
       ];
     });
   }
@@ -151,8 +157,8 @@ export default class Question extends Vue {
         data: {
           questionId: this.questionsData.id,
           deviceCode: device.code,
-          deviceType: device.type,
-        },
+          deviceType: device.type
+        }
       }).then((res: any) => {
         this.devices = res.device_relation;
         this.deviceCancel();
@@ -165,12 +171,12 @@ export default class Question extends Vue {
 
   delDevice(index: number) {
     Dialog.confirm({
-      message: '是否确定删除此设备？',
+      message: '是否确定删除此设备？'
     })
       .then(() => {
         deviceRelations({
           method: 'DELETE',
-          url: `deviceRelations/${this.devices[index].id}`,
+          url: `deviceRelations/${this.devices[index].id}`
         }).then((res: any) => {
           this.devices.splice(index, 1);
           this.$tip('设备删除成功！');
@@ -181,31 +187,53 @@ export default class Question extends Vue {
       });
   }
 
-  imageError(i: number, j: number) {
-    this.record[i].attachments[j].videoUrl = this.record[i].attachments[j].url;
-    this.record[i].attachments[j].url = '/static/images/play.jpg';
-    this.record[i].attachments[j].isVideo = true;
-  }
-
-  onPreview(attachment: any) {
-    if (attachment.isVideo) {
-      this.video = attachment;
-      this.videoShow = true;
-    } else {
+  onPreview(row: any) {
+    const IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg)/i;
+    const VIDEO_REGEXP = /\.(mp4|mov|m4v|3gp|avi|m3u8|webm)/i;
+    const DOC_REGEXP = /\.(txt|xls|xlsx|doc|docx|pdf|ppt|)/i;
+    if (IMAGE_REGEXP.test(row.url)) {
       wx.previewImage({
-        urls: [attachment.url],
-        current: attachment.url,
+        urls: [row.url],
+        current: row.url,
         fail(err) {
-          // console.log(err);
           wx.showToast({ title: '预览图片失败', icon: 'none' });
-        },
+        }
       });
+    } else if (VIDEO_REGEXP.test(row.url)) {
+      this.video = row;
+      this.videoShow = true;
+    } else if (DOC_REGEXP.test(row.url)) {
+      this.downloadFile(row);
+    } else {
+      wx.showToast({ title: '文件不支持预览！', icon: 'none' });
     }
   }
 
-  onVideoClose() {
-    this.videoShow = false;
-    this.video = {};
+  downloadFile(row: any) {
+    let filePath = row.url;
+    let filename = row.name;
+    let index = filename.lastIndexOf('.');
+    let fileType = filename.substr(index + 1);
+    // 下载对应文件
+    wx.downloadFile({
+      url: filePath,
+      success(res) {
+        let filePath = res.tempFilePath; // 文件路径
+        wx.openDocument({
+          filePath, // 装载对应文件的路径
+          fileType, // 指定打开的文件类型
+          success(res) {
+            console.log('打开成功');
+          },
+          fail(res) {
+            console.log(res);
+          }
+        });
+      },
+      fail(res) {
+        console.log(res);
+      }
+    });
   }
 
   afterRead(e: any) {
@@ -217,13 +245,13 @@ export default class Question extends Vue {
   handleRemove(e: any) {
     let index = e.mp.detail.index;
     Dialog.confirm({
-      message: '是否确定删除此附件？',
+      message: '是否确定删除此附件？'
     })
       .then(() => {
         if (this.fileList[index].id) {
           attachments({
             method: 'DELETE',
-            url: `attachments/${this.fileList[index].id}`,
+            url: `attachments/${this.fileList[index].id}`
           }).then((res: any) => {
             // console.log(res);
             this.fileList.splice(index, 1);
@@ -240,9 +268,9 @@ export default class Question extends Vue {
   }
 
   filterDifferent(arr1: any[], arr2: any[]) {
-    return arr1.filter((item) => {
+    return arr1.filter(item => {
       return (
-        arr2.findIndex((subItem) => {
+        arr2.findIndex(subItem => {
           return subItem.url == item.url;
         }) === -1
       );
@@ -253,17 +281,17 @@ export default class Question extends Vue {
     this.fileList = this.filterDifferent(this.fileList, this.recordAttachments);
     this.recordAttachments = [];
     for (let item of this.fileList) {
-      //获取最后一个.的位置
+      // 获取最后一个.的位置
       let index = item.tempFilePath.lastIndexOf('.');
-      //获取后缀
+      // 获取后缀
       let ext = item.tempFilePath.substr(index + 1);
       let name = `${item.uid}_wx.${ext}`;
       let objectName = item.tempFilePath.includes('tmp/')
         ? item.tempFilePath.split('tmp/')[1]
         : item.tempFilePath.split('tmp_')[1];
       let obj: object = {
-        name: name,
-        objectName: objectName,
+        name,
+        objectName
       };
       this.recordAttachments.push(obj);
     }
@@ -279,20 +307,20 @@ export default class Question extends Vue {
         suggest: this.suggest,
         workflowId: this.questionsData.workflow_id,
         isFinish: this.isFinish,
-        attachments: this.recordAttachments,
+        attachments: this.recordAttachments
       };
       if (this.questionsData.record.length > 0 && this.questionsData.record[0].revisable) {
         dataParam.recordId = this.questionsData.record[0].id;
         wxQuestionRecordUpdate({
           method: 'PUT',
-          data: dataParam,
+          data: dataParam
         }).then((res: any) => {
           this.createSuccess();
         });
       } else {
         questionRecords({
           method: 'POST',
-          data: dataParam,
+          data: dataParam
         }).then((res: any) => {
           this.createSuccess();
         });
@@ -303,11 +331,11 @@ export default class Question extends Vue {
   createSuccess() {
     for (let file of this.fileList) {
       uploadFile(this.OssSign, {
-        file: file,
+        file,
         dir: 'iot',
         successCallback(res) {
           // console.log(res);
-        },
+        }
       });
     }
     wx.navigateBack();

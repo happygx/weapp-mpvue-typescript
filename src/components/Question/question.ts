@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Author: happy
+ * @Date: 2020-07-03 17:18:53
+ * @LastEditTime: 2020-12-14 14:01:02
+ * @LastEditors: happy
+ */
 import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
 import { questions } from '@/api/question';
 import TableCom from '../TableCom/tableCom.vue';
@@ -5,17 +12,17 @@ import TableCom from '../TableCom/tableCom.vue';
 @Component({
   name: 'question',
   components: {
-    TableCom,
-  },
+    TableCom
+  }
 })
 export default class Question extends Vue {
   // prop
   @Prop({
-    required: true,
+    required: true
   })
   private buildingId: number;
   @Prop({
-    required: true,
+    required: true
   })
   private selectRows: any[];
 
@@ -25,12 +32,12 @@ export default class Question extends Vue {
     tableHeader: [
       { prop: 'exhibitor_name', icon: 'icon-user' },
       { prop: 'create_time', icon: 'icon-clock' },
-      { prop: 'visibleName', icon: 'icon-status' },
+      { prop: 'visibleName', icon: 'icon-status' }
     ],
     tagType: ['default', 'warning', 'danger'],
     isLoading: true,
     isMore: false,
-    checkbox: true,
+    checkbox: true
   };
 
   // 监听页面加载
@@ -57,8 +64,8 @@ export default class Question extends Vue {
     questions({
       data: {
         building_id: this.buildingId,
-        status: 20,
-      },
+        status: 20
+      }
     }).then((res: any) => {
       for (let item of res.results) {
         item.visibleName = item.visible ? '可见' : '不可见';
@@ -85,7 +92,7 @@ export default class Question extends Vue {
   confirm(selectRows: []) {}
 
   addQuestion() {
-    let selectRows = this.$refs.table.handleSelection();
+    let selectRows = (this.$refs.table as any).handleSelection();
     if (selectRows.length > 0) {
       this.confirm(selectRows);
       this.cancel();

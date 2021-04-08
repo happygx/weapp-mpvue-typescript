@@ -1,7 +1,7 @@
 /**
  * 项目名称
  */
-export const PROJECTNAME = '能工工单系统';
+export const PROJECTNAME = '能工售后管理系统';
 
 /**
  * 线上环境
@@ -22,8 +22,7 @@ export const QAHOST: string = '';
 /**
  * 当前的host  ONLINEHOST | QAHOST | MOCKHOST
  */
-export const BaseUrl: string =
-  process.env.NODE_ENV === 'production' ? ONLINEHOST : ONLOCALHOST;
+export const BaseUrl: string = process.env.NODE_ENV === 'production' ? ONLINEHOST : ONLOCALHOST;
 
 /**
  * 请求的公共参数

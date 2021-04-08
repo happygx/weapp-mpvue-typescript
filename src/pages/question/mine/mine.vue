@@ -1,16 +1,12 @@
 <template>
   <div class="mine-wrap">
     <header class="common-header">
-      <Search
-        v-if="componentShow"
-        :searchOptions="searchOptions"
-        @search="getQuestions"
-      />
+      <Search v-if="componentShow" :searchOptions="searchOptions" @search="generateData" />
       <Filter
         v-if="componentShow"
         :dropdownConfig="dropdownConfig"
         :timeConfig="timeConfig"
-        @confirm="filterConfirm"
+        @filter="generateData"
       />
     </header>
     <div class="common-content">

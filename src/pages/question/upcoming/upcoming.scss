@@ -4,7 +4,10 @@ page {
   background-color: #f1f1f1;
   .upcoming-wrap {
     width: 100%;
-    footer {
+    .common-content {
+      margin-bottom: 70px;
+    }
+    .footer {
       position: fixed;
       bottom: 0;
       justify-content: space-between;

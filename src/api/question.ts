@@ -71,3 +71,23 @@ export const wxQuestionRecordUpdate = (params = {}) => {
 export const buildingQuestion = (params = {}) => {
   return Api.buildingQuestion(params);
 };
+
+export const constructionProblem = (params = {}) => {
+  return Api.constructionProblem(params);
+};
+
+export const constructionProblemKind = (params = {}) => {
+  return Api.constructionProblemKind(params);
+};
+
+export const constructionRank = (params = {}) => {
+  return Api.constructionRank(params);
+};
+
+export const constructionClassRank = (params = {}) => {
+  return Api.constructionClassRank(params);
+};
+
+export const constructionBuildingRank = (params = {}) => {
+  return Api.constructionBuildingRank(params);
+};

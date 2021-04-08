@@ -1,0 +1,32 @@
+@import '@/assert/css/common.scss';
+
+page {
+  background-color: #f1f1f1;
+  .detail-wrap {
+    padding: 10px 10px 50px 10px;
+    background-color: #fff;
+    width: 100%;
+    .link {
+      color: $bg;
+    }
+    .list-wrap {
+      .list-item {
+        .list-title {
+          color: #555d6e;
+        }
+        .list-content {
+          & > span {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+    }
+    .address {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      color: #666;
+    }
+  }
+}

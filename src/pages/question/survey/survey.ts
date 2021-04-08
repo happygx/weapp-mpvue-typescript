@@ -2,14 +2,14 @@ import { Vue, Component } from 'vue-property-decorator';
 import { buildings } from '@/api/common';
 import { buildingQuestion } from '@/api/question';
 import Company from '@/components/Company/company.vue';
-import { now, minDate, maxDate, lastMonthDay } from '@/utils/date';
+import { now, minDate, maxDate } from '@/utils/date';
 import { formatDate } from '@/utils/common';
 
 @Component({
   name: 'survey',
   components: {
-    Company,
-  },
+    Company
+  }
 })
 export default class Survey extends Vue {
   // data
@@ -19,12 +19,12 @@ export default class Survey extends Vue {
   private buildingName: string = '';
   private buildingId: number = 0;
   private timeConfig: any = {
-    startDay: lastMonthDay,
+    startDay: '',
     endDay: now,
     startTime: '',
     endTime: '',
     minDate: minDate,
-    maxDate: maxDate,
+    maxDate: maxDate
   };
   private questionData: object = {};
   private classification: string[] = [];
@@ -49,6 +49,9 @@ export default class Survey extends Vue {
 
   // 初始化函数
   init() {
+    let date = now.split('-');
+    let prevYear = Number(date[0]) - 1;
+    this.timeConfig.startDay = `${prevYear}-${date[1]}-${date[2]}`;
     this.timeConfig.startTime = new Date(this.timeConfig.startDay).getTime();
     this.timeConfig.endTime = new Date(this.timeConfig.endDay).getTime();
     this.getBuildings();
@@ -67,7 +70,6 @@ export default class Survey extends Vue {
   selectBuilding(b: { name: string; id: number }) {
     this.buildingName = b.name;
     this.buildingId = b.id;
-    console.log(this.timeConfig);
     this.getBuildingQuestion();
   }
 
@@ -76,8 +78,8 @@ export default class Survey extends Vue {
       data: {
         buildingId: this.buildingId,
         startTime: `${this.timeConfig.startDay} 00:00:00`,
-        endTime: `${this.timeConfig.endDay} 00:00:00`,
-      },
+        endTime: `${this.timeConfig.endDay} 00:00:00`
+      }
     }).then((res: object) => {
       this.questionData = res;
       this.classification = Object.keys(res);
@@ -91,7 +93,9 @@ export default class Survey extends Vue {
 
   timeConfirm(val: any) {
     this.timeConfig[`${this.timeType}Day`] = formatDate(val.mp.detail, 'yyyy-MM-dd');
-    this.timeConfig[`${this.timeType}Time`] = new Date(this.timeConfig[`${this.timeType}Day`]).getTime();
+    this.timeConfig[`${this.timeType}Time`] = new Date(
+      this.timeConfig[`${this.timeType}Day`]
+    ).getTime();
     this.timeShow = false;
   }
 

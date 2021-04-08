@@ -54,7 +54,7 @@ export default class Search extends Vue {
   }
 
   @Emit()
-  search(params: any, merge: boolean) {
+  search(params: object = {}, merge: boolean = false) {
     // console.log(params);
   }
 

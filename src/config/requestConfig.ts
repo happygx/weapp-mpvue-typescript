@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Author: happy
+ * @Date: 2020-07-03 17:18:53
+ * @LastEditTime: 2021-03-10 14:43:39
+ * @LastEditors: happy
+ */
 export default {
   getOpenIdSessionKey: 'getOpenidSessionKey', // 获取3rd_session
   wxLogin: 'wxlogin', // 登录
@@ -42,6 +49,7 @@ export default {
   questionConcerns: 'questionConcerns', // 关注问题
   concernDel: 'questionConcerns/concernDel', // 取消关注问题
   workflows: 'workflows', // 工单相关操作
+  workflowProvince: 'workflows/workflowProvince', // 获取工单的省份
   wxWorkflowUpdate: 'workflows/wxWorkflowUpdate', // 修改工单
   attachments: 'attachments', // 附件相关操作
   getAfterSaleManager: 'workflows/getAfterSaleManager', // 获取售后经理
@@ -52,4 +60,12 @@ export default {
   workflowSystemKeepRecords: 'workflowSystemKeepRecords', // 获取保养表
   buildingQuestion: 'questions/buildingQuestion', // 获取问题概况
   mineWorkflowCount: 'workflows/mineWorkflowCount', // 获取我的工单相关的数量
+  addressBooks: 'addressBooks', // 获取通讯录列表
+  locationUpdate: 'buildings/locationUpdate', // 更新仓库位置
+  wxBuildingRecordUpdate: 'buildings/wxBuildingRecordUpdate', // 更新仓库记录
+  constructionProblem: 'constructionProblem', // 施工问题
+  constructionProblemKind: 'constructionProblemKind', // 施工问题类型
+  constructionRank: 'constructionProblem/constructionRank', // 施工问题排名
+  constructionClassRank: 'constructionProblem/constructionClassRank', // 施工问题分类排名
+  constructionBuildingRank: 'constructionProblem/constructionBuildingRank' // 施工问题仓库排名
 };

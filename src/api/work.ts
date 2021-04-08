@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Author: happy
+ * @Date: 2020-07-03 17:18:53
+ * @LastEditTime: 2021-03-12 11:39:41
+ * @LastEditors: happy
+ */
 import Api from '@/utils/request';
 
 export const workflows = (params = {}) => {
@@ -42,4 +49,12 @@ export const workflowSystemKeepRecords = (params = {}) => {
 
 export const mineWorkflowCount = (params = {}) => {
   return Api.mineWorkflowCount(params);
+};
+
+export const workflowProvince = (params = {}) => {
+  return Api.workflowProvince(params);
+};
+
+export const wxBuildingRecordUpdate = (params = {}) => {
+  return Api.wxBuildingRecordUpdate(params);
 };

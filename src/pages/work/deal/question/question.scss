@@ -3,6 +3,9 @@
 .question-wrap {
   width: 100%;
   padding: 10px;
+  .link {
+    color: $bg;
+  }
   .van-cell__title {
     color: #555;
     font-size: 15px;

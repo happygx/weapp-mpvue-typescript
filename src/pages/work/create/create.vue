@@ -14,6 +14,37 @@
       @confirm="questionConfirm"
     />
     <van-cell-group :border="false" custom-class="cell-group">
+      <van-cell :border="false" title="工单类型" title-width="90px" title-class="required">
+        <van-radio-group
+          class="radio-group"
+          :disabled="disabled"
+          :value="operation"
+          @change="operationChange"
+        >
+          <van-radio :name="14" class="mr15" icon-size="16px">维修单</van-radio>
+          <van-radio :name="15" class="mr15" icon-size="16px">维保单</van-radio>
+          <van-radio :name="16" icon-size="16px">善后单</van-radio>
+          <van-radio :name="17" icon-size="16px" class="mt15">调试单</van-radio>
+        </van-radio-group>
+      </van-cell>
+      <van-field
+        label="选择省份"
+        placeholder="请选择省份"
+        disabled
+        :border="false"
+        :value="province"
+        @click="provinceShow = true"
+      />
+      <van-popup position="bottom" :show="provinceShow" @close="provinceShow = false">
+        <van-picker
+          show-toolbar
+          title="请选择省份"
+          value-key="name"
+          :columns="provinces"
+          @cancel="provinceShow = false"
+          @confirm="provinceConfirm"
+        />
+      </van-popup>
       <van-field
         label="仓库名称"
         placeholder="请选择仓库名称"
@@ -23,18 +54,38 @@
         :value="buildingName"
         @click="!disabled && (companyShow = true)"
       />
-      <van-cell :border="false" title="工单类型" title-width="90px" title-class="required">
-        <van-radio-group class="radio-group" :disabled="disabled" :value="operation" @change="operationChange">
-          <van-radio :name="14" class="mr15" icon-size="16px">维修单</van-radio>
-          <van-radio :name="15" class="mr15" icon-size="16px">维保单</van-radio>
-          <van-radio :name="16" icon-size="16px">善后单</van-radio>
-          <van-radio :name="17" icon-size="16px" class="mt15">调试单</van-radio>
-        </van-radio-group>
-      </van-cell>
-      <van-cell v-if="!hideQuestion" :border="false" title="工单问题" title-width="90px" title-class="required">
+      <van-cell
+        v-if="operation === 14 || operation === 16"
+        :border="false"
+        title="工单问题"
+        title-width="90px"
+        title-class="required"
+      >
         <van-button type="info" size="small" class="fl" @click="selectQuestion">
           选择问题
         </van-button>
+      </van-cell>
+      <van-cell v-if="operation === 15" :border="false" title="同省仓库" title-width="90px">
+        <van-checkbox
+          custom-class="mb10"
+          label-class="fb"
+          shape="square"
+          icon-size="15px"
+          :value="isAll"
+          @change="checkAll"
+          >全选</van-checkbox
+        >
+        <van-checkbox
+          v-for="(item, i) in provinceBuildingsData"
+          :key="i"
+          custom-class="mb10"
+          shape="square"
+          icon-size="15px"
+          :value="item.checked"
+          @change="item.checked = $event.mp.detail"
+        >
+          {{ item.abbreviation }}
+        </van-checkbox>
       </van-cell>
     </van-cell-group>
     <van-cell v-for="(item, index) in selectRows" :key="index" :border="false">
@@ -63,8 +114,8 @@
               :class="[
                 header.icon,
                 {
-                  green: item.visible,
-                },
+                  green: item.visible
+                }
               ]"
             ></i>
             <i v-else class="iconfont mr5" :class="header.icon" />
@@ -90,7 +141,7 @@
     />
     <van-dialog id="van-dialog" />
     <div class="btn-group" v-if="!disabled">
-      <van-button type="info" size="large" @click="submit">
+      <van-button type="info" size="large" @click="onSubmit">
         立即创建
       </van-button>
     </div>

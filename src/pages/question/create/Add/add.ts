@@ -1,6 +1,13 @@
 import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
 import { buildings, getOssSign } from '@/api/common';
-import { questions, wxDevicesSearch, getUsers, attachments, wxQuestionUpdate, deviceRelations } from '@/api/question';
+import {
+  questions,
+  wxDevicesSearch,
+  getUsers,
+  attachments,
+  wxQuestionUpdate,
+  deviceRelations
+} from '@/api/question';
 import Company from '@/components/Company/company.vue';
 import { UserModule } from '@/store/module/user';
 import { uploadFile } from '@/utils/uploadOSS/uploadFile';
@@ -10,17 +17,17 @@ import { addQuestion } from '@/api/work';
 @Component({
   name: 'add',
   components: {
-    Company,
-  },
+    Company
+  }
 })
 export default class Add extends Vue {
   // prop
   @Prop({
-    required: true,
+    required: true
   })
   classificationsData: object;
   @Prop({
-    required: true,
+    required: true
   })
   classification: any;
 
@@ -41,21 +48,21 @@ export default class Add extends Vue {
     content: '',
     attachments: [],
     faultsId: [],
-    status: 10,
+    status: 10
   };
   private validate: any = {
     buildingId: {
-      name: '仓库名称',
+      name: '仓库名称'
     },
     exhibitorId: {
-      name: '问题提出人',
+      name: '问题提出人'
     },
     classificationId: {
-      name: '问题分类',
+      name: '问题分类'
     },
     content: {
-      name: '问题详情',
-    },
+      name: '问题详情'
+    }
   };
   private buildingsData: object[] = [];
   private companyShow: boolean = false;
@@ -88,7 +95,7 @@ export default class Add extends Vue {
 
   // 初始化函数
   init() {
-    this.questionId = this.$options.parent.$mp.query.id;
+    this.questionId = (this.$options as any).parent.$mp.query.id;
     if (this.questionId) {
       this.disabled = true;
       this.getQuestionsData();
@@ -108,11 +115,11 @@ export default class Add extends Vue {
       this.classificationName = this.classification.name;
       this.form.classificationId = this.classification.id;
     }
-    this.workflowId = this.$options.parent.$mp.query.workflowId;
+    this.workflowId = (this.$options as any).parent.$mp.query.workflowId;
     if (this.workflowId) {
       this.disabled = true;
-      this.buildingName = this.$options.parent.$mp.query.buildingName;
-      this.form.buildingId = this.$options.parent.$mp.query.buildingId;
+      this.buildingName = (this.$options as any).parent.$mp.query.buildingName;
+      this.form.buildingId = (this.$options as any).parent.$mp.query.buildingId;
       this.getUsers(this.form.buildingId);
       this.getDevice(this.form.buildingId);
     } else {
@@ -123,13 +130,15 @@ export default class Add extends Vue {
 
   get getWidth() {
     let result =
-      this.roles !== '售后经理' || (this.form.status === 10 && !this.workflowId) || this.workflowId ? 'w100' : '';
+      this.roles !== '售后经理' || (this.form.status === 10 && !this.workflowId) || this.workflowId
+        ? 'w100'
+        : '';
     return result;
   }
 
   getQuestionsData() {
     questions({
-      url: `questions/${this.questionId}`,
+      url: `questions/${this.questionId}`
     }).then((res: any) => {
       // console.log(res);
       this.buildingName = res.building_name;
@@ -165,8 +174,8 @@ export default class Add extends Vue {
   getUsers(id: number) {
     getUsers({
       data: {
-        buildingId: id,
-      },
+        buildingId: id
+      }
     }).then((res: any) => {
       this.exhibitorData = res;
     });
@@ -175,8 +184,8 @@ export default class Add extends Vue {
   getDevice(id: number) {
     wxDevicesSearch({
       data: {
-        buildingId: id,
-      },
+        buildingId: id
+      }
     }).then((res: any) => {
       this.deviceData = res;
       this.deviceColumns = [
@@ -184,9 +193,9 @@ export default class Add extends Vue {
           values: res.map((val: any) => {
             return {
               label: val.label,
-              children: val.children,
+              children: val.children
             };
-          }),
+          })
         },
         {
           values: res[0].children.map((val: any) => {
@@ -194,13 +203,13 @@ export default class Add extends Vue {
             let floor = val.label.match(reg);
             return {
               label: floor ? floor : val.label,
-              children: val.children,
+              children: val.children
             };
-          }),
+          })
         },
         {
-          values: res[0].children[0].children,
-        },
+          values: res[0].children[0].children
+        }
       ];
     });
   }
@@ -282,13 +291,13 @@ export default class Add extends Vue {
 
   delDevice(index: number) {
     Dialog.confirm({
-      message: '是否确定删除此设备？',
+      message: '是否确定删除此设备？'
     })
       .then(() => {
         if (this.questionId && this.form.devices[index].id) {
           deviceRelations({
             method: 'DELETE',
-            url: `deviceRelations/${this.form.devices[index].id}`,
+            url: `deviceRelations/${this.form.devices[index].id}`
           }).then((res: any) => {
             this.form.devices.splice(index, 1);
             this.$tip('设备删除成功！');
@@ -312,13 +321,13 @@ export default class Add extends Vue {
   handleRemove(e: any) {
     let index = e.mp.detail.index;
     Dialog.confirm({
-      message: '是否确定删除此附件？',
+      message: '是否确定删除此附件？'
     })
       .then(() => {
         if (this.questionId && this.fileList[index].id) {
           attachments({
             method: 'DELETE',
-            url: `attachments/${this.fileList[index].id}`,
+            url: `attachments/${this.fileList[index].id}`
           }).then((res: any) => {
             // console.log(res);
             this.fileList.splice(index, 1);
@@ -337,7 +346,7 @@ export default class Add extends Vue {
   submit(type: string) {
     if (this.roles !== '养护员') {
       this.validate.exhibitorId = {
-        name: '问题提出人',
+        name: '问题提出人'
       };
     }
     for (let key of Object.keys(this.validate)) {
@@ -353,9 +362,9 @@ export default class Add extends Vue {
   }
 
   filterDifferent(arr1: any[], arr2: any[]) {
-    return arr1.filter((item) => {
+    return arr1.filter(item => {
       return (
-        arr2.findIndex((subItem) => {
+        arr2.findIndex(subItem => {
           return subItem.url == item.url;
         }) === -1
       );
@@ -376,7 +385,7 @@ export default class Add extends Vue {
         : item.tempFilePath.split('tmp_')[1];
       let obj: object = {
         name: name,
-        objectName: objectName,
+        objectName: objectName
       };
       this.form.attachments.push(obj);
     }
@@ -396,7 +405,7 @@ export default class Add extends Vue {
     console.log(this.form);
     addQuestion({
       method: 'POST',
-      data: this.form,
+      data: this.form
     }).then((res: any) => {
       this.createSuccess();
     });
@@ -407,14 +416,14 @@ export default class Add extends Vue {
       this.form.questionId = this.questionId;
       wxQuestionUpdate({
         method: 'PUT',
-        data: this.form,
+        data: this.form
       }).then((res: any) => {
         this.createSuccess();
       });
     } else {
       questions({
         method: 'POST',
-        data: this.form,
+        data: this.form
       }).then((res: any) => {
         this.createSuccess();
       });
@@ -428,12 +437,12 @@ export default class Add extends Vue {
         dir: 'iot',
         successCallback(res) {
           // console.log(res);
-        },
+        }
       });
     }
     if (this.createWork) {
       wx.redirectTo({
-        url: `/pages/work/create/main?buildingId=${this.form.buildingId}&buildingName=${this.buildingName}`,
+        url: `/pages/work/create/main?buildingId=${this.form.buildingId}&buildingName=${this.buildingName}`
       });
     } else {
       if (this.disabled) {
@@ -443,11 +452,11 @@ export default class Add extends Vue {
             let page: any = getCurrentPages().pop();
             if (page == undefined || page == null) return;
             page.onPullDownRefresh();
-          },
+          }
         });
       } else {
         wx.redirectTo({
-          url: '/pages/question/mine/main',
+          url: '/pages/question/mine/main'
         });
       }
     }
