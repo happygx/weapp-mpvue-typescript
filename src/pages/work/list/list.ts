@@ -40,7 +40,7 @@ export default class List extends Vue {
         { text: '全部', value: '' },
         { text: '维修单', value: 10 },
         { text: '维保单', value: 20 },
-        { text: '善后单', value: 30 },
+        { text: '服务单', value: 30 },
         { text: '调试单', value: 40 }
       ]
     },
@@ -69,7 +69,7 @@ export default class List extends Vue {
     ],
     isLoading: true,
     isMore: true,
-    workflowType: { 10: '维修单', 20: '维保单', 30: '善后单', 40: '调试单' }
+    workflowType: { 10: '维修单', 20: '维保单', 30: '服务单', 40: '调试单' }
   };
   private curPage: number = 0;
   private dataParams: object = {};

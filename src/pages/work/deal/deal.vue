@@ -57,8 +57,12 @@
         <template v-else>
           <div class="mb5 question" v-for="(question, i) in questions" :key="i">
             <div class="df">
-              <i v-if="question.isFinish === 10" class="iconfont icon-error red"></i>
-              <i v-else class="iconfont icon-deal green"></i>
+              <i
+                :class="[
+                  'iconfont',
+                  question.isFinish === 10 ? 'icon-error red' : 'icon-deal green'
+                ]"
+              ></i>
               <p
                 class="tl link ml5"
                 :class="rankClass[question.rank]"
@@ -68,6 +72,7 @@
               </p>
             </div>
             <p class="tl break">详情：{{ question.content }}</p>
+            <p class="tl break" v-if="question.isFinish === 20">结果：{{ question.result }}</p>
           </div>
         </template>
       </van-cell>

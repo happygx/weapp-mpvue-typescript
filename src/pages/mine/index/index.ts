@@ -7,7 +7,7 @@
  */
 import { Vue, Component } from 'vue-property-decorator';
 import { wxLogout } from '@/api/common';
-import { UserModule } from '@/store/module/user';
+import { UserModule } from '@/store/module/login';
 import { routeInterception } from '@/utils/common';
 
 // 必须使用装饰器的方式来指定component

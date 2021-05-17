@@ -23,7 +23,7 @@
         >
           <van-radio :name="14" class="mr15" icon-size="16px">维修单</van-radio>
           <van-radio :name="15" class="mr15" icon-size="16px">维保单</van-radio>
-          <van-radio :name="16" icon-size="16px">善后单</van-radio>
+          <van-radio :name="16" icon-size="16px">服务单</van-radio>
           <van-radio :name="17" icon-size="16px" class="mt15">调试单</van-radio>
         </van-radio-group>
       </van-cell>

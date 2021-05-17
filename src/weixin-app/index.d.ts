@@ -68,6 +68,13 @@ declare namespace wx {
    */
   function request(options: RequestOptions): RequestTask;
 
+  interface Profile extends BaseOptions<DataResponse> {
+    lang?: string; // en	否	显示用户信息的语言
+    desc: string; // 是	声明获取用户个人信息后的用途，不超过30个字符
+  }
+
+  function getUserProfile(profile: Profile): void;
+
   /**
    * 返回一个 requestTask 对象，通过 requestTask，可中断请求任务。
    */

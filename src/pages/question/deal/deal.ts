@@ -11,7 +11,7 @@ import {
 } from '@/api/question';
 import { buildings } from '@/api/common';
 import Popup from '@/components/Popup/popup.vue'; // mpvue目前只支持的单文件组件
-import { UserModule } from '@/store/module/user';
+import { UserModule } from '@/store/module/login';
 import Dialog from '../../../../static/vant/dialog/dialog';
 import { isVideo } from '@/utils/common';
 

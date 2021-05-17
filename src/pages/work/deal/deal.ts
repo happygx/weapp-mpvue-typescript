@@ -2,7 +2,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { buildings } from '@/api/common';
 import { workflows, changeParts, wxWorkflowUpdate } from '@/api/work';
 import Popup from '@/components/Popup/popup.vue'; // mpvue目前只支持的单文件组件
-import { UserModule } from '@/store/module/user';
+import { UserModule } from '@/store/module/login';
 import Dialog from '../../../../static/vant/dialog/dialog';
 
 @Component({
@@ -21,7 +21,7 @@ export default class Deal extends Vue {
   private kindList: object = {
     10: '维修单',
     20: '维保单',
-    30: '善后单',
+    30: '服务单',
     40: '调试单'
   };
   private parts: any[] = [];

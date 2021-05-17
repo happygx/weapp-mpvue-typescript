@@ -42,6 +42,7 @@ export default class Create extends Vue {
   private disabled: boolean = false;
   private componentShow: boolean = false;
   private isAll: boolean = false;
+  private isSubmit: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -290,28 +291,37 @@ export default class Create extends Vue {
   }
 
   async onSubmit() {
-    if (this.operation === 15) {
-      let buildingList: number[] = [];
-      this.buildingId && buildingList.push(this.buildingId);
-      this.provinceBuildingsData.forEach((val: any) => {
-        if (val.checked) {
-          buildingList.push(val.id);
+    try {
+      if (this.operation === 15) {
+        let buildingList: number[] = [];
+        this.buildingId && buildingList.push(this.buildingId);
+        this.provinceBuildingsData.forEach((val: any) => {
+          if (val.checked) {
+            buildingList.push(val.id);
+          }
+        });
+        this.buildingId = buildingList;
+      }
+
+      if (!this.buildingId || this.buildingId.length === 0) {
+        this.$tip('请先选择仓库！');
+        return false;
+      }
+
+      if (!this.isSubmit) {
+        this.isSubmit = true;
+        if (this.operation === 14 || this.operation === 16) {
+          this.handleSubmitQuestion();
+        } else if (this.operation === 15) {
+          this.handleMaintenance();
+        } else if (this.operation === 17) {
+          this.submit();
         }
-      });
-      this.buildingId = buildingList;
-    }
-
-    if (!this.buildingId || this.buildingId.length === 0) {
-      this.$tip('请先选择仓库！');
-      return false;
-    }
-
-    if (this.operation === 14 || this.operation === 16) {
-      this.handleSubmitQuestion();
-    } else if (this.operation === 15) {
-      this.handleMaintenance();
-    } else if (this.operation === 17) {
-      this.submit();
+      } else {
+        this.$tip('请稍等！');
+      }
+    } catch (e) {
+      this.$tip(e.message, 10 * 1000);
     }
   }
 

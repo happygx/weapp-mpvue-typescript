@@ -2,7 +2,7 @@
  * @Description:
  * @Author: happygx
  * @Date: 2020-07-03 17:18:49
- * @LastEditTime: 2021-02-25 09:21:46
+ * @LastEditTime: 2021-05-13 11:42:38
  * @LastEditors: happy
  */
 
@@ -12,7 +12,7 @@
  */
 export const setStorage = (key: string, value: any) => {
   wx.setStorage({
-    key: key,
+    key,
     data: value
   });
 };
@@ -22,7 +22,7 @@ export const setStorage = (key: string, value: any) => {
  */
 export const removeStorage = (key: string) => {
   wx.removeStorage({
-    key: key
+    key
   });
 };
 
@@ -36,7 +36,7 @@ export const getStorage = (key: string, sync: boolean, success?: any): any => {
     return wx.getStorageSync(key);
   } else {
     wx.getStorage({
-      key: key,
+      key,
       success: res => {
         return typeof success === 'function' && success(res.data);
       },
@@ -51,7 +51,7 @@ export const getStorage = (key: string, sync: boolean, success?: any): any => {
  * @param  {string} path
  */
 export const routeInterception = (name: string) => {
-  var info = wx.getStorageSync('info');
+  let info = wx.getStorageSync('info');
   if (info) {
     wx.navigateTo({
       url: `/pages/mine/${name}/main`
@@ -139,11 +139,11 @@ export const getLastMonth = (pre: boolean = true) => {
 /**
  * @param  {string} msg
  */
-export const tip = (msg: string) => {
+export const tip = (msg: string, timeout: number = 3000) => {
   wx.showToast({
     title: msg,
     icon: 'none',
-    duration: 1000
+    duration: timeout
   });
 };
 

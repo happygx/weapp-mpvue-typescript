@@ -172,7 +172,7 @@
     </van-cell-group>
     <van-dialog id="van-dialog" />
     <div class="btn-group">
-      <van-button type="info" size="large" @click="submit" :custom-class="getWidth">
+      <van-button type="info" size="large" :custom-class="getWidth" @click="submit">
         创建问题
       </van-button>
       <van-button

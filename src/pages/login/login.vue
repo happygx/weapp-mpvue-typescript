@@ -20,13 +20,10 @@
       />
     </van-cell-group>
     <div class="btn mt20">
-      <van-button
-        type="info"
-        size="large"
-        open-type="getUserInfo"
-        @getuserinfo="bindGetUserInfo"
+      <!--被弃用 <van-button type="info" size="large" open-type="getUserInfo" @getuserinfo="bindGetUserInfo"
         >登录</van-button
-      >
+      > -->
+      <van-button type="info" size="large" @click="getUserProfile">登录</van-button>
     </div>
   </div>
 </template>

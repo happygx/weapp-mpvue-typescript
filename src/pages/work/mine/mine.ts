@@ -3,7 +3,7 @@ import { workflows, wxWorkflowUpdate, getAfterSalePerson, workflowProvince } fro
 import Search from '@/components/Search/search.vue'; // mpvue目前只支持的单文件组件
 import Filter from '@/components/Filter/filter.vue'; // mpvue目前只支持的单文件组件
 import TableCom from '@/components/TableCom/tableCom.vue'; // mpvue目前只支持的单文件组件
-import { UserModule } from '@/store/module/user';
+import { UserModule } from '@/store/module/login';
 import { now } from '@/utils/date';
 import Dialog from '../../../../static/vant/dialog/dialog';
 import { workStatusType, refreshInit } from '@/utils/common';
@@ -48,7 +48,7 @@ export default class Mine extends Vue {
         { text: '全部', value: '' },
         { text: '维修单', value: 10 },
         { text: '维保单', value: 20 },
-        { text: '善后单', value: 30 },
+        { text: '服务单', value: 30 },
         { text: '调试单', value: 40 }
       ]
     },
@@ -79,7 +79,7 @@ export default class Mine extends Vue {
     isLoading: true,
     isMore: true,
     checkbox: false,
-    workflowType: { 10: '维修单', 20: '维保单', 30: '善后单', 40: '调试单' }
+    workflowType: { 10: '维修单', 20: '维保单', 30: '服务单', 40: '调试单' }
   };
   private curPage: number = 0;
   private myselfStatus: number | string = '000';

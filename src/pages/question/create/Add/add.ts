@@ -9,7 +9,7 @@ import {
   deviceRelations
 } from '@/api/question';
 import Company from '@/components/Company/company.vue';
-import { UserModule } from '@/store/module/user';
+import { UserModule } from '@/store/module/login';
 import { uploadFile } from '@/utils/uploadOSS/uploadFile';
 import Dialog from '../../../../../static/vant/dialog/dialog';
 import { addQuestion } from '@/api/work';
@@ -77,6 +77,7 @@ export default class Add extends Vue {
   private faultDevice: object[] = [];
   private textareaShow: boolean = true;
   private createWork: boolean = false;
+  private isSubmit: boolean = false;
 
   // 监听页面加载
   onLoad() {
@@ -358,14 +359,20 @@ export default class Add extends Vue {
     if (type === 'work') {
       this.createWork = true;
     }
-    this.createQuestion();
+    // 防止网络不好时连续点击
+    if (!this.isSubmit) {
+      this.isSubmit = true;
+      this.createQuestion();
+    } else {
+      this.$tip('请稍等！');
+    }
   }
 
   filterDifferent(arr1: any[], arr2: any[]) {
     return arr1.filter(item => {
       return (
         arr2.findIndex(subItem => {
-          return subItem.url == item.url;
+          return subItem.url === item.url;
         }) === -1
       );
     });
@@ -375,17 +382,17 @@ export default class Add extends Vue {
     this.fileList = this.filterDifferent(this.fileList, this.form.attachments);
     this.form.attachments = [];
     for (let item of this.fileList) {
-      //获取最后一个.的位置
+      // 获取最后一个.的位置
       let index = item.tempFilePath.lastIndexOf('.');
-      //获取后缀
+      // 获取后缀
       let ext = item.tempFilePath.substr(index + 1);
       let name = `${item.uid}_wx.${ext}`;
       let objectName = item.tempFilePath.includes('tmp/')
         ? item.tempFilePath.split('tmp/')[1]
         : item.tempFilePath.split('tmp_')[1];
       let obj: object = {
-        name: name,
-        objectName: objectName
+        name,
+        objectName
       };
       this.form.attachments.push(obj);
     }
@@ -402,7 +409,6 @@ export default class Add extends Vue {
 
   add() {
     this.form.workflowId = this.workflowId;
-    console.log(this.form);
     addQuestion({
       method: 'POST',
       data: this.form
@@ -433,7 +439,7 @@ export default class Add extends Vue {
   createSuccess() {
     for (let file of this.fileList) {
       uploadFile(this.OssSign, {
-        file: file,
+        file,
         dir: 'iot',
         successCallback(res) {
           // console.log(res);
@@ -450,7 +456,9 @@ export default class Add extends Vue {
           delta: 1,
           success: () => {
             let page: any = getCurrentPages().pop();
-            if (page == undefined || page == null) return;
+            if (page === undefined || page === null) {
+              return;
+            }
             page.onPullDownRefresh();
           }
         });

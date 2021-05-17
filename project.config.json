@@ -41,7 +41,7 @@
   "projectname": "workflow",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
-  "libVersion": "2.11.3",
+  "libVersion": "2.16.1",
   "condition": {
     "plugin": {
       "list": []

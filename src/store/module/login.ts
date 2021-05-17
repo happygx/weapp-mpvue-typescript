@@ -1,43 +1,61 @@
-import { GetterTree, MutationTree, ActionTree } from 'vuex';
+import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators';
+import store from '@/store';
+import { setStorage, getStorage } from '@/utils/common';
+import { getSession } from '@/utils/session';
 
-export interface LoginState {
-  status?: any;
+export interface IUserState {
+  session: string | boolean;
+  info: any;
+  browse: string[] | boolean;
 }
 
-const state: LoginState = {
-  status: false
-};
+@Module({ dynamic: true, store, name: 'user' })
+class User extends VuexModule implements IUserState {
+  public session: string | boolean = getStorage('session', true);
+  public info: any = getStorage('info', true);
+  public browse: string[] | boolean = getStorage('browse', true);
 
-// 强制使用getter获取state
-const getters: GetterTree<LoginState, any> = {
-  status: (state: LoginState) => state.status
-};
-
-// 更改state
-const mutations: MutationTree<LoginState> = {
-  // 更新state都用该方法
-  UPDATE_STATE(state: LoginState, data: LoginState) {
-    for (const key in data) {
-      if (!data.hasOwnProperty(key)) {
-        return;
-      }
-      state[key] = data[key];
-    }
+  @Action
+  public ResetToken() {
+    this.SET_SESSION(false);
+    this.SET_INFO(false);
+    this.SET_BROWSE(false);
+    wx.clearStorage();
+    getSession();
   }
-};
 
-const actions: ActionTree<LoginState, any> = {
-  UPDATE_STATE_ASYN({ commit, state: LoginState }, data: LoginState) {
-    commit('UPDATE_STATE', data);
-  },
-  GET_DATA_ASYN({ commit, state: LoginState }) {
-    //
+  @Action
+  public async SET_SESSION_ASYNC(session: string) {
+    this.SET_SESSION(session);
   }
-};
 
-export default {
-  state,
-  getters,
-  mutations,
-  actions
-};
+  @Action
+  public async SET_INFO_ASYNC(info: object) {
+    this.SET_INFO(info);
+  }
+
+  @Action
+  public async SET_BROWSE_ASYNC(browse: string[] | boolean) {
+    this.SET_BROWSE(browse);
+  }
+
+  @Mutation
+  private SET_SESSION(session: string | boolean) {
+    this.session = session;
+    setStorage('session', session);
+  }
+
+  @Mutation
+  private SET_INFO(info: object | boolean) {
+    this.info = info;
+    setStorage('info', info);
+  }
+
+  @Mutation
+  private SET_BROWSE(browse: string[] | boolean) {
+    this.browse = browse;
+    setStorage('browse', browse);
+  }
+}
+
+export const UserModule = getModule(User);

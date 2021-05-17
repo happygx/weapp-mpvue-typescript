@@ -2,11 +2,11 @@
  * @Description:
  * @Author: happy
  * @Date: 2020-07-03 17:18:49
- * @LastEditTime: 2021-02-25 16:36:31
+ * @LastEditTime: 2021-04-12 10:30:54
  * @LastEditors: happy
  */
 import { Vue, Component } from 'vue-property-decorator';
-import { UserModule } from '@/store/module/user';
+import { UserModule } from '@/store/module/login';
 import { questions } from '@/api/question';
 import { now } from '@/utils/date';
 import { mineWorkflowCount } from '@/api/work';
@@ -20,7 +20,7 @@ export default class Index extends Vue {
   private bg1: string = require('@/assert/img/swiper1.png');
   private bg2: string = require('@/assert/img/swiper2.png');
   private roles: string = '';
-  private browse: any = [];
+  private browse: any = '';
   private page: any = {
     mineQuestion: false,
     upcoming: false,
@@ -55,9 +55,9 @@ export default class Index extends Vue {
   }
 
   init() {
-    this.roles = UserModule.info.group;
     this.browse = UserModule.browse;
     if (this.browse.length > 0) {
+      this.roles = UserModule.info.group;
       for (let item of Object.keys(this.page)) {
         this.page[item] = this.browse.includes(item);
       }

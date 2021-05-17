@@ -1,16 +1,13 @@
 import { Vue, Component } from 'vue-property-decorator';
-import {
-  questionClassifications,
-  workflowQuestionSolutions,
-} from '@/api/question';
-import { UserModule } from '@/store/module/user';
+import { questionClassifications, workflowQuestionSolutions } from '@/api/question';
+import { UserModule } from '@/store/module/login';
 import Add from './Add/add.vue';
 
 @Component({
   name: 'create',
   components: {
-    Add,
-  },
+    Add
+  }
 })
 export default class Create extends Vue {
   // data
@@ -64,8 +61,8 @@ export default class Create extends Vue {
     this.solutionsData = [];
     workflowQuestionSolutions({
       data: {
-        question_id: this.collapseActive,
-      },
+        question_id: this.collapseActive
+      }
     }).then((res: any) => {
       this.solutionsData = res;
     });

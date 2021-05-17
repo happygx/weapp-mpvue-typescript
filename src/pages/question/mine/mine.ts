@@ -4,7 +4,7 @@ import Search from '@/components/Search/search.vue'; // mpvue目前只支持的�
 import Filter from '@/components/Filter/filter.vue'; // mpvue目前只支持的单文件组件
 import TableCom from '@/components/TableCom/tableCom.vue'; // mpvue目前只支持的单文件组件
 import { now } from '@/utils/date';
-import { UserModule } from '@/store/module/user';
+import { UserModule } from '@/store/module/login';
 import { refreshInit } from '@/utils/common';
 
 @Component({

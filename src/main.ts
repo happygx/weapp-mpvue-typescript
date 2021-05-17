@@ -1,11 +1,16 @@
+/*
+ * @Description:
+ * @Author: happy
+ * @Date: 2020-07-03 17:18:53
+ * @LastEditTime: 2021-05-13 13:18:10
+ * @LastEditors: happy
+ */
 import { Component, Vue } from 'vue-property-decorator';
 import { VueConstructor } from 'vue';
 import { tip } from '@/utils/common';
 import hack from './utils/hack';
 import '@/assert/css/variables.scss';
 import '@/assert/font/iconfont.css';
-
-// 解决页面数据缓存的问题
 
 interface IMpVue extends VueConstructor {
   mpType: string;
@@ -35,7 +40,7 @@ Vue.prototype.$tip = tip;
 // 定义全局函数
 declare module 'vue/types/vue' {
   interface Vue {
-    $tip: (msg: string) => {};
+    $tip: (msg: string, timeout?: number) => {};
   }
 }
 

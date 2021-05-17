@@ -1,12 +1,18 @@
+/*
+ * @Description:
+ * @Author: happy
+ * @Date: 2020-07-03 17:18:49
+ * @LastEditTime: 2021-04-26 15:53:42
+ * @LastEditors: happy
+ */
 import { Vue, Component } from 'vue-property-decorator';
 import { wxLogin } from '@/api/common';
-import { UserModule } from '@/store/module/user';
-import { getSession } from '@/utils/session';
-import { getStorage } from '@/utils/common';
+import { UserModule } from '@/store/module/login';
+import { checkSession, getSession } from '@/utils/session';
 
 @Component({
   name: 'login',
-  components: {},
+  components: {}
 })
 export default class Login extends Vue {
   // data
@@ -33,7 +39,11 @@ export default class Login extends Vue {
 
   // 初始化函数
   init() {
-    //
+    if (UserModule.session) {
+      checkSession();
+    } else {
+      getSession();
+    }
   }
 
   onChange(e: any, type: string) {
@@ -44,24 +54,36 @@ export default class Login extends Vue {
     this.passwordShow = !this.passwordShow;
   }
 
-  bindGetUserInfo(e: any) {
+  // 被弃用
+  // bindGetUserInfo(e: any) {
+  //   // if (this.username === '' || this.username === '') {
+  //   //   this.$tip('不能为空！');
+  //   //   return false;
+  //   // }
+  //   let userInfo = e.target.userInfo;
+  //   // console.log(userInfo);
+  //   if (userInfo) {
+  //     this.encryptedData = e.target.encryptedData;
+  //     this.iv = e.target.iv;
+  //     this.login();
+  //   }
+  // }
+
+  getUserProfile(e: any) {
     if (this.username === '' || this.username === '') {
       this.$tip('不能为空！');
       return false;
     }
-    let userInfo = e.target.userInfo;
-    // console.log(userInfo);
-    if (userInfo) {
-      this.encryptedData = e.target.encryptedData;
-      this.iv = e.target.iv;
-      getStorage('session', false, (res: any) => {
-        if (res) {
-          this.login();
-        } else {
-          getSession(this.login);
-        }
-      });
-    }
+    // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
+    // 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
+    wx.getUserProfile({
+      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+      success: (res: any) => {
+        this.encryptedData = res.encryptedData;
+        this.iv = res.iv;
+        this.login();
+      }
+    });
   }
 
   login() {
@@ -71,14 +93,14 @@ export default class Login extends Vue {
         username: this.username,
         password: this.password,
         encryptedData: this.encryptedData,
-        iv: this.iv,
-      },
+        iv: this.iv
+      }
     }).then((res: any) => {
       if (res) {
         UserModule.SET_INFO_ASYNC(res.info);
         UserModule.SET_BROWSE_ASYNC(res.browse_permissions);
         wx.switchTab({
-          url: '/pages/index/main',
+          url: '/pages/index/main'
         });
       }
     });

@@ -1,10 +1,10 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { workflowSystemKeepRecords, wxWorkflowUpdate } from '@/api/work';
-import { UserModule } from '@/store/module/user';
+import { UserModule } from '@/store/module/login';
 
 @Component({
   name: 'maintenance',
-  components: {},
+  components: {}
 })
 export default class Maintenance extends Vue {
   // data
@@ -38,11 +38,11 @@ export default class Maintenance extends Vue {
   getMaintenance() {
     workflowSystemKeepRecords({
       data: {
-        workflow_id: this.$mp.query.id,
-      },
+        workflow_id: this.$mp.query.id
+      }
     }).then((res: object) => {
       this.maintenanceData = JSON.parse(res[0].item);
-      let hasFalse = this.maintenanceData.some((val) => {
+      let hasFalse = this.maintenanceData.some(val => {
         return val.status === false;
       });
       this.isAll = hasFalse ? false : true;
@@ -51,7 +51,7 @@ export default class Maintenance extends Vue {
 
   checkAll(e: any) {
     this.isAll = e.mp.detail;
-    this.maintenanceData.map((val) => {
+    this.maintenanceData.map(val => {
       val.status = e.mp.detail;
     });
   }
@@ -62,8 +62,8 @@ export default class Maintenance extends Vue {
       data: {
         workflowId: this.$mp.query.id,
         operation: 121,
-        item: JSON.stringify(this.maintenanceData),
-      },
+        item: JSON.stringify(this.maintenanceData)
+      }
     }).then((res: any) => {
       wx.navigateBack();
     });

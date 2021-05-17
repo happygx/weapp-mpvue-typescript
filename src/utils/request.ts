@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { BaseUrl } from '@/config/index';
 import requestConfig from '@/config/requestConfig';
-import { UserModule } from '@/store/module/user';
+import { UserModule } from '@/store/module/login';
 import { getSession } from './session';
 import { tip } from './common';
 
@@ -97,7 +97,7 @@ const requestFail = (res: AxiosResponse) => {
   if (statusCode === 401) {
     // 账户失效
     UserModule.ResetToken();
-    return false;
+    throw new Error('请重新登录');
   } else if (statusCode === 412) {
     // session失效重新获取
     return getSession();
